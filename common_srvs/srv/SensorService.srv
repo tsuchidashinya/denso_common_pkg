@@ -1,0 +1,5 @@
+int32 counter
+---
+common_msgs/CloudData cloud_data
+sensor_msgs/CameraInfo camera_info
+sensor_msgs/Image image
