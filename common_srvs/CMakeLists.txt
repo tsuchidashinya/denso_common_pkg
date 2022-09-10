@@ -10,7 +10,6 @@ project(common_srvs)
 find_package(catkin REQUIRED COMPONENTS
     message_generation
     common_msgs
-    anno_msgs
     sensor_msgs
 )
 
@@ -58,7 +57,6 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   SensorService.srv 
-  MeshCloudService.srv 
 )
 
 ## Generate actions in the 'action' folder
@@ -71,7 +69,7 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  common_msgs anno_msgs sensor_msgs 
+  common_msgs sensor_msgs 
 )
 
 ################################################
