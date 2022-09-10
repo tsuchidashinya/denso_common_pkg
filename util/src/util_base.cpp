@@ -1,6 +1,6 @@
 /**
  * @file util_base.cpp
- * @author 土田真哉
+ * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief  UtilBaseクラスのソースファイル
  * @version 0.1
  * @date 2022-09-10
