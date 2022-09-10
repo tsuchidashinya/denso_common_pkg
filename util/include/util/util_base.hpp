@@ -1,6 +1,6 @@
 /**
  * @file util_base.hpp
- * @author tsuchidashinya
+ * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief UtilBaseクラスのヘッダーファイル
  * @version 0.1
  * @date 2022-09-10
