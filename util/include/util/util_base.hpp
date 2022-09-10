@@ -1,6 +1,6 @@
 /**
  * @file util_base.hpp
- * @author 土田真哉
+ * @author tsuchidashinya
  * @brief UtilBaseクラスのヘッダーファイル
  * @version 0.1
  * @date 2022-09-10

@@ -1,0 +1,18 @@
+param_list:
+  cloud_data:
+    - instance: 0
+      color:
+        r: 0
+        g: 255
+        b: 0
+    - instance: 1
+      color:
+        r: 255
+        g: 0
+        b: 0
+    - instance: 5
+      color:
+        r: 100
+        g: 0
+        b: 100
+        
