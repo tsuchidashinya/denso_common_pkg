@@ -155,8 +155,8 @@ geometry_msgs::Transform UtilBase::geo_trans_make(double x, double y, double z, 
 /**
  * @brief ROSのTFを取得する
  *
- * @param target
- * @param source
+ * @param target target_frame
+ * @param source source_frame
  * @return geometry_msgs::Transform
  */
 geometry_msgs::Transform UtilBase::get_tf(std::string target, std::string source)
