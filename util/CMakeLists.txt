@@ -104,8 +104,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES util
+ INCLUDE_DIRS include
+ LIBRARIES UtilBase UtilSensor
 #  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
@@ -121,8 +121,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(util_base src/util_base.cpp)
-target_link_libraries(util_base
+add_library(UtilBase src/util_base.cpp)
+
+add_library(UtilSensor src/util_sensor.cpp)
+
+target_link_libraries(UtilBase
   ${catkin_LIBRARIES}
 )
 
+target_link_libraries(UtilSensor
+  UtilBase 
+  ${catkin_LIBRARIES}
+)

@@ -1,3 +1,4 @@
+#pragma once
 #include "common_header.hpp"
 #include "util_base.hpp"
 #include <common_msgs/CloudData.h>

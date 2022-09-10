@@ -1,0 +1,18 @@
+cloud_process:
+  planar_threshold: 0.01
+  crop_box: 
+    x_min: -1
+    y_min: -1
+    z_max: -1
+    x_max: 1
+    y_max: 1
+    z_max: 1
+sensor_receiver:
+  pc_pub_topic: pc_pub
+  pc_sub_topic: 
+  img_sub_topic:
+  cam_sub_topic:
+  sensor_service_name:
+  leaf_size: 0.003
+    
+  

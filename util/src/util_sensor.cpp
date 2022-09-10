@@ -4,7 +4,7 @@ UtilSensor::UtilSensor()
     : pnh_("~"),
       param_list()
 {
-  pnh_.getParam("param_list", param_list);
+  pnh_.getParam("util_sensor", param_list);
 }
 
 /**

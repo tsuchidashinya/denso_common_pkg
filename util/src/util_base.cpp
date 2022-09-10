@@ -11,6 +11,14 @@
 
 #include <util/util_base.hpp>
 
+UtilBase::UtilBase()
+    : buffer_(),
+      listener_(buffer_),
+      pnh_("~"),
+      rd_(),
+      eng_(rd_())
+{
+}
 /**
  * @brief 小数点以下に少しでも値があれば+1した整数値を渡す関数
  *
@@ -155,8 +163,8 @@ geometry_msgs::Transform UtilBase::geo_trans_make(double x, double y, double z, 
 /**
  * @brief ROSのTFを取得する
  *
- * @param target
- * @param source
+ * @param target target_frame
+ * @param source source_frame
  * @return geometry_msgs::Transform
  */
 geometry_msgs::Transform UtilBase::get_tf(std::string target, std::string source)
