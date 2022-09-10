@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <sensor_receiver/cloud_process.hpp>
+#include <sensor_package/cloud_process.hpp>
 
 CloudProcess::CloudProcess()
     : pnh_("~")

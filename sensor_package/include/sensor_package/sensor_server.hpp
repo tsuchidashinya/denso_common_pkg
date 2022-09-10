@@ -1,22 +1,22 @@
 /**
- * @file sensor_receiver.hpp
+ * @file sensor_data_server.hpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2022-09-10
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 #pragma once
 #include <util/util_sensor.hpp>
 #include <common_srvs/SensorService.h>
 #include "cloud_process.hpp"
 
-class SensorReceiver
+class SensorServer
 {
 public:
-    SensorReceiver(ros::NodeHandle &);
+    SensorServer(ros::NodeHandle &);
 
     XmlRpc::XmlRpcValue param_list;
 

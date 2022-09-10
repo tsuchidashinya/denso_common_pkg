@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(sensor_receiver)
+project(sensor_package)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -32,14 +32,14 @@ include_directories(
 
 add_library(CloudProcess src/cloud_process.cpp)
 
-add_executable(SensorReceiver src/sensor_receiver.cpp src/sensor_receiver_node.cpp)
+add_executable(SensorServer src/sensor_server.cpp src/sensor_server_node.cpp)
 
 
 target_link_libraries(CloudProcess 
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(SensorReceiver
+target_link_libraries(SensorServer
   CloudProcess
   ${catkin_LIBRARIES}
 )

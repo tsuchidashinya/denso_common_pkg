@@ -1,5 +1,5 @@
 /**
- * @file sensor_receiver_node.cpp
+ * @file sensor_data_server_node.cpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief
  * @version 0.1
@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <sensor_receiver/sensor_receiver.hpp>
+#include <sensor_package/sensor_server.hpp>
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "sensor_receiver");
+    ros::init(argc, argv, "sensor_package");
     ros::NodeHandle nh;
-    SensorReceiver senser_service(nh);
+    SensorServer senser_service(nh);
     ros::spin();
 }

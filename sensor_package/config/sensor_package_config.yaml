@@ -7,7 +7,7 @@ cloud_process:
     x_max: 1
     y_max: 1
     z_max: 1
-sensor_receiver:
+sensor_data_server:
   pc_pub_topic: pc_pub
   pc_sub_topic: 
   img_sub_topic:
