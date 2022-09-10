@@ -11,6 +11,14 @@
 
 #include <util/util_base.hpp>
 
+UtilBase::UtilBase()
+    : buffer_(),
+      listener_(buffer_),
+      pnh_("~"),
+      rd_(),
+      eng_(rd_())
+{
+}
 /**
  * @brief 小数点以下に少しでも値があれば+1した整数値を渡す関数
  *
