@@ -45,30 +45,44 @@ int UtilBase::calcurate_round_up(double num)
  * @param angle
  * @return tf2::Quaternion
  */
-tf2::Quaternion UtilBase::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, std::string xyz, double angle)
+tf2::Quaternion UtilBase::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, RotationOption option, double angle)
 {
   tf2::Quaternion q_ori(0, 0, 0, 0);
-  if (xyz == "x")
+  if (option == RotationOption::x)
   {
     q_ori.setX(1);
   }
-  else if (xyz == "y")
+  else if (option == RotationOption::y)
   {
     q_ori.setY(1);
   }
-  else if (xyz == "z")
+  else if (option == RotationOption::z)
   {
     q_ori.setZ(1);
-  }
-  else
-  {
-    throw std::runtime_error("rotate_quaternion_by_axis: x, y, z以外の文字が指定されています");
   }
   tf2::Quaternion q_after, q_final;
   q_after = rotated_quat * q_ori * rotated_quat.inverse();
   tf2::Vector3 vec(q_after[0], q_after[1], q_after[2]);
   q_final.setRotation(vec, angle);
   return q_final;
+}
+
+tf2::Quaternion UtilBase::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
+{
+  tf2::Quaternion quaternion;
+  quaternion = rotate_quaternion_by_axis(q_moto, RotationOption::x, x);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
+  return quaternion;
+}
+
+tf2::Quaternion UtilBase::rotate_xyz_make(double x, double y, double z)
+{
+  tf2::Quaternion quaternion(0, 0, 0, 1);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, x);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
+  return quaternion;
 }
 
 /**

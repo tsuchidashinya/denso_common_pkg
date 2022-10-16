@@ -11,15 +11,23 @@
 #pragma once
 #include "common_header.hpp"
 
+enum RotationOption
+{
+    x,
+    y,
+    z
+};
 class UtilBase
 {
 public:
     UtilBase();
     static int calcurate_round_up(double);
-    static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, std::string, double);
+    static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, RotationOption, double);
+    static tf2::Quaternion rotate_xyz_make(double, double, double, tf2::Quaternion);
+    static tf2::Quaternion rotate_xyz_make(double, double, double);
+
     static void mkdir(std::string);
     static std::string join(std::string, std::string);
-
     /**
      * @brief 変数を格納してその変数がどの型なのかを示します。
      *
