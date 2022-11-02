@@ -1,4 +1,4 @@
-param_list:
+util_sensor:
   cloud_data:
     - instance: 0
       color:

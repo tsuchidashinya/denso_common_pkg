@@ -1,10 +1,20 @@
+/**
+ * @file util_sensor.cpp
+ * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
+ * @brief
+ * @version 0.1
+ * @date 2022-09-10
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #include <util/util_sensor.hpp>
 
 UtilSensor::UtilSensor()
     : pnh_("~"),
       param_list()
 {
-  pnh_.getParam("param_list", param_list);
+  pnh_.getParam("util_sensor", param_list);
 }
 
 /**
