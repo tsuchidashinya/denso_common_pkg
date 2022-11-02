@@ -74,8 +74,8 @@ pcl::PointCloud<PclXyz> CloudProcess::planar_segmentar(pcl::PointCloud<PclXyz> p
  */
 void CloudProcess::set_crop_frame(std::string sensor_frame, std::string target_frame)
 {
-    UtilBase util;
-    crop_trans_ = util.get_tf(target_frame, sensor_frame);
+    UtilTF util_tf;
+    crop_trans_ = util_tf.get_tf(target_frame, sensor_frame);
 }
 
 /**
