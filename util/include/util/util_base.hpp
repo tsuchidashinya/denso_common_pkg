@@ -1,6 +1,6 @@
 /**
  * @file util_base.hpp
- * @author tsuchidashinya
+ * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief UtilBaseクラスのヘッダーファイル
  * @version 0.1
  * @date 2022-09-10
@@ -11,15 +11,14 @@
 #pragma once
 #include "common_header.hpp"
 
+
 class UtilBase
 {
 public:
     UtilBase();
     static int calcurate_round_up(double);
-    static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, std::string, double);
     static void mkdir(std::string);
     static std::string join(std::string, std::string);
-
     /**
      * @brief 変数を格納してその変数がどの型なのかを示します。
      *
@@ -79,7 +78,7 @@ public:
         }
     }
 
-    geometry_msgs::Transform get_tf(std::string, std::string);
+    
     tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
@@ -87,11 +86,9 @@ public:
     XmlRpc::XmlRpcValue param_list;
 
 private:
-    tf2_ros::Buffer buffer_;
-    tf2_ros::TransformListener listener_;
+    
     std::random_device rd_;
     std::default_random_engine eng_;
-    ros::NodeHandle pnh_;
 
     static std::string get_name_by_typeinfo(std::type_info const &);
 };

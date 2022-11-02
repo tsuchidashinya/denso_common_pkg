@@ -1,6 +1,6 @@
 /**
  * @file util_base.cpp
- * @author 土田真哉
+ * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief  UtilBaseクラスのソースファイル
  * @version 0.1
  * @date 2022-09-10
@@ -11,6 +11,12 @@
 
 #include <util/util_base.hpp>
 
+UtilBase::UtilBase()
+    : 
+      rd_(),
+      eng_(rd_())
+{
+}
 /**
  * @brief 小数点以下に少しでも値があれば+1した整数値を渡す関数
  *
@@ -29,39 +35,7 @@ int UtilBase::calcurate_round_up(double num)
   }
 }
 
-/**
- * @brief xyzの指定した軸の方向に回転する
- *
- * @param rotated_quat クオータニオン型
- * @param xyz string型, "x" or "y" or "z"
- * @param angle
- * @return tf2::Quaternion
- */
-tf2::Quaternion UtilBase::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, std::string xyz, double angle)
-{
-  tf2::Quaternion q_ori(0, 0, 0, 0);
-  if (xyz == "x")
-  {
-    q_ori.setX(1);
-  }
-  else if (xyz == "y")
-  {
-    q_ori.setY(1);
-  }
-  else if (xyz == "z")
-  {
-    q_ori.setZ(1);
-  }
-  else
-  {
-    throw std::runtime_error("rotate_quaternion_by_axis: x, y, z以外の文字が指定されています");
-  }
-  tf2::Quaternion q_after, q_final;
-  q_after = rotated_quat * q_ori * rotated_quat.inverse();
-  tf2::Vector3 vec(q_after[0], q_after[1], q_after[2]);
-  q_final.setRotation(vec, angle);
-  return q_final;
-}
+
 
 /**
  * @brief ディレクトリを生成
@@ -152,33 +126,6 @@ geometry_msgs::Transform UtilBase::geo_trans_make(double x, double y, double z, 
   return output;
 }
 
-/**
- * @brief ROSのTFを取得する
- *
- * @param target
- * @param source
- * @return geometry_msgs::Transform
- */
-geometry_msgs::Transform UtilBase::get_tf(std::string target, std::string source)
-{
-  geometry_msgs::TransformStamped final_tf;
-  while (true)
-  {
-    try
-    {
-      final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
-      ROS_INFO_STREAM_ONCE("get_tf: source: " << source << "  target: " << target);
-      break;
-    }
-    catch (const std::exception &e)
-    {
-      ROS_WARN_STREAM(e.what());
-      ros::Duration(0.1).sleep();
-      continue;
-    }
-  }
-  return final_tf.transform;
-}
 
 /**
  * @brief geometry_msgs::Transform型からtf::StampedTransformへ変換する関数
