@@ -14,12 +14,12 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
     : nh_(nh),
       pnh_("~")
 {
-    pnh_.getParam("sensor_package", param_list);
-    pub_ = nh_.advertise<sensor_msgs::PointCloud2>(param_list["pc_pub_topic"], 10);
-    pc_sub_ = nh_.subscribe(param_list["pc_sub_topic"], 10, &SensorServer::pc_sub_callback, this);
-    img_sub_ = nh_.subscribe(param_list["img_sub_topic"], 10, &SensorServer::img_sub_callback, this);
-    cam_sub_ = nh_.subscribe(param_list["cam_sub_topic"], 10, &SensorServer::cam_sub_callback, this);
-    server_ = nh_.advertiseService(param_list["sensor_service_name"], &SensorServer::service_callback, this);
+    set_parameter();
+    pub_ = nh_.advertise<sensor_msgs::PointCloud2>(static_cast<std::string>(param_list["pc_pub_topic"]), 10);
+    pc_sub_ = nh_.subscribe(static_cast<std::string>(param_list["pc_sub_topic"]), 10, &SensorServer::pc_sub_callback, this);
+    img_sub_ = nh_.subscribe(static_cast<std::string>(param_list["img_sub_topic"]), 10, &SensorServer::img_sub_callback, this);
+    cam_sub_ = nh_.subscribe(static_cast<std::string>(param_list["cam_sub_topic"]), 10, &SensorServer::cam_sub_callback, this);
+    server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
 }
 
 /**
@@ -30,7 +30,14 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
  */
 void SensorServer::pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 {
-    pcl::fromROSMsg(*msg, pcl_data_);
+    pc_data_ = *msg;
+    // UtilBase::message_show("pcl_data", pcl_data_.points.size());
+}
+
+void SensorServer::set_parameter() {
+    pnh_.getParam("sensor_server", param_list);
+    LEAF_SIZE = param_list["leaf_size"];
+    sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
 }
 
 /**
@@ -57,8 +64,12 @@ void SensorServer::img_sub_callback(const sensor_msgs::ImageConstPtr &msg)
 
 bool SensorServer::service_callback(common_srvs::SensorService::Request &request, common_srvs::SensorService::Response &response)
 {
-    pcl_data_ = CloudProcess::downsample_by_voxelgrid(pcl_data_, std::stof(param_list["leaf_size"]));
-    response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data_);
+    pcl::PointCloud<PclXyz> pcl_data;
+    pcl::fromROSMsg(pc_data_, pcl_data);
+    UtilBase::message_show("pcl_data1", pcl_data.points.size());
+    pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
+    UtilBase::message_show(std::to_string(LEAF_SIZE), pcl_data.points.size());
+    response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;
     return true;

@@ -10,10 +10,10 @@
  */
 #include <sensor_package/cloud_process.hpp>
 
-CloudProcess::CloudProcess()
+CloudProcess::CloudProcess(std::string param_name)
     : pnh_("~")
 {
-    pnh_.getParam("cloud_process", param_list);
+    pnh_.getParam(param_name, param_list);
 }
 
 /**

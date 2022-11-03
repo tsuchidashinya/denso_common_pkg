@@ -21,7 +21,7 @@
 class CloudProcess
 {
 public:
-    CloudProcess();
+    CloudProcess(std::string);
     pcl::PointCloud<PclXyz> planar_segmentar(pcl::PointCloud<PclXyz>);
     void set_crop_frame(std::string, std::string);
     pcl::PointCloud<PclXyz> cropbox_segmenter(pcl::PointCloud<PclXyz>);

@@ -1,0 +1,7 @@
+sensor_server:
+  pc_pub_topic: pc_pub
+  pc_sub_topic: /photoneo_center/sensor/points
+  img_sub_topic: /photoneo_center/sensor/image_color
+  cam_sub_topic: /photoneo_center/sensor/camera_info
+  sensor_service_name: sensor_service
+  leaf_size: 0.0035
