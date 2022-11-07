@@ -17,6 +17,16 @@ UtilSensor::UtilSensor()
   pnh_.getParam("util_sensor", param_list);
 }
 
+void UtilSensor::cloud_size_ok(common_msgs::CloudData cloud)
+{
+  if (cloud.x.size() == cloud.y.size() == cloud.z.size() == cloud.instance.size()) {
+    ;
+  }
+  else {
+    ROS_ERROR_STREAM("cloudのsizeが揃っていません");
+  }
+}
+
 /**
  * @brief pcl::PointCloud<pcl::PointXYZ>型からcommon_msgs::CloudData型へ変換する関数
  *
