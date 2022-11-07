@@ -6,6 +6,12 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 
+struct KeyBoardTf
+{
+    geometry_msgs::Transform transform;
+    bool quit;
+};
+
 enum RotationOption
 {
     x,
@@ -13,16 +19,17 @@ enum RotationOption
     z
 };
 
-class UtilTF
+class TfBasic
 {
 public:
-    UtilTF();
+    TfBasic();
     geometry_msgs::Transform get_tf(std::string, std::string);
     static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, RotationOption, double);
     static tf2::Quaternion rotate_xyz_make(double, double, double, tf2::Quaternion);
     static tf2::Quaternion rotate_xyz_make(double, double, double);
     void static_broadcast(geometry_msgs::TransformStamped);
     void broadcast(geometry_msgs::TransformStamped);
+    KeyBoardTf get_keyboard_tf(double, double);
 
 private:
     tf2_ros::Buffer buffer_;
