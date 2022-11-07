@@ -79,7 +79,7 @@ public:
     }
 
     
-    tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
+    static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
 

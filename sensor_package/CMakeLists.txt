@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   common_srvs 
   common_msgs
   util
+  tf_package
 )
 
 

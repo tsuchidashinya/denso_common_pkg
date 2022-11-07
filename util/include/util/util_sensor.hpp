@@ -27,6 +27,8 @@ class UtilSensor
 public:
   UtilSensor();
   static common_msgs::CloudData pcl_to_cloudmsg(pcl::PointCloud<PclXyz>);
+  static sensor_msgs::PointCloud2 pcl_to_pc2(pcl::PointCloud<PclXyz>);
+  static pcl::PointCloud<PclXyz> pc2_to_pcl(sensor_msgs::PointCloud2);
   static pcl::PointCloud<PclXyz> cloudmsg_to_pcl(common_msgs::CloudData);
   pcl::PointCloud<PclRgb> cloudmsg_to_pclrgb(common_msgs::CloudData);
   static sensor_msgs::PointCloud2 cloudmsg_to_pc2(common_msgs::CloudData);

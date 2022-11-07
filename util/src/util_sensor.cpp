@@ -40,6 +40,20 @@ common_msgs::CloudData UtilSensor::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_d
   return cloud_data;
 }
 
+sensor_msgs::PointCloud2 UtilSensor::pcl_to_pc2(pcl::PointCloud<PclXyz> pcl_data)
+{
+  sensor_msgs::PointCloud2 pc2;
+  pcl::toROSMsg(pcl_data, pc2);
+  return pc2;
+}
+
+pcl::PointCloud<PclXyz> UtilSensor::pc2_to_pcl(sensor_msgs::PointCloud2 pc2)
+{
+  pcl::PointCloud<PclXyz> pcl_data;
+  pcl::fromROSMsg(pc2, pcl_data);
+  return pcl_data;
+}
+
 /**
  * @brief common_msgs::CloudData型からpcl::PointCloud<pcl::PointXYZ>型へ変換する関数
  *
