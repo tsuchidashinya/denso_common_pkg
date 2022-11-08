@@ -11,11 +11,19 @@
 #pragma once
 #include "common_header.hpp"
 
+typedef std::vector<int> ArrayInt;
+typedef std::vector<double> ArrayDouble;
 
 class UtilBase
 {
 public:
     UtilBase();
+    template <typename T>
+    static std::vector<T> concatenate_array(std::vector<T> array_original, std::vector<T> array_add)
+    {
+        array_original.insert(array_original.end(), array_add.begin(), array_add.end());
+        return array_original;
+    }
     static int calcurate_round_up(double);
     static void mkdir(std::string);
     static std::string join(std::string, std::string);
@@ -33,7 +41,7 @@ public:
 
     static std::string get_time_str();
     static double distance(double[], double[]);
-    static geometry_msgs::Transform geo_trans_make(double, double, double, tf2::Quaternion);
+    
 
     /**
      * @brief 標準出力に変数の内容を表示します。主に手動のデバックで用います。

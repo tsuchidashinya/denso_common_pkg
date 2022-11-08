@@ -30,7 +30,7 @@ public:
     void static_broadcast(geometry_msgs::TransformStamped);
     void broadcast(geometry_msgs::TransformStamped);
     KeyBoardTf get_keyboard_tf(double, double);
-
+    static geometry_msgs::Transform make_geo_transform(double, double, double, tf2::Quaternion);
 private:
     tf2_ros::Buffer buffer_;
     tf2_ros::TransformListener listener_;

@@ -109,24 +109,7 @@ double UtilBase::distance(double *vec1, double *vec2)
   return sqrt(sum);
 }
 
-/**
- * @brief Transform型を簡単に作るための関数
- *
- * @param x
- * @param y
- * @param z
- * @param quaterion
- * @return geometry_msgs::Transform
- */
-geometry_msgs::Transform UtilBase::geo_trans_make(double x, double y, double z, tf2::Quaternion quaterion)
-{
-  geometry_msgs::Transform output;
-  output.translation.x = x;
-  output.translation.y = y;
-  output.translation.z = z;
-  tf2::convert(quaterion, output.rotation);
-  return output;
-}
+
 
 
 /**
