@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <node pkg="sensor_package" type="sensor_server" name="sensor_server">
+    <node pkg="sensor_package" type="SensorServer" name="sensor_server" output="screen">
         <rosparam file="$(find sensor_package)/config/sensor_server.yaml" command="load"/>
     </node>
 

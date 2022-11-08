@@ -15,11 +15,19 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
       pnh_("~")
 {
     set_parameter();
-    pub_ = nh_.advertise<sensor_msgs::PointCloud2>(static_cast<std::string>(param_list["pc_pub_topic"]), 10);
-    pc_sub_ = nh_.subscribe(static_cast<std::string>(param_list["pc_sub_topic"]), 10, &SensorServer::pc_sub_callback, this);
-    img_sub_ = nh_.subscribe(static_cast<std::string>(param_list["img_sub_topic"]), 10, &SensorServer::img_sub_callback, this);
-    cam_sub_ = nh_.subscribe(static_cast<std::string>(param_list["cam_sub_topic"]), 10, &SensorServer::cam_sub_callback, this);
+    sensor_pub_ = nh_.advertise<sensor_msgs::PointCloud2>(pc_pub_topic_, 10);
+    pc_sub_ = nh_.subscribe(pc_sub_topic_, 10, &SensorServer::pc_sub_callback, this);
+    img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
+    cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
     server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
+    timer_ = nh_.createTimer(ros::Duration(0.1), &SensorServer::visualize_callback, this);
+}
+
+void SensorServer::visualize_callback(const ros::TimerEvent &event)
+{
+    pc_response_data_.header.frame_id = sensor_frame_;
+    sensor_pub_.publish(pc_response_data_);
+    UtilBase::message_show("pc_timer", "come");
 }
 
 /**
@@ -38,6 +46,11 @@ void SensorServer::set_parameter() {
     pnh_.getParam("sensor_server", param_list);
     LEAF_SIZE = param_list["leaf_size"];
     sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
+    pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
+    img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
+    cam_sub_topic_ = static_cast<std::string>(param_list["cam_sub_topic"]);
+    sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
 }
 
 /**
@@ -72,5 +85,6 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
     response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;
+    pc_response_data_ = UtilSensor::pcl_to_pc2(pcl_data);
     return true;
 }

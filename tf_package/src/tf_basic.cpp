@@ -259,9 +259,9 @@ tf2::Quaternion TfBasic::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat,
 tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
 {
   tf2::Quaternion quaternion;
-  quaternion = rotate_quaternion_by_axis(q_moto, RotationOption::x, x);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
+  quaternion = rotate_quaternion_by_axis(q_moto, RotationOption::x, x) * q_moto;
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y) * quaternion;
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z) * quaternion;
   return quaternion;
 }
 
