@@ -14,7 +14,7 @@ private:
     std::vector<Point3D> get_3Dpoint_from_sensor(std::vector<std::string>);
     std::vector<common_msgs::BoxPosition> convert_3Dto2D(std::vector<Point3D>);
     std::string world_frame_, sensor_frame_;
-    double object_radious_;
+    double object_radious_x_, object_radious_y_;
     sensor_msgs::CameraInfo cinfo_;
     ImageSize img_size_;
 };

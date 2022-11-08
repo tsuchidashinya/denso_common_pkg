@@ -5,7 +5,8 @@ Make2DInfoBy3D::Make2DInfoBy3D(sensor_msgs::CameraInfo cinfo, ImageSize img_size
     pnh_.getParam("make_2Dinfo_by_3D", param_list);
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
-    object_radious_ = param_list["radious"];
+    object_radious_x_ = param_list["radious_x"];
+    object_radious_y_ = param_list["radious_y"];
     cinfo_ = cinfo;
     img_size_ = img_size;
 }
@@ -26,8 +27,8 @@ std::vector<common_msgs::BoxPosition> Make2DInfoBy3D::convert_3Dto2D(std::vector
         double y = point3D_objects[i].y;
         double z = point3D_objects[i].z;
         Point3D pt_cv(y, x, z);
-        Point3D pt_cv_left(y - object_radious_, x - object_radious_, z);
-        Point3D pt_cv_right(y + object_radious_, x + object_radious_, z);
+        Point3D pt_cv_left(y - object_radious_y_, x - object_radious_x_, z);
+        Point3D pt_cv_right(y + object_radious_y_, x + object_radious_x_, z);
         Point2D uv_left, uv_right;
         FuncDataConvertion data_convert;
         uv_left = data_convert.func_3d_to_2d_coodinate(pt_cv_left, cinfo_);
