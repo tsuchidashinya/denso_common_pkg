@@ -212,6 +212,20 @@ geometry_msgs::Transform TfBasic::make_geo_transform(double x, double y, double 
   return output;
 }
 
+/*
+1: child_frame
+2: frame_id
+3: transform
+*/
+geometry_msgs::TransformStamped TfBasic::make_geo_trans_stamped(std::string child_frame, std::string frame_id, geometry_msgs::Transform trans)
+{
+    geometry_msgs::TransformStamped outdata;
+    outdata.child_frame_id = child_frame;
+    outdata.header.frame_id = frame_id;
+    outdata.transform = trans;
+    return outdata;
+}
+
 /**
  * @brief xyzの指定した軸の方向に回転する
  *
@@ -276,4 +290,18 @@ void TfBasic::static_broadcast(geometry_msgs::TransformStamped transform)
         static_br_.sendTransform(transform);
         ros::Duration(0.01).sleep();
     }
+}
+
+geometry_msgs::Quaternion TfBasic::make_geo_quaternion(tf2::Quaternion tf2_quat)
+{
+    geometry_msgs::Quaternion geo_quat;
+    tf2::convert(tf2_quat, geo_quat);
+    return geo_quat;
+}
+
+tf2::Quaternion TfBasic::make_tf2_quaternion(geometry_msgs::Quaternion geo_quat)
+{
+    tf2::Quaternion tf2_quat;
+    tf2::convert(geo_quat, tf2_quat);
+    return tf2_quat;
 }
