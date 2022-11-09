@@ -33,6 +33,7 @@ public:
     KeyBoardTf get_keyboard_tf(double, double);
     static geometry_msgs::Transform make_geo_transform(double, double, double, tf2::Quaternion);
     static geometry_msgs::TransformStamped make_geo_trans_stamped(std::string, std::string, geometry_msgs::Transform);
+    static void tf_data_show(geometry_msgs::Transform, std::string);
 private:
     tf2_ros::Buffer buffer_;
     tf2_ros::TransformListener listener_;

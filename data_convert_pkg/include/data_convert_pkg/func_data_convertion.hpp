@@ -14,7 +14,7 @@ struct Point2D
 {
     double x;
     double y;
-    Point2D();
+    Point2D(){};
     Point2D(double x1,double y1) {
         x = x1;
         y = y1;
@@ -26,7 +26,7 @@ struct Point3D
     double x;
     double y;
     double z;
-    Point3D();
+    Point3D(){};
     Point3D(double x1, double y1, double z1) {
         x = x1;
         y = y1;

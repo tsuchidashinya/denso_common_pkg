@@ -131,12 +131,12 @@ target_link_libraries(func_data_convertion
 
 add_library(get_3D_by_2D src/get_3D_by_2D.cpp)
 target_link_libraries(get_3D_by_2D
-  ${catkin_LIBRARIES}
   func_data_convertion
+  ${catkin_LIBRARIES}
 )
 
 add_library(make_2Dinfo_by_3D src/make_2Dinfo_by_3D.cpp)
 target_link_libraries(make_2Dinfo_by_3D
-  ${catkin_LIBRARIES}
   func_data_convertion
+  ${catkin_LIBRARIES}
 )

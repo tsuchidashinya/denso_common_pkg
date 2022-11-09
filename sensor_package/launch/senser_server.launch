@@ -3,6 +3,7 @@
 
     <node pkg="sensor_package" type="SensorServer" name="sensor_server" output="screen">
         <rosparam file="$(find sensor_package)/config/sensor_server.yaml" command="load"/>
+        <rosparam file="$(find sensor_package)/config/cloud_process.yaml" command="load" />
     </node>
 
 </launch>

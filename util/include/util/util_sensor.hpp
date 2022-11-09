@@ -26,9 +26,11 @@ class UtilSensor
 {
 public:
   UtilSensor();
-  static void cloud_size_ok(common_msgs::CloudData);
+  static void cloud_size_ok(common_msgs::CloudData&);
   static common_msgs::CloudData pcl_to_cloudmsg(pcl::PointCloud<PclXyz>);
   static sensor_msgs::PointCloud2 pcl_to_pc2(pcl::PointCloud<PclXyz>);
+  static sensor_msgs::PointCloud2 pclrgb_to_pc2_color(pcl::PointCloud<PclRgb>);
+  static pcl::PointCloud<PclRgb> pc2_color_to_pclrgb(sensor_msgs::PointCloud2);
   static pcl::PointCloud<PclXyz> pc2_to_pcl(sensor_msgs::PointCloud2);
   static pcl::PointCloud<PclXyz> cloudmsg_to_pcl(common_msgs::CloudData);
   pcl::PointCloud<PclRgb> cloudmsg_to_pclrgb(common_msgs::CloudData);
@@ -41,4 +43,5 @@ private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;
   UtilBase util;
+  void set_parameter();
 };

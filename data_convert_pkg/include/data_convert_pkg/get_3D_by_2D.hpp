@@ -1,3 +1,4 @@
+#pragma once
 #include "func_data_convertion.hpp"
 
 class Get3DBy2D

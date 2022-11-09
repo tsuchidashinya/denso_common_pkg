@@ -36,8 +36,9 @@ private:
     sensor_msgs::PointCloud2 pc_data_, pc_response_data_;
     sensor_msgs::Image img_data_;
     sensor_msgs::CameraInfo cam_data_;
+    CloudProcess cloud_process_;
     double LEAF_SIZE;
     std::string sensor_service_name_;
     std::string pc_pub_topic_, pc_sub_topic_, img_sub_topic_, cam_sub_topic_;
-    std::string sensor_frame_;
+    std::string sensor_frame_, world_frame_;
 };

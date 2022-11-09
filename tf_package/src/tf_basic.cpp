@@ -265,6 +265,12 @@ tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z, tf2::Quat
   return quaternion;
 }
 
+void TfBasic::tf_data_show(geometry_msgs::Transform trans, std::string name)
+{
+    ROS_INFO_STREAM(name << "  x: " << trans.translation.x << "  y: " << trans.translation.y << " z: " << trans.translation.z);
+    ROS_INFO_STREAM("qx: " << trans.rotation.x << " qy: " << trans.rotation.y << " qz: " << trans.rotation.z << " qw: " << trans.rotation.w);
+}
+
 tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z)
 {
   tf2::Quaternion quaternion(0, 0, 0, 1);

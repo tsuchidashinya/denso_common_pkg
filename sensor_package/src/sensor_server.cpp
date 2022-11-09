@@ -12,22 +12,23 @@
 
 SensorServer::SensorServer(ros::NodeHandle &nh)
     : nh_(nh),
-      pnh_("~")
+      pnh_("~"),
+      cloud_process_()
 {
     set_parameter();
+    
     sensor_pub_ = nh_.advertise<sensor_msgs::PointCloud2>(pc_pub_topic_, 10);
     pc_sub_ = nh_.subscribe(pc_sub_topic_, 10, &SensorServer::pc_sub_callback, this);
     img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
     cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
     server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
-    timer_ = nh_.createTimer(ros::Duration(0.1), &SensorServer::visualize_callback, this);
+    timer_ = nh_.createTimer(ros::Duration(0.3), &SensorServer::visualize_callback, this);
 }
 
 void SensorServer::visualize_callback(const ros::TimerEvent &event)
 {
     pc_response_data_.header.frame_id = sensor_frame_;
     sensor_pub_.publish(pc_response_data_);
-    UtilBase::message_show("pc_timer", "come");
 }
 
 /**
@@ -51,6 +52,7 @@ void SensorServer::set_parameter() {
     img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
     cam_sub_topic_ = static_cast<std::string>(param_list["cam_sub_topic"]);
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
+    world_frame_ = static_cast<std::string>(param_list["world_frame"]);
 }
 
 /**
@@ -79,9 +81,9 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
 {
     pcl::PointCloud<PclXyz> pcl_data;
     pcl::fromROSMsg(pc_data_, pcl_data);
-    UtilBase::message_show("pcl_data1", pcl_data.points.size());
     pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
-    UtilBase::message_show(std::to_string(LEAF_SIZE), pcl_data.points.size());
+    cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
+    pcl_data = cloud_process_.cropbox_segmenter(pcl_data);
     response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;

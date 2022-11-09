@@ -8,6 +8,7 @@ class Make2DInfoBy3D
 public:
     Make2DInfoBy3D(sensor_msgs::CameraInfo, ImageSize);
     std::vector<common_msgs::BoxPosition> get_out_data(std::vector<std::string>);
+    static cv::Mat draw_b_box(cv::Mat, std::vector<common_msgs::BoxPosition>);
     XmlRpc::XmlRpcValue param_list;
 private:
     ros::NodeHandle pnh_;
@@ -17,4 +18,5 @@ private:
     double object_radious_x_, object_radious_y_;
     sensor_msgs::CameraInfo cinfo_;
     ImageSize img_size_;
+    TfBasic tf_basic_;
 };

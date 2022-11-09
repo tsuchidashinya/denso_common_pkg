@@ -14,16 +14,36 @@ UtilSensor::UtilSensor()
     : pnh_("~"),
       param_list()
 {
+  set_parameter();
+}
+
+void UtilSensor::set_parameter()
+{
   pnh_.getParam("util_sensor", param_list);
 }
 
-void UtilSensor::cloud_size_ok(common_msgs::CloudData cloud)
+sensor_msgs::PointCloud2 UtilSensor::pclrgb_to_pc2_color(pcl::PointCloud<PclRgb> pclrgb_data)
+{
+  sensor_msgs::PointCloud2 sensor_data;
+  pcl::toROSMsg(pclrgb_data, sensor_data);
+  return sensor_data;
+}
+
+pcl::PointCloud<PclRgb> UtilSensor::pc2_color_to_pclrgb(sensor_msgs::PointCloud2 sensor_data)
+{
+  pcl::PointCloud<PclRgb> pclrbg_data;
+  pcl::fromROSMsg(sensor_data, pclrbg_data);
+  return pclrbg_data;
+}
+
+
+void UtilSensor::cloud_size_ok(common_msgs::CloudData &cloud)
 {
   if (cloud.x.size() == cloud.y.size() == cloud.z.size() == cloud.instance.size()) {
     ;
   }
   else {
-    ROS_ERROR_STREAM("cloudのsizeが揃っていません");
+    cloud.instance.resize(cloud.x.size());
   }
 }
 
@@ -93,10 +113,11 @@ pcl::PointCloud<PclXyz> UtilSensor::cloudmsg_to_pcl(common_msgs::CloudData cloud
 pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cloud_data)
 {
   pcl::PointCloud<PclRgb> pcl_rgb_data;
+  pcl_rgb_data.points.resize(cloud_data.x.size());
   std::vector<int> ins_list;
-  for (int i = 0; i < param_list["cloud_data"].size(); i++)
+  for (int i = 0; i < param_list.size(); i++)
   {
-    ins_list.push_back(param_list["cloud_data"][i]["instance"]);
+    ins_list.push_back(param_list[i]["instance"]);
   }
   for (int i = 0; i < cloud_data.x.size(); i++)
   {
@@ -113,9 +134,9 @@ pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cl
     else
     {
       const int index = std::distance(ins_list.begin(), itr);
-      pcl_rgb_data.points[i].r = static_cast<int>(param_list["cloud_data"][i]["color"]["r"]);
-      pcl_rgb_data.points[i].g = static_cast<int>(param_list["cloud_data"][i]["color"]["g"]);
-      pcl_rgb_data.points[i].b = static_cast<int>(param_list["cloud_data"][i]["color"]["b"]);
+      pcl_rgb_data.points[i].r = static_cast<int>(param_list[index]["color"][0]);
+      pcl_rgb_data.points[i].g = static_cast<int>(param_list[index]["color"][1]);
+      pcl_rgb_data.points[i].b = static_cast<int>(param_list[index]["color"][2]);
     }
   }
   return pcl_rgb_data;
