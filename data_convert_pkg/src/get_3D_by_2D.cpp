@@ -38,10 +38,10 @@ std::vector<ArrayInt> Get3DBy2D::write_2d_instance(std::vector<common_msgs::BoxP
     return outdata;
 }
 
-std::vector<common_msgs::CloudData> Get3DBy2D::extract_data(common_msgs::CloudData cloud, std::vector<ArrayInt> write_instance, ImageSize im_size)
+std::vector<common_msgs::CloudData> Get3DBy2D::extract_data(common_msgs::CloudData cloud, std::vector<ArrayInt> write_instance, ImageSize im_size, std::vector<common_msgs::BoxPosition> b_boxs)
 {
     std::vector<common_msgs::CloudData> outdata;
-    outdata.resize(box_num_);
+    outdata.resize(b_boxs.size());
     FuncDataConvertion data_convert;
     for (int i = 0; i < cloud.x.size(); i++) {
         Point3D point3d(cloud.x[i], cloud.y[i], cloud.z[i]);
@@ -50,10 +50,12 @@ std::vector<common_msgs::CloudData> Get3DBy2D::extract_data(common_msgs::CloudDa
             int x = int(point2d.x);
             int y = int(point2d.y);
             if (write_instance[y][x] > 0) {
-                outdata[write_instance[y][x] - 1].x.push_back(cloud.x[i]);
-                outdata[write_instance[y][x] - 1].y.push_back(cloud.y[i]);
-                outdata[write_instance[y][x] - 1].z.push_back(cloud.z[i]);
-                outdata[write_instance[y][x] - 1].instance.push_back(0);
+                int write_ins_point = write_instance[y][x] - 1;
+                outdata[write_ins_point].x.push_back(cloud.x[i]);
+                outdata[write_ins_point].y.push_back(cloud.y[i]);
+                outdata[write_ins_point].z.push_back(cloud.z[i]);
+                outdata[write_ins_point].instance.push_back(0);
+                outdata[write_ins_point].cloud_name = b_boxs[write_ins_point].tf_name;
             }
         }
     }
@@ -63,5 +65,6 @@ std::vector<common_msgs::CloudData> Get3DBy2D::extract_data(common_msgs::CloudDa
 std::vector<common_msgs::CloudData> Get3DBy2D::get_out_data(common_msgs::CloudData cloud, std::vector<common_msgs::BoxPosition> b_boxs)
 {
     std::vector<ArrayInt> image_instance = write_2d_instance(b_boxs, im_size_);
-    return extract_data(cloud, image_instance, im_size_);
+    
+    return extract_data(cloud, image_instance, im_size_, b_boxs);
 }

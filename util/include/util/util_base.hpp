@@ -41,6 +41,7 @@ public:
 
     static std::string get_time_str();
     static double distance(double[], double[]);
+    static double distance(double x1, double y1, double x2, double y2);
     
 
     /**
@@ -62,6 +63,16 @@ public:
             ROS_ERROR("メッセージが表示できない変数です");
         }
     }
+
+    // template <typename T>
+    // static void array_message_show(std::string name, std::vector<T> array)
+    // {
+    //     std::cout << name << ": ";
+    //     for (int i = 0; i < array.size(); i++) {
+    //         std::cout << std::to_string(array[i]) << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     /**
      * @brief クライアントがリクエストを送信します。

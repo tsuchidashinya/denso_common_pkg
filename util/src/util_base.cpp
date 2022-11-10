@@ -104,12 +104,20 @@ double UtilBase::distance(double *vec1, double *vec2)
   double sum = 0;
   for (int i = 0; i < vec_size; i++)
   {
-    sum += abs(vec1[i] - vec2[i]) * abs(vec1[i] - vec2[i]);
+    sum += (vec1[i] - vec2[i]) * (vec1[i] - vec2[i]);
   }
   return sqrt(sum);
 }
-
-
+/*
+1: x1
+2: y1
+3: x2
+4: y2
+*/
+double UtilBase::distance(double x1, double y1, double x2, double y2)
+{
+    return sqrt(abs(x1 - x2)*abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2));
+}
 
 
 /**

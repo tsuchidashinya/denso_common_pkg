@@ -14,4 +14,44 @@ util_sensor:
       - 255
       - 255
       - 0
+  - instance: 3
+    color:
+      - 255
+      - 0
+      - 0
+  - instance: 4
+    color:
+      - 255
+      - 0
+      - 255
+  - instance: 5
+    color:
+      - 255
+      - 0
+      - 100
+  - instance: 6
+    color:
+      - 100
+      - 0
+      - 100
+  - instance: 7
+    color:
+      - 100
+      - 255
+      - 0
+  - instance: 8
+    color:
+      - 100
+      - 100
+      - 0
+  - instance: 9
+    color:
+      - 255
+      - 100
+      - 0
+  - instance: 10
+    color:
+      - 255
+      - 100
+      - 100
         

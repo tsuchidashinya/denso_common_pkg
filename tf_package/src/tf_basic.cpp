@@ -282,19 +282,21 @@ tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z)
 
 void TfBasic::broadcast(geometry_msgs::TransformStamped transform)
 {
-  transform.header.stamp = ros::Time::now();
+  
   for (int i = 0; i < 3; i++) {
+    transform.header.stamp = ros::Time::now();
     br_.sendTransform(transform);
-    ros::Duration(0.01).sleep();
+    ros::Duration(0.0001).sleep();
   }
 }
 
 void TfBasic::static_broadcast(geometry_msgs::TransformStamped transform)
 {
-  transform.header.stamp = ros::Time::now();
+  
     for (int i = 0; i < 3; i++) {
+        transform.header.stamp = ros::Time::now();
         static_br_.sendTransform(transform);
-        ros::Duration(0.01).sleep();
+        ros::Duration(0.0001).sleep();
     }
 }
 

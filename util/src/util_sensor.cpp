@@ -17,6 +17,40 @@ UtilSensor::UtilSensor()
   set_parameter();
 }
 
+common_msgs::CloudData UtilSensor::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud.x.size(); i++) {
+    if (cloud.instance[i] != remove_ins) {
+      outdata.x.push_back(cloud.x[i]);
+      outdata.y.push_back(cloud.y[i]);
+      outdata.z.push_back(cloud.z[i]);
+      outdata.instance.push_back(cloud.instance[i]);
+    }
+  }
+  outdata.cloud_name = cloud.cloud_name;
+  return outdata;
+}
+
+common_msgs::CloudData UtilSensor::concat_cloudmsg(common_msgs::CloudData cloud_ori, common_msgs::CloudData cloud_add)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud_ori.x.size(); i++) {
+    outdata.x.push_back(cloud_ori.x[i]);
+    outdata.y.push_back(cloud_ori.y[i]);
+    outdata.z.push_back(cloud_ori.z[i]);
+    outdata.instance.push_back(cloud_ori.instance[i]);
+  }
+  for (int i = 0; i < cloud_add.x.size(); i++) {
+    outdata.x.push_back(cloud_add.x[i]);
+    outdata.y.push_back(cloud_add.y[i]);
+    outdata.z.push_back(cloud_add.z[i]);
+    outdata.instance.push_back(cloud_add.instance[i]);
+  }
+  outdata.cloud_name = cloud_ori.cloud_name + cloud_add.cloud_name;
+  return outdata;
+}
+
 void UtilSensor::set_parameter()
 {
   pnh_.getParam("util_sensor", param_list);
@@ -115,6 +149,9 @@ pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cl
   pcl::PointCloud<PclRgb> pcl_rgb_data;
   pcl_rgb_data.points.resize(cloud_data.x.size());
   std::vector<int> ins_list;
+  int random_red = util.random_int(0, 255);
+  int random_blue = util.random_int(0, 255);
+  int random_green = util.random_int(0, 255);
   for (int i = 0; i < param_list.size(); i++)
   {
     ins_list.push_back(param_list[i]["instance"]);
@@ -127,9 +164,9 @@ pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cl
     auto itr = std::find(ins_list.begin(), ins_list.end(), cloud_data.instance[i]);
     if (itr == ins_list.end())
     {
-      pcl_rgb_data.points[i].r = util.random_int(0, 255);
-      pcl_rgb_data.points[i].g = util.random_int(0, 255);
-      pcl_rgb_data.points[i].b = util.random_int(0, 255);
+      pcl_rgb_data.points[i].r = random_red;
+      pcl_rgb_data.points[i].g = random_green;
+      pcl_rgb_data.points[i].b = random_blue;
     }
     else
     {

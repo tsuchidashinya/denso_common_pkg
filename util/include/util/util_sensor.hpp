@@ -27,6 +27,8 @@ class UtilSensor
 public:
   UtilSensor();
   static void cloud_size_ok(common_msgs::CloudData&);
+  static common_msgs::CloudData remove_ins_cloudmsg(common_msgs::CloudData, int);
+  static common_msgs::CloudData concat_cloudmsg(common_msgs::CloudData, common_msgs::CloudData);
   static common_msgs::CloudData pcl_to_cloudmsg(pcl::PointCloud<PclXyz>);
   static sensor_msgs::PointCloud2 pcl_to_pc2(pcl::PointCloud<PclXyz>);
   static sensor_msgs::PointCloud2 pclrgb_to_pc2_color(pcl::PointCloud<PclRgb>);

@@ -9,9 +9,8 @@ public:
     
     
 private:
-    int box_num_;
     sensor_msgs::CameraInfo cinfo_;
     ImageSize im_size_;
     static std::vector<ArrayInt> write_2d_instance(std::vector<common_msgs::BoxPosition>, ImageSize);
-    std::vector<common_msgs::CloudData> extract_data(common_msgs::CloudData, std::vector<ArrayInt>, ImageSize);
+    std::vector<common_msgs::CloudData> extract_data(common_msgs::CloudData, std::vector<ArrayInt>, ImageSize, std::vector<common_msgs::BoxPosition>);
 };

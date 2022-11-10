@@ -14,10 +14,10 @@ Make2DInfoBy3D::Make2DInfoBy3D(sensor_msgs::CameraInfo cinfo, ImageSize img_size
 std::vector<common_msgs::BoxPosition> Make2DInfoBy3D::get_out_data(std::vector<std::string> tf_frames)
 {
     std::vector<Point3D> point_3d_datas = get_3Dpoint_from_sensor(tf_frames);
-    return convert_3Dto2D(point_3d_datas);
+    return convert_3Dto2D(point_3d_datas, tf_frames);
 }
 
-std::vector<common_msgs::BoxPosition> Make2DInfoBy3D::convert_3Dto2D(std::vector<Point3D> point3D_objects)
+std::vector<common_msgs::BoxPosition> Make2DInfoBy3D::convert_3Dto2D(std::vector<Point3D> point3D_objects, std::vector<std::string> tf_names)
 {
     std::vector<common_msgs::BoxPosition> outdata;
     for (int i = 0; i < point3D_objects.size(); i++) {
@@ -37,7 +37,12 @@ std::vector<common_msgs::BoxPosition> Make2DInfoBy3D::convert_3Dto2D(std::vector
             b_box.x_two = uv_right.x;
             b_box.y_one = uv_left.y;
             b_box.y_two = uv_right.y;
+            b_box.tf_name = tf_names[i];
             outdata.push_back(b_box);
+            // UtilBase::message_show("tf_id", i);
+        }
+        else {
+           std::cout << "Not Detect" << ": " << uv_left.x << " " << uv_left.y << " " << uv_right.x << " " << uv_right.y << std::endl;
         }
     }
     return outdata;
@@ -50,7 +55,7 @@ cv::Mat Make2DInfoBy3D::draw_b_box(cv::Mat img, std::vector<common_msgs::BoxPosi
         double uv_left_y = b_boxs[i].y_one;
         double uv_right_x = b_boxs[i].x_two;
         double uv_right_y = b_boxs[i].y_two;
-        std::cout << uv_lect_x << " " << uv_left_y << " " << uv_right_x << " " << uv_right_y << std::endl;
+        // std::cout << i << ": " << uv_lect_x << " " << uv_left_y << " " << uv_right_x << " " << uv_right_y << std::endl;
         cv::rectangle(img, cv::Point(uv_lect_x, uv_right_y), cv::Point(uv_right_x, uv_left_y), cv::Scalar(0, 255, 0), 3);
         cv::circle(img, cv::Point(uv_lect_x, uv_right_y), 8, cv::Scalar(255, 255, 255), 3, 1);
         cv::circle(img, cv::Point(uv_right_x, uv_left_y), 8, cv::Scalar(0, 0, 0), 3, 1);
@@ -63,14 +68,15 @@ std::vector<Point3D> Make2DInfoBy3D::get_3Dpoint_from_sensor(std::vector<std::st
     std::vector<Point3D> outdata;
     outdata.resize(tf_frames.size());
     geometry_msgs::Transform object_tf, sensor_tf; 
+    sensor_tf = tf_basic_.get_tf(sensor_frame_, world_frame_);
     for (int i = 0; i < tf_frames.size(); i++) {
         sensor_tf = tf_basic_.get_tf(sensor_frame_, world_frame_);
-        TfBasic::tf_data_show(sensor_tf, sensor_frame_);
-        UtilBase::message_show(world_frame_, sensor_frame_);
+        // TfBasic::tf_data_show(sensor_tf, sensor_frame_);
+        // UtilBase::message_show(world_frame_, sensor_frame_);
         tf2::Quaternion source_quat;
         tf2::convert(sensor_tf.rotation, source_quat);
         object_tf = tf_basic_.get_tf(tf_frames[i], world_frame_);
-        TfBasic::tf_data_show(object_tf, tf_frames[i]);
+        // TfBasic::tf_data_show(object_tf, tf_frames[i]);
         double x = object_tf.translation.x - sensor_tf.translation.x;
         double y = object_tf.translation.y - sensor_tf.translation.y;
         double z = object_tf.translation.z - sensor_tf.translation.z;
