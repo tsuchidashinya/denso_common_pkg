@@ -3,7 +3,12 @@ sensor_server:
   pc_sub_topic: /photoneo_center/sensor/points
   img_sub_topic: /photoneo_center/sensor/image_color
   cam_sub_topic: /photoneo_center/sensor/camera_info
-  sensor_service_name: sensor_service
-  leaf_size: 0.002
-  sensor_frame: photoneo_center_optical_frame
-  world_frame: base_link
+  
+cloud_process:
+  planar_threshold: 0.01
+  x_min: -1.1
+  y_min: -1.1
+  z_min: 0.01
+  x_max: 1.1
+  y_max: 1.1
+  z_max: 1.01

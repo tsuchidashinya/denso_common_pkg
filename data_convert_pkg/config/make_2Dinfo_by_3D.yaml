@@ -1,5 +1,3 @@
 make_2Dinfo_by_3D:
-  world_frame: base_link
-  sensor_frame: photoneo_center_optical_frame
   radious_x: 0.05
   radious_y: 0.05

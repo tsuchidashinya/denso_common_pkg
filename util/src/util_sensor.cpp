@@ -53,7 +53,7 @@ common_msgs::CloudData UtilSensor::concat_cloudmsg(common_msgs::CloudData cloud_
 
 void UtilSensor::set_parameter()
 {
-  pnh_.getParam("util_sensor", param_list);
+  pnh_.getParam("common_parameter/util_sensor", param_list);
 }
 
 sensor_msgs::PointCloud2 UtilSensor::pclrgb_to_pc2_color(pcl::PointCloud<PclRgb> pclrgb_data)

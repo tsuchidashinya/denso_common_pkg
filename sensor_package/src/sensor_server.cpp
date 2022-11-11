@@ -44,15 +44,17 @@ void SensorServer::pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 }
 
 void SensorServer::set_parameter() {
-    pnh_.getParam("sensor_server", param_list);
-    LEAF_SIZE = param_list["leaf_size"];
+    pnh_.getParam("common_parameter", param_list);
+    LEAF_SIZE = param_list["LEAF_SIZE"];
     sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
+    world_frame_ = static_cast<std::string>(param_list["world_frame"]);
+    pnh_.getParam("sensor_server", param_list);
     pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
     pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
     img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
     cam_sub_topic_ = static_cast<std::string>(param_list["cam_sub_topic"]);
-    sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
-    world_frame_ = static_cast<std::string>(param_list["world_frame"]);
+    
 }
 
 /**

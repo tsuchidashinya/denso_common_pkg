@@ -2,9 +2,10 @@
 
 Make2DInfoBy3D::Make2DInfoBy3D(sensor_msgs::CameraInfo cinfo, ImageSize img_size): pnh_("~")
 {
-    pnh_.getParam("make_2Dinfo_by_3D", param_list);
+    pnh_.getParam("common_parameter", param_list);
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
+    pnh_.getParam("make_2Dinfo_by_3D", param_list);
     object_radious_x_ = param_list["radious_x"];
     object_radious_y_ = param_list["radious_y"];
     cinfo_ = cinfo;
