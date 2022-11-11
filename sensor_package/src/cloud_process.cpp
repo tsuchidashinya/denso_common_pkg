@@ -14,6 +14,7 @@ CloudProcess::CloudProcess()
     : pnh_("~")
 {
     pnh_.getParam("cloud_process", param_list);
+    set_parameter();
 }
 
 /**
@@ -74,8 +75,18 @@ pcl::PointCloud<PclXyz> CloudProcess::planar_segmentar(pcl::PointCloud<PclXyz> p
  */
 void CloudProcess::set_crop_frame(std::string sensor_frame, std::string target_frame)
 {
-    UtilBase util;
-    crop_trans_ = util.get_tf(target_frame, sensor_frame);
+    
+    crop_trans_ = tfbase_.get_tf(target_frame, sensor_frame);
+}
+
+void CloudProcess::set_parameter()
+{
+    crop_x_min_ = param_list["x_min"];
+    crop_y_min_ = param_list["y_min"];
+    crop_z_min_ = param_list["z_min"];
+    crop_x_max_ = param_list["x_max"];
+    crop_y_max_ = param_list["y_max"];
+    crop_z_max_ = param_list["z_max"];
 }
 
 /**
@@ -88,12 +99,12 @@ void CloudProcess::set_crop_frame(std::string sensor_frame, std::string target_f
 pcl::PointCloud<PclXyz> CloudProcess::cropbox_segmenter(pcl::PointCloud<PclXyz> pcl_data)
 {
     Eigen::Vector4f minPoint, maxPoint;
-    minPoint[0] = std::stof(param_list["crop_box"]["x_min"]);
-    minPoint[1] = std::stof(param_list["crop_box"]["y_min"]);
-    minPoint[2] = std::stof(param_list["crop_box"]["z_min"]);
-    maxPoint[0] = std::stof(param_list["crop_box"]["x_max"]);
-    maxPoint[1] = std::stof(param_list["crop_box"]["y_max"]);
-    maxPoint[2] = std::stof(param_list["crop_box"]["z_max"]);
+    minPoint[0] = crop_x_min_;
+    minPoint[1] = crop_y_min_;
+    minPoint[2] = crop_z_min_;
+    maxPoint[0] = crop_x_max_;
+    maxPoint[1] = crop_y_max_;
+    maxPoint[2] = crop_z_max_;
 
     Eigen::Vector3f boxTranslation, boxRotation;
     boxTranslation[0] = crop_trans_.translation.x;

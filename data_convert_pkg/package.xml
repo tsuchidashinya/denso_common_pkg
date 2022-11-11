@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>sensor_package</name>
+  <name>data_convert_pkg</name>
   <version>0.0.0</version>
-  <description>The sensor_package package</description>
+  <description>The data_convert_pkg package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/sensor_package</url> -->
+  <!-- <url type="website">http://wiki.ros.org/data_convert_pkg</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -49,16 +49,24 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>pcl_ros</build_depend>
-  <build_depend>cv_bridge</build_depend>
-  <build_depend>common_srvs</build_depend>
   <build_depend>common_msgs</build_depend>
-  <build_depend>util</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>roscpp</build_depend>
   <build_depend>tf_package</build_depend>
+  <build_depend>util</build_depend>
+  <build_export_depend>common_msgs</build_export_depend>
+  <build_export_depend>cv_bridge</build_export_depend>
+  <build_export_depend>pcl_ros</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>tf_package</build_export_depend>
+  <build_export_depend>util</build_export_depend>
+  <exec_depend>common_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>pcl_ros</exec_depend>
   <exec_depend>roscpp</exec_depend>
-  
+  <exec_depend>tf_package</exec_depend>
+  <exec_depend>util</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

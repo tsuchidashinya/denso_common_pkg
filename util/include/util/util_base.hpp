@@ -11,15 +11,22 @@
 #pragma once
 #include "common_header.hpp"
 
+typedef std::vector<int> ArrayInt;
+typedef std::vector<double> ArrayDouble;
+
 class UtilBase
 {
 public:
     UtilBase();
+    template <typename T>
+    static std::vector<T> concatenate_array(std::vector<T> array_original, std::vector<T> array_add)
+    {
+        array_original.insert(array_original.end(), array_add.begin(), array_add.end());
+        return array_original;
+    }
     static int calcurate_round_up(double);
-    static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, std::string, double);
     static void mkdir(std::string);
     static std::string join(std::string, std::string);
-
     /**
      * @brief 変数を格納してその変数がどの型なのかを示します。
      *
@@ -34,7 +41,8 @@ public:
 
     static std::string get_time_str();
     static double distance(double[], double[]);
-    static geometry_msgs::Transform geo_trans_make(double, double, double, tf2::Quaternion);
+    static double distance(double x1, double y1, double x2, double y2);
+    
 
     /**
      * @brief 標準出力に変数の内容を表示します。主に手動のデバックで用います。
@@ -55,6 +63,16 @@ public:
             ROS_ERROR("メッセージが表示できない変数です");
         }
     }
+
+    // template <typename T>
+    // static void array_message_show(std::string name, std::vector<T> array)
+    // {
+    //     std::cout << name << ": ";
+    //     for (int i = 0; i < array.size(); i++) {
+    //         std::cout << std::to_string(array[i]) << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     /**
      * @brief クライアントがリクエストを送信します。
@@ -79,19 +97,17 @@ public:
         }
     }
 
-    geometry_msgs::Transform get_tf(std::string, std::string);
-    tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
+    
+    static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
 
     XmlRpc::XmlRpcValue param_list;
 
 private:
-    tf2_ros::Buffer buffer_;
-    tf2_ros::TransformListener listener_;
+    
     std::random_device rd_;
     std::default_random_engine eng_;
-    ros::NodeHandle pnh_;
 
     static std::string get_name_by_typeinfo(std::type_info const &);
 };

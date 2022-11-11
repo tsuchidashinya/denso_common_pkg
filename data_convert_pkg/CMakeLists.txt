@@ -1,17 +1,19 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(util)
+project(data_convert_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++17)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  pcl_ros
-  cv_bridge
   common_msgs
+  cv_bridge
+  pcl_ros
+  roscpp
+  tf_package
+  util
 )
 
 ## System dependencies are found with CMake's conventions
@@ -71,7 +73,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
+#   common_msgs
 # )
 
 ################################################
@@ -103,11 +105,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_python_setup()
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES UtilBase UtilSensor
-#  CATKIN_DEPENDS roscpp
+ LIBRARIES func_data_convertion get_3D_by_2D make_2Dinfo_by_3D
+#  CATKIN_DEPENDS common_msgs cv_bridge pcl_ros roscpp tf_package util
 #  DEPENDS system_lib
 )
 
@@ -122,17 +123,20 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(UtilBase src/util_base.cpp)
 
-add_library(UtilSensor src/util_sensor.cpp)
-
-
-target_link_libraries(UtilBase
+add_library(func_data_convertion src/func_data_convertion.cpp)
+target_link_libraries(func_data_convertion
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(UtilSensor
-  UtilBase 
+add_library(get_3D_by_2D src/get_3D_by_2D.cpp)
+target_link_libraries(get_3D_by_2D
+  func_data_convertion
   ${catkin_LIBRARIES}
 )
 
+add_library(make_2Dinfo_by_3D src/make_2Dinfo_by_3D.cpp)
+target_link_libraries(make_2Dinfo_by_3D
+  func_data_convertion
+  ${catkin_LIBRARIES}
+)
