@@ -1,0 +1,4 @@
+data_convert_pkg:
+  f_scale: 0.5
+  cx_scale: 0.99
+  cy_scale: 0.9

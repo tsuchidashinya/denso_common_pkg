@@ -12,14 +12,23 @@
 
 SensorServer::SensorServer(ros::NodeHandle &nh)
     : nh_(nh),
-      pnh_("~")
+      pnh_("~"),
+      cloud_process_()
 {
-    pnh_.getParam("sensor_package", param_list);
-    pub_ = nh_.advertise<sensor_msgs::PointCloud2>(param_list["pc_pub_topic"], 10);
-    pc_sub_ = nh_.subscribe(param_list["pc_sub_topic"], 10, &SensorServer::pc_sub_callback, this);
-    img_sub_ = nh_.subscribe(param_list["img_sub_topic"], 10, &SensorServer::img_sub_callback, this);
-    cam_sub_ = nh_.subscribe(param_list["cam_sub_topic"], 10, &SensorServer::cam_sub_callback, this);
-    server_ = nh_.advertiseService(param_list["sensor_service_name"], &SensorServer::service_callback, this);
+    set_parameter();
+    
+    sensor_pub_ = nh_.advertise<sensor_msgs::PointCloud2>(pc_pub_topic_, 10);
+    pc_sub_ = nh_.subscribe(pc_sub_topic_, 10, &SensorServer::pc_sub_callback, this);
+    img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
+    cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
+    server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
+    timer_ = nh_.createTimer(ros::Duration(0.3), &SensorServer::visualize_callback, this);
+}
+
+void SensorServer::visualize_callback(const ros::TimerEvent &event)
+{
+    pc_response_data_.header.frame_id = sensor_frame_;
+    sensor_pub_.publish(pc_response_data_);
 }
 
 /**
@@ -30,7 +39,22 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
  */
 void SensorServer::pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 {
-    pcl::fromROSMsg(*msg, pcl_data_);
+    pc_data_ = *msg;
+    // UtilBase::message_show("pcl_data", pcl_data_.points.size());
+}
+
+void SensorServer::set_parameter() {
+    pnh_.getParam("common_parameter", param_list);
+    LEAF_SIZE = param_list["LEAF_SIZE"];
+    sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
+    world_frame_ = static_cast<std::string>(param_list["world_frame"]);
+    pnh_.getParam("sensor_server", param_list);
+    pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
+    pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
+    img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
+    cam_sub_topic_ = static_cast<std::string>(param_list["cam_sub_topic"]);
+    
 }
 
 /**
@@ -57,9 +81,14 @@ void SensorServer::img_sub_callback(const sensor_msgs::ImageConstPtr &msg)
 
 bool SensorServer::service_callback(common_srvs::SensorService::Request &request, common_srvs::SensorService::Response &response)
 {
-    pcl_data_ = CloudProcess::downsample_by_voxelgrid(pcl_data_, std::stof(param_list["leaf_size"]));
-    response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data_);
+    pcl::PointCloud<PclXyz> pcl_data;
+    pcl::fromROSMsg(pc_data_, pcl_data);
+    pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
+    cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
+    pcl_data = cloud_process_.cropbox_segmenter(pcl_data);
+    response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;
+    pc_response_data_ = UtilSensor::pcl_to_pc2(pcl_data);
     return true;
 }

@@ -12,13 +12,13 @@
 #include <util/util_base.hpp>
 
 UtilBase::UtilBase()
-    : buffer_(),
-      listener_(buffer_),
-      pnh_("~"),
+    : 
       rd_(),
       eng_(rd_())
 {
 }
+
+
 /**
  * @brief 小数点以下に少しでも値があれば+1した整数値を渡す関数
  *
@@ -37,53 +37,8 @@ int UtilBase::calcurate_round_up(double num)
   }
 }
 
-/**
- * @brief xyzの指定した軸の方向に回転する
- *
- * @param rotated_quat クオータニオン型
- * @param xyz string型, "x" or "y" or "z"
- * @param angle
- * @return tf2::Quaternion
- */
-tf2::Quaternion UtilBase::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, RotationOption option, double angle)
-{
-  tf2::Quaternion q_ori(0, 0, 0, 0);
-  if (option == RotationOption::x)
-  {
-    q_ori.setX(1);
-  }
-  else if (option == RotationOption::y)
-  {
-    q_ori.setY(1);
-  }
-  else if (option == RotationOption::z)
-  {
-    q_ori.setZ(1);
-  }
-  tf2::Quaternion q_after, q_final;
-  q_after = rotated_quat * q_ori * rotated_quat.inverse();
-  tf2::Vector3 vec(q_after[0], q_after[1], q_after[2]);
-  q_final.setRotation(vec, angle);
-  return q_final;
-}
 
-tf2::Quaternion UtilBase::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
-{
-  tf2::Quaternion quaternion;
-  quaternion = rotate_quaternion_by_axis(q_moto, RotationOption::x, x);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
-  return quaternion;
-}
 
-tf2::Quaternion UtilBase::rotate_xyz_make(double x, double y, double z)
-{
-  tf2::Quaternion quaternion(0, 0, 0, 1);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, x);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
-  return quaternion;
-}
 
 /**
  * @brief ディレクトリを生成
@@ -150,57 +105,21 @@ double UtilBase::distance(double *vec1, double *vec2)
   double sum = 0;
   for (int i = 0; i < vec_size; i++)
   {
-    sum += abs(vec1[i] - vec2[i]) * abs(vec1[i] - vec2[i]);
+    sum += (vec1[i] - vec2[i]) * (vec1[i] - vec2[i]);
   }
   return sqrt(sum);
 }
-
-/**
- * @brief Transform型を簡単に作るための関数
- *
- * @param x
- * @param y
- * @param z
- * @param quaterion
- * @return geometry_msgs::Transform
- */
-geometry_msgs::Transform UtilBase::geo_trans_make(double x, double y, double z, tf2::Quaternion quaterion)
+/*
+1: x1
+2: y1
+3: x2
+4: y2
+*/
+double UtilBase::distance(double x1, double y1, double x2, double y2)
 {
-  geometry_msgs::Transform output;
-  output.translation.x = x;
-  output.translation.y = y;
-  output.translation.z = z;
-  tf2::convert(quaterion, output.rotation);
-  return output;
+    return sqrt(abs(x1 - x2)*abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2));
 }
 
-/**
- * @brief ROSのTFを取得する
- *
- * @param target target_frame
- * @param source source_frame
- * @return geometry_msgs::Transform
- */
-geometry_msgs::Transform UtilBase::get_tf(std::string target, std::string source)
-{
-  geometry_msgs::TransformStamped final_tf;
-  while (true)
-  {
-    try
-    {
-      final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
-      ROS_INFO_STREAM_ONCE("get_tf: source: " << source << "  target: " << target);
-      break;
-    }
-    catch (const std::exception &e)
-    {
-      ROS_WARN_STREAM(e.what());
-      ros::Duration(0.1).sleep();
-      continue;
-    }
-  }
-  return final_tf.transform;
-}
 
 /**
  * @brief geometry_msgs::Transform型からtf::StampedTransformへ変換する関数

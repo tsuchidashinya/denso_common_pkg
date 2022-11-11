@@ -14,7 +14,71 @@ UtilSensor::UtilSensor()
     : pnh_("~"),
       param_list()
 {
-  pnh_.getParam("util_sensor", param_list);
+  set_parameter();
+}
+
+common_msgs::CloudData UtilSensor::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud.x.size(); i++) {
+    if (cloud.instance[i] != remove_ins) {
+      outdata.x.push_back(cloud.x[i]);
+      outdata.y.push_back(cloud.y[i]);
+      outdata.z.push_back(cloud.z[i]);
+      outdata.instance.push_back(cloud.instance[i]);
+    }
+  }
+  outdata.cloud_name = cloud.cloud_name;
+  return outdata;
+}
+
+common_msgs::CloudData UtilSensor::concat_cloudmsg(common_msgs::CloudData cloud_ori, common_msgs::CloudData cloud_add)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud_ori.x.size(); i++) {
+    outdata.x.push_back(cloud_ori.x[i]);
+    outdata.y.push_back(cloud_ori.y[i]);
+    outdata.z.push_back(cloud_ori.z[i]);
+    outdata.instance.push_back(cloud_ori.instance[i]);
+  }
+  for (int i = 0; i < cloud_add.x.size(); i++) {
+    outdata.x.push_back(cloud_add.x[i]);
+    outdata.y.push_back(cloud_add.y[i]);
+    outdata.z.push_back(cloud_add.z[i]);
+    outdata.instance.push_back(cloud_add.instance[i]);
+  }
+  outdata.cloud_name = cloud_ori.cloud_name + cloud_add.cloud_name;
+  return outdata;
+}
+
+void UtilSensor::set_parameter()
+{
+  pnh_.getParam("common_parameter/util_sensor", param_list);
+}
+
+sensor_msgs::PointCloud2 UtilSensor::pclrgb_to_pc2_color(pcl::PointCloud<PclRgb> pclrgb_data)
+{
+  sensor_msgs::PointCloud2 sensor_data;
+  pcl::toROSMsg(pclrgb_data, sensor_data);
+  return sensor_data;
+}
+
+pcl::PointCloud<PclRgb> UtilSensor::pc2_color_to_pclrgb(sensor_msgs::PointCloud2 sensor_data)
+{
+  pcl::PointCloud<PclRgb> pclrbg_data;
+  pcl::fromROSMsg(sensor_data, pclrbg_data);
+  return pclrbg_data;
+}
+
+
+void UtilSensor::cloud_size_ok(common_msgs::CloudData &cloud)
+{
+  if (cloud.x.size() == cloud.y.size() == cloud.z.size() == cloud.instance.size()) {
+    ;
+  }
+  else {
+    cloud.instance.resize(cloud.x.size());
+  }
 }
 
 /**
@@ -38,6 +102,20 @@ common_msgs::CloudData UtilSensor::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_d
     cloud_data.instance[i] = 0;
   }
   return cloud_data;
+}
+
+sensor_msgs::PointCloud2 UtilSensor::pcl_to_pc2(pcl::PointCloud<PclXyz> pcl_data)
+{
+  sensor_msgs::PointCloud2 pc2;
+  pcl::toROSMsg(pcl_data, pc2);
+  return pc2;
+}
+
+pcl::PointCloud<PclXyz> UtilSensor::pc2_to_pcl(sensor_msgs::PointCloud2 pc2)
+{
+  pcl::PointCloud<PclXyz> pcl_data;
+  pcl::fromROSMsg(pc2, pcl_data);
+  return pcl_data;
 }
 
 /**
@@ -69,10 +147,14 @@ pcl::PointCloud<PclXyz> UtilSensor::cloudmsg_to_pcl(common_msgs::CloudData cloud
 pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cloud_data)
 {
   pcl::PointCloud<PclRgb> pcl_rgb_data;
+  pcl_rgb_data.points.resize(cloud_data.x.size());
   std::vector<int> ins_list;
-  for (int i = 0; i < param_list["cloud_data"].size(); i++)
+  int random_red = util.random_int(0, 255);
+  int random_blue = util.random_int(0, 255);
+  int random_green = util.random_int(0, 255);
+  for (int i = 0; i < param_list.size(); i++)
   {
-    ins_list.push_back(param_list["cloud_data"][i]["instance"]);
+    ins_list.push_back(param_list[i]["instance"]);
   }
   for (int i = 0; i < cloud_data.x.size(); i++)
   {
@@ -82,16 +164,16 @@ pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cl
     auto itr = std::find(ins_list.begin(), ins_list.end(), cloud_data.instance[i]);
     if (itr == ins_list.end())
     {
-      pcl_rgb_data.points[i].r = util.random_int(0, 255);
-      pcl_rgb_data.points[i].g = util.random_int(0, 255);
-      pcl_rgb_data.points[i].b = util.random_int(0, 255);
+      pcl_rgb_data.points[i].r = random_red;
+      pcl_rgb_data.points[i].g = random_green;
+      pcl_rgb_data.points[i].b = random_blue;
     }
     else
     {
       const int index = std::distance(ins_list.begin(), itr);
-      pcl_rgb_data.points[i].r = static_cast<int>(param_list["cloud_data"][i]["color"]["r"]);
-      pcl_rgb_data.points[i].g = static_cast<int>(param_list["cloud_data"][i]["color"]["g"]);
-      pcl_rgb_data.points[i].b = static_cast<int>(param_list["cloud_data"][i]["color"]["b"]);
+      pcl_rgb_data.points[i].r = static_cast<int>(param_list[index]["color"][0]);
+      pcl_rgb_data.points[i].g = static_cast<int>(param_list[index]["color"][1]);
+      pcl_rgb_data.points[i].b = static_cast<int>(param_list[index]["color"][2]);
     }
   }
   return pcl_rgb_data;
