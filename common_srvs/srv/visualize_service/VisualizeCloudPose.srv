@@ -1,0 +1,4 @@
+common_msgs/CloudData[] cloud_data 
+common_msgs/PoseData[] pose_datas
+---
+bool ok

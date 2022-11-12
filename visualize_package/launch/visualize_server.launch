@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="visualize_package" type="visualize_server" name="visualize_server">
+        <rosparam file="$(find visualize_package)/config/visualize_server.yaml" command="load" />
+        <rosparam file="$(find annotation_common)/config/common_parameter.yaml" command="load" />
+    </node>
+
+</launch>

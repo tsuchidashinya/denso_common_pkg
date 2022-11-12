@@ -1,9 +1,9 @@
-#include <data_convert_pkg/func_data_convertion.hpp>
+#include <data_transform_pkg/func_data_convertion.hpp>
 
 FuncDataConvertion::FuncDataConvertion() : 
 pnh_("~")
 {
-    pnh_.getParam("data_convert_pkg", param_list);
+    pnh_.getParam("data_transform_pkg", param_list);
     f_scale_ = param_list["f_scale"];
     cx_scale_ = param_list["cx_scale"];
     cy_scale_ = param_list["cy_scale"];

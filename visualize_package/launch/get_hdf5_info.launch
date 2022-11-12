@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="visualize_package" type="get_hdf5_info.py" name="get_hdf5_info" output="screen">
+        <rosparam file="$(find visualize_package)/config/get_hdf5_info.yaml" command="load" />
+    </node>
+
+</launch>

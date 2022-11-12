@@ -56,7 +56,11 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  SensorService.srv 
+  SensorService.srv
+  visualize_service/VisualizeCloud.srv
+  visualize_service/VisualizeCloudPose.srv
+  visualize_service/VisualizeImage.srv
+  visualize_service/VisualizeImageBox.srv
 )
 
 ## Generate actions in the 'action' folder
