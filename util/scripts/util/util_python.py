@@ -23,12 +23,23 @@ def ext_exist(basename):
     else:
         return False
 
+def dir_join_and_make(origin_dir, add_dir):
+    path = os.path.join(origin_dir, add_dir)
+    make_dir(path)
+    return path
+
+def make_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
 def decide_allpath(dir_path, file_path):
     dirname, basename = os.path.split(dir_path)
     if not ext_exist(basename):
-        return os.path.join(dir_path, insert_time_str(file_path))
+        make_dir(dir_path)
+        return str(os.path.join(dir_path, insert_time_str(file_path)))
     else:
-        return os.path.join(dirname, insert_time_str(file_path))
+        make_dir(dirname)
+        return str(os.path.join(dirname, insert_time_str(file_path)))
         
 def make_pose_data(pose):
     data_size = len(pose)

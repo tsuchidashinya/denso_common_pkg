@@ -36,13 +36,11 @@ void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
 bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloudRequest &request, 
                                                 common_srvs::VisualizeCloudResponse &response)
 {
-    if (cloud_counter == 0) {
-        cloud_pub_.resize(request.cloud_data.size());
-        for (int i = 0; i < cloud_pub_.size(); i++) {
-            cloud_pub_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.cloud_data[i].cloud_name + "_visualize", 10);
-        }
-        pc2_multi_.resize(cloud_pub_.size());
+    cloud_pub_.resize(request.cloud_data.size());
+    for (int i = 0; i < cloud_pub_.size(); i++) {
+        cloud_pub_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.cloud_data[i].cloud_name + "_visualize", 10);
     }
+    pc2_multi_.resize(cloud_pub_.size());
     for (int i = 0; i < request.cloud_data.size(); i++) {
         pc2_multi_[i] = util_sensor_.cloudmsg_to_pc2_color(request.cloud_data[i]);
     }
