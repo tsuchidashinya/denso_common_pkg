@@ -76,6 +76,9 @@ def make_npcloud_from_cloud(cloud_data):
     return np_cloud
 
 def extract_mask_from_npcloud(npcloud):
-    new_np_cloud = npcloud[0:3]
-    np_mask = npcloud[3:]
+    npcloud = npcloud.T
+    new_np_cloud = npcloud[:][0:3]
+    np_mask = npcloud[:][3:]
+    new_np_cloud = new_np_cloud.T 
+    np_mask = np_mask.T
     return new_np_cloud, np_mask

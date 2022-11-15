@@ -286,7 +286,7 @@ void TfBasic::broadcast(geometry_msgs::TransformStamped transform)
   for (int i = 0; i < 3; i++) {
     transform.header.stamp = ros::Time::now();
     br_.sendTransform(transform);
-    ros::Duration(0.0001).sleep();
+    ros::Duration(0.001).sleep();
   }
 }
 
@@ -296,7 +296,7 @@ void TfBasic::static_broadcast(geometry_msgs::TransformStamped transform)
     for (int i = 0; i < 3; i++) {
         transform.header.stamp = ros::Time::now();
         static_br_.sendTransform(transform);
-        ros::Duration(0.0001).sleep();
+        ros::Duration(0.001).sleep();
     }
 }
 
