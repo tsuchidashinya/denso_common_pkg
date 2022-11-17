@@ -4,6 +4,7 @@ import datetime
 from cv_bridge import CvBridge
 import numpy as np
 import os
+from tf.transformations import quaternion_matrix
 
 def get_time_str():
     dt_now = datetime.datetime.now()
@@ -82,3 +83,10 @@ def extract_mask_from_npcloud(npcloud):
     new_np_cloud = new_np_cloud.T 
     np_mask = np_mask.T
     return new_np_cloud, np_mask
+
+def conv_quat2mat(vec):
+    conv_vec = np.zeros(12)
+    conv_vec[0:3] = vec[0:3]
+    trans_euler =quaternion_matrix(vec[3:7])
+    conv_vec[3:12] = trans_euler[0:3, 0:3].reshape(9)
+    return conv_vec
