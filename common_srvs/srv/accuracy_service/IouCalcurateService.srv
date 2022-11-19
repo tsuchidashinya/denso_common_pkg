@@ -1,0 +1,5 @@
+common_msgs/CloudData ground_truth_cloud
+common_msgs/CloudData estimation_cloud
+int32 instance
+---
+float32 iou_result

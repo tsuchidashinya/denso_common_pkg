@@ -2,6 +2,25 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from common_msgs.msg import CloudData, PoseData
 
+
+def get_instance_dict(cloud):
+    info = {}
+    instance_list = []
+    for i in range(len(cloud.x)):
+        exist = cloud.instance[i] in instance_list
+        if not exist:
+            instance_list.append(cloud.instance[i])
+            info[str(int(cloud.instance[i]))] = 0
+        info[str(int(cloud.instance[i]))] += 1
+    return info
+
+def get_max_instance(cloud):
+    max = 0
+    for i in range(len(cloud.x)):
+        if max < cloud.instance[i]:
+            max = cloud.instance[i]
+    return max
+
 def msgposelist_to_trans_rotate(pose):
     data_size = len(pose)
     translation = np.zeros((data_size, 3), dtype=np.float32)

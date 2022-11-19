@@ -64,6 +64,8 @@ add_service_files(
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
   Hdf5OpenService.srv 
+  network_service/SemanticSegmentationService.srv 
+  accuracy_service/IouCalcurateService.srv 
 )
 
 ## Generate actions in the 'action' folder
