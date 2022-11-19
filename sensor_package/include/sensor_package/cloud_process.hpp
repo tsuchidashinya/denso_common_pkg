@@ -9,7 +9,7 @@
  * 
  */
 #pragma once
-#include <util/util_sensor.hpp>
+#include <util/util_msg_data.hpp>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/voxel_grid.h>

@@ -40,7 +40,7 @@ void SensorServer::visualize_callback(const ros::TimerEvent &event)
 void SensorServer::pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 {
     pc_data_ = *msg;
-    // UtilBase::message_show("pcl_data", pcl_data_.points.size());
+    // Util::message_show("pcl_data", pcl_data_.points.size());
 }
 
 void SensorServer::set_parameter() {
@@ -86,9 +86,9 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
     pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
     cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
     pcl_data = cloud_process_.cropbox_segmenter(pcl_data);
-    response.cloud_data = UtilSensor::pcl_to_cloudmsg(pcl_data);
+    response.cloud_data = UtilMsgData::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;
-    pc_response_data_ = UtilSensor::pcl_to_pc2(pcl_data);
+    pc_response_data_ = UtilMsgData::pcl_to_pc2(pcl_data);
     return true;
 }

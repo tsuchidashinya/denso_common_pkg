@@ -1,7 +1,7 @@
 /**
- * @file util_base.cpp
+ * @file util.cpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
- * @brief  UtilBaseクラスのソースファイル
+ * @brief  Utilクラスのソースファイル
  * @version 0.1
  * @date 2022-09-10
  *
@@ -9,9 +9,9 @@
  *
  */
 
-#include <util/util_base.hpp>
+#include <util/util.hpp>
 
-UtilBase::UtilBase()
+Util::Util()
     : 
       rd_(),
       eng_(rd_())
@@ -25,7 +25,7 @@ UtilBase::UtilBase()
  * @param num
  * @return int
  */
-int UtilBase::calcurate_round_up(double num)
+int Util::calcurate_round_up(double num)
 {
   if (num - int(num))
   {
@@ -45,7 +45,7 @@ int UtilBase::calcurate_round_up(double num)
  *
  * @param path
  */
-void UtilBase::mkdir(std::string path)
+void Util::mkdir(std::string path)
 {
   if (!std::filesystem::exists(path))
   {
@@ -60,7 +60,7 @@ void UtilBase::mkdir(std::string path)
  * @param str_add 結合するパス
  * @return std::string 結合後のパス
  */
-std::string UtilBase::join(std::string str_front, std::string str_add)
+std::string Util::join(std::string str_front, std::string str_add)
 {
   if (str_front[str_front.size() - 1] == '/')
   {
@@ -84,7 +84,7 @@ std::string UtilBase::join(std::string str_front, std::string str_add)
  *
  * @return std::string 月_日_時間_分_秒
  */
-std::string UtilBase::get_time_str()
+std::string Util::get_time_str()
 {
   time_t t_ = time(nullptr);
   const tm *localtime_ = localtime(&t_);
@@ -99,7 +99,7 @@ std::string UtilBase::get_time_str()
  * @param vec2  vec1と同様
  * @return double vec1とvec2のユークリッド距離
  */
-double UtilBase::distance(double *vec1, double *vec2)
+double Util::distance(double *vec1, double *vec2)
 {
   int vec_size = sizeof(vec1) / sizeof(vec1[0]);
   double sum = 0;
@@ -115,7 +115,7 @@ double UtilBase::distance(double *vec1, double *vec2)
 3: x2
 4: y2
 */
-double UtilBase::distance(double x1, double y1, double x2, double y2)
+double Util::distance(double x1, double y1, double x2, double y2)
 {
     return sqrt(abs(x1 - x2)*abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2));
 }
@@ -127,7 +127,7 @@ double UtilBase::distance(double x1, double y1, double x2, double y2)
  * @param trans
  * @return tf::StampedTransform
  */
-tf::StampedTransform UtilBase::make_stamped_trans(geometry_msgs::Transform trans)
+tf::StampedTransform Util::make_stamped_trans(geometry_msgs::Transform trans)
 {
   tf::StampedTransform stamp_trans;
   tf::Vector3 vec3;
@@ -147,7 +147,7 @@ tf::StampedTransform UtilBase::make_stamped_trans(geometry_msgs::Transform trans
  * @param max 生成する数値の上限
  * @return int
  */
-int UtilBase::random_int(int min, int max)
+int Util::random_int(int min, int max)
 {
   std::uniform_int_distribution<> distr(min, max);
   return distr(eng_);
@@ -160,13 +160,13 @@ int UtilBase::random_int(int min, int max)
  * @param max 生成する数値の上限
  * @return float
  */
-float UtilBase::random_float(float min, float max)
+float Util::random_float(float min, float max)
 {
   std::uniform_real_distribution<> distr(min, max);
   return distr(eng_);
 }
 
-std::string UtilBase::get_name_by_typeinfo(std::type_info const &iTypeInfo)
+std::string Util::get_name_by_typeinfo(std::type_info const &iTypeInfo)
 {
   char *aName;
   int status = 0;

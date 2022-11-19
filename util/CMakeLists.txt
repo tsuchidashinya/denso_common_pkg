@@ -106,7 +106,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_python_setup()
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES UtilBase UtilSensor
+ LIBRARIES Util UtilMsgData
 #  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
@@ -122,17 +122,17 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(UtilBase src/util_base.cpp)
+add_library(Util src/util.cpp)
 
-add_library(UtilSensor src/util_sensor.cpp)
+add_library(UtilMsgData src/util_msg_data.cpp)
 
 
-target_link_libraries(UtilBase
+target_link_libraries(Util
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(UtilSensor
-  UtilBase 
+target_link_libraries(UtilMsgData
+  Util 
   ${catkin_LIBRARIES}
 )
 

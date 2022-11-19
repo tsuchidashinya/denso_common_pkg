@@ -1,6 +1,6 @@
 #pragma once
-#include <util/util_base.hpp>
-#include <util/util_sensor.hpp>
+#include <util/util.hpp>
+#include <util/util_msg_data.hpp>
 #include <common_msgs/BoxPosition.h>
 #include <math.h>
 

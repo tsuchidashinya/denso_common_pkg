@@ -1,4 +1,4 @@
-util_sensor:
+util_msg_data:
   - instance: 0
     color:
       - 255

@@ -1,5 +1,5 @@
 /**
- * @file util_sensor.hpp
+ * @file util_msg_data.hpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief
  * @version 0.1
@@ -10,7 +10,7 @@
  */
 #pragma once
 #include "common_header.hpp"
-#include "util_base.hpp"
+#include "util.hpp"
 #include <common_msgs/CloudData.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Image.h>
@@ -22,10 +22,10 @@
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
 
-class UtilSensor
+class UtilMsgData
 {
 public:
-  UtilSensor();
+  UtilMsgData();
   static void cloud_size_ok(common_msgs::CloudData&);
   static common_msgs::CloudData remove_ins_cloudmsg(common_msgs::CloudData, int);
   static common_msgs::CloudData concat_cloudmsg(common_msgs::CloudData, common_msgs::CloudData);
@@ -44,6 +44,6 @@ public:
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;
-  UtilBase util;
+  Util util;
   void set_parameter();
 };

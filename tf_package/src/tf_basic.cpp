@@ -172,7 +172,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
  * @param source source_frame
  * @return geometry_msgs::Transform
  */
-geometry_msgs::Transform TfBasic::get_tf(std::string target, std::string source)
+geometry_msgs::Transform TfBasic::tf_listen(std::string target, std::string source)
 {
   geometry_msgs::TransformStamped final_tf;
   while (true)
@@ -180,7 +180,7 @@ geometry_msgs::Transform TfBasic::get_tf(std::string target, std::string source)
     try
     {
       final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
-      ROS_INFO_STREAM_ONCE("get_tf: source: " << source << "  target: " << target);
+      ROS_INFO_STREAM_ONCE("tf_listen: source: " << source << "  target: " << target);
       break;
     }
     catch (const std::exception &e)

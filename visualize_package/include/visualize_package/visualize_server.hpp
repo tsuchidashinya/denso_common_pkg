@@ -1,7 +1,7 @@
 #pragma once
 #include <common_srvs/VisualizeCloud.h>
-#include <util/util_base.hpp>
-#include <util/util_sensor.hpp>
+#include <util/util.hpp>
+#include <util/util_msg_data.hpp>
 #include <sensor_msgs/PointCloud2.h>
 
 
@@ -20,7 +20,7 @@ private:
     ros::Timer timer_;
     int cloud_counter;
     double timer_duration_;
-    UtilSensor util_sensor_;
+    UtilMsgData util_msg_data_;
     ros::ServiceServer visualize_cloud_server_;
     std::string visualize_cloud_service_name_;
 

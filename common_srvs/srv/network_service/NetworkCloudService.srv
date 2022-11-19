@@ -1,0 +1,3 @@
+common_msgs/CloudData[] cloud_data_multi
+---
+common_msgs/PoseData[] pose_data

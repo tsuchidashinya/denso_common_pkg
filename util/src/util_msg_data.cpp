@@ -1,5 +1,5 @@
 /**
- * @file util_sensor.cpp
+ * @file util_msg_data.cpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
  * @brief
  * @version 0.1
@@ -8,16 +8,16 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <util/util_sensor.hpp>
+#include <util/util_msg_data.hpp>
 
-UtilSensor::UtilSensor()
+UtilMsgData::UtilMsgData()
     : pnh_("~"),
       param_list()
 {
   set_parameter();
 }
 
-common_msgs::CloudData UtilSensor::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
+common_msgs::CloudData UtilMsgData::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
 {
   common_msgs::CloudData outdata;
   for (int i = 0; i < cloud.x.size(); i++) {
@@ -32,7 +32,7 @@ common_msgs::CloudData UtilSensor::remove_ins_cloudmsg(common_msgs::CloudData cl
   return outdata;
 }
 
-common_msgs::CloudData UtilSensor::concat_cloudmsg(common_msgs::CloudData cloud_ori, common_msgs::CloudData cloud_add)
+common_msgs::CloudData UtilMsgData::concat_cloudmsg(common_msgs::CloudData cloud_ori, common_msgs::CloudData cloud_add)
 {
   common_msgs::CloudData outdata;
   for (int i = 0; i < cloud_ori.x.size(); i++) {
@@ -51,19 +51,19 @@ common_msgs::CloudData UtilSensor::concat_cloudmsg(common_msgs::CloudData cloud_
   return outdata;
 }
 
-void UtilSensor::set_parameter()
+void UtilMsgData::set_parameter()
 {
-  pnh_.getParam("common_parameter/util_sensor", param_list);
+  pnh_.getParam("common_parameter/util_msg_data", param_list);
 }
 
-sensor_msgs::PointCloud2 UtilSensor::pclrgb_to_pc2_color(pcl::PointCloud<PclRgb> pclrgb_data)
+sensor_msgs::PointCloud2 UtilMsgData::pclrgb_to_pc2_color(pcl::PointCloud<PclRgb> pclrgb_data)
 {
   sensor_msgs::PointCloud2 sensor_data;
   pcl::toROSMsg(pclrgb_data, sensor_data);
   return sensor_data;
 }
 
-pcl::PointCloud<PclRgb> UtilSensor::pc2_color_to_pclrgb(sensor_msgs::PointCloud2 sensor_data)
+pcl::PointCloud<PclRgb> UtilMsgData::pc2_color_to_pclrgb(sensor_msgs::PointCloud2 sensor_data)
 {
   pcl::PointCloud<PclRgb> pclrbg_data;
   pcl::fromROSMsg(sensor_data, pclrbg_data);
@@ -71,7 +71,7 @@ pcl::PointCloud<PclRgb> UtilSensor::pc2_color_to_pclrgb(sensor_msgs::PointCloud2
 }
 
 
-void UtilSensor::cloud_size_ok(common_msgs::CloudData &cloud)
+void UtilMsgData::cloud_size_ok(common_msgs::CloudData &cloud)
 {
   if (cloud.x.size() == cloud.y.size() == cloud.z.size() == cloud.instance.size()) {
     ;
@@ -87,7 +87,7 @@ void UtilSensor::cloud_size_ok(common_msgs::CloudData &cloud)
  * @param pcl_data
  * @return common_msgs::CloudData
  */
-common_msgs::CloudData UtilSensor::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_data)
+common_msgs::CloudData UtilMsgData::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_data)
 {
   common_msgs::CloudData cloud_data;
   cloud_data.x.resize(pcl_data.points.size());
@@ -104,14 +104,14 @@ common_msgs::CloudData UtilSensor::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_d
   return cloud_data;
 }
 
-sensor_msgs::PointCloud2 UtilSensor::pcl_to_pc2(pcl::PointCloud<PclXyz> pcl_data)
+sensor_msgs::PointCloud2 UtilMsgData::pcl_to_pc2(pcl::PointCloud<PclXyz> pcl_data)
 {
   sensor_msgs::PointCloud2 pc2;
   pcl::toROSMsg(pcl_data, pc2);
   return pc2;
 }
 
-pcl::PointCloud<PclXyz> UtilSensor::pc2_to_pcl(sensor_msgs::PointCloud2 pc2)
+pcl::PointCloud<PclXyz> UtilMsgData::pc2_to_pcl(sensor_msgs::PointCloud2 pc2)
 {
   pcl::PointCloud<PclXyz> pcl_data;
   pcl::fromROSMsg(pc2, pcl_data);
@@ -124,7 +124,7 @@ pcl::PointCloud<PclXyz> UtilSensor::pc2_to_pcl(sensor_msgs::PointCloud2 pc2)
  * @param cloud_data
  * @return pcl::PointCloud<PclXyz>
  */
-pcl::PointCloud<PclXyz> UtilSensor::cloudmsg_to_pcl(common_msgs::CloudData cloud_data)
+pcl::PointCloud<PclXyz> UtilMsgData::cloudmsg_to_pcl(common_msgs::CloudData cloud_data)
 {
   pcl::PointCloud<PclXyz> pcl_data;
   pcl_data.points.resize(cloud_data.x.size());
@@ -139,12 +139,12 @@ pcl::PointCloud<PclXyz> UtilSensor::cloudmsg_to_pcl(common_msgs::CloudData cloud
 
 /**
  * @brief common_msgs::CloudData型からpcl::PointCloud<pcl::PointXYZRGB>型へ変換する関数
- *        色の付け方で特別指定したい場合はutil_sensor_config.yamlに記述
+ *        色の付け方で特別指定したい場合はutil_msg_data_config.yamlに記述
  *
  * @param cloud_data
  * @return pcl::PointCloud<PclRgb>
  */
-pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cloud_data)
+pcl::PointCloud<PclRgb> UtilMsgData::cloudmsg_to_pclrgb(common_msgs::CloudData cloud_data)
 {
   pcl::PointCloud<PclRgb> pcl_rgb_data;
   pcl_rgb_data.points.resize(cloud_data.x.size());
@@ -185,7 +185,7 @@ pcl::PointCloud<PclRgb> UtilSensor::cloudmsg_to_pclrgb(common_msgs::CloudData cl
  * @param cloud_data
  * @return sensor_msgs::PointCloud2
  */
-sensor_msgs::PointCloud2 UtilSensor::cloudmsg_to_pc2(common_msgs::CloudData cloud_data)
+sensor_msgs::PointCloud2 UtilMsgData::cloudmsg_to_pc2(common_msgs::CloudData cloud_data)
 {
   sensor_msgs::PointCloud2 pc2;
   pcl::toROSMsg(cloudmsg_to_pcl(cloud_data), pc2);
@@ -198,14 +198,14 @@ sensor_msgs::PointCloud2 UtilSensor::cloudmsg_to_pc2(common_msgs::CloudData clou
  * @param cloud_data
  * @return sensor_msgs::PointCloud2
  */
-sensor_msgs::PointCloud2 UtilSensor::cloudmsg_to_pc2_color(common_msgs::CloudData cloud_data)
+sensor_msgs::PointCloud2 UtilMsgData::cloudmsg_to_pc2_color(common_msgs::CloudData cloud_data)
 {
   sensor_msgs::PointCloud2 pc2;
   pcl::toROSMsg(cloudmsg_to_pclrgb(cloud_data), pc2);
   return pc2;
 }
 
-common_msgs::CloudData UtilSensor::pc2_to_cloudmsg(sensor_msgs::PointCloud2 pc2)
+common_msgs::CloudData UtilMsgData::pc2_to_cloudmsg(sensor_msgs::PointCloud2 pc2)
 {
   common_msgs::CloudData cloud_data;
   pcl::PointCloud<PclXyz> pcl_data;
@@ -225,7 +225,7 @@ common_msgs::CloudData UtilSensor::pc2_to_cloudmsg(sensor_msgs::PointCloud2 pc2)
  * 白黒であればsensor_msgs::image_encodings::MONO8が適切です。
  * @return cv::Mat
  */
-cv::Mat UtilSensor::img_to_cv(sensor_msgs::Image img_msg, std::string encording)
+cv::Mat UtilMsgData::img_to_cv(sensor_msgs::Image img_msg, std::string encording)
 {
 
   cv_bridge::CvImageConstPtr cv_img_ptr;

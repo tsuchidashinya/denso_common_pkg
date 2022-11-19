@@ -42,7 +42,7 @@ bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloud
     }
     pc2_multi_.resize(cloud_pub_.size());
     for (int i = 0; i < request.cloud_data.size(); i++) {
-        pc2_multi_[i] = util_sensor_.cloudmsg_to_pc2_color(request.cloud_data[i]);
+        pc2_multi_[i] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data[i]);
     }
     response.ok = true;
     return true;

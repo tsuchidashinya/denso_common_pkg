@@ -9,7 +9,7 @@
  *
  */
 #pragma once
-#include <util/util_sensor.hpp>
+#include <util/util_msg_data.hpp>
 #include <common_srvs/SensorService.h>
 #include "cloud_process.hpp"
 

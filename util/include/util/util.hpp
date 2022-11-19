@@ -1,7 +1,7 @@
 /**
- * @file util_base.hpp
+ * @file util.hpp
  * @author tsuchidashinya (tsuchida.shinya413@mail.kyutech.jp)
- * @brief UtilBaseクラスのヘッダーファイル
+ * @brief Utilクラスのヘッダーファイル
  * @version 0.1
  * @date 2022-09-10
  *
@@ -14,10 +14,10 @@
 typedef std::vector<int> ArrayInt;
 typedef std::vector<double> ArrayDouble;
 
-class UtilBase
+class Util
 {
 public:
-    UtilBase();
+    Util();
     template <typename T>
     static std::vector<T> concatenate_array(std::vector<T> array_original, std::vector<T> array_add)
     {
@@ -36,7 +36,7 @@ public:
     template <typename T>
     static std::string type(T para)
     {
-        return UtilBase::get_name_by_typeinfo(typeid(para));
+        return Util::get_name_by_typeinfo(typeid(para));
     }
 
     static std::string get_time_str();

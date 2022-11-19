@@ -1,0 +1,6 @@
+int32 index
+---
+common_msgs/CloudData cloud_data
+float32[] camera_info
+sensor_msgs/Image image
+common_msgs/PoseData[] pose_data
