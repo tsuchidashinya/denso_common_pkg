@@ -80,3 +80,13 @@ def extract_mask_from_npcloud(npcloud):
     new_np_cloud = new_np_cloud.T 
     np_mask = np_mask.T
     return new_np_cloud, np_mask
+
+def extract_ins_cloud_msg(cloud, ins):
+    outcloud = CloudData()
+    for i in range(len(cloud.x)):
+        if (cloud.instance[i] == ins):
+            outcloud.x.append(cloud.x[i])
+            outcloud.y.append(cloud.y[i])
+            outcloud.z.append(cloud.z[i])
+            outcloud.instance.append(cloud.instance[i])
+    return outcloud
