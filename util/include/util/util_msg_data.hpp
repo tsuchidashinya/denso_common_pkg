@@ -22,6 +22,12 @@
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
 
+struct ImageSize
+{
+    int width;
+    int height;
+};
+
 class UtilMsgData
 {
 public:
@@ -40,7 +46,8 @@ public:
   sensor_msgs::PointCloud2 cloudmsg_to_pc2_color(common_msgs::CloudData);
   static common_msgs::CloudData pc2_to_cloudmsg(sensor_msgs::PointCloud2);
   static cv::Mat img_to_cv(sensor_msgs::Image, std::string);
-
+  static std::vector<float> caminfo_to_floatlist(sensor_msgs::CameraInfo);
+  static ImageSize get_image_size(cv::Mat);
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;

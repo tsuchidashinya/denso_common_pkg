@@ -4,12 +4,12 @@
 class Get3DBy2D
 {
 public:
-    Get3DBy2D(sensor_msgs::CameraInfo, ImageSize);
+    Get3DBy2D(std::vector<float>, ImageSize);
     std::vector<common_msgs::CloudData> get_out_data(common_msgs::CloudData, std::vector<common_msgs::BoxPosition>);
     
     
 private:
-    sensor_msgs::CameraInfo cinfo_;
+    std::vector<float> cinfo_list_;
     ImageSize im_size_;
     std::vector<ArrayInt> write_2d_instance_multi(std::vector<common_msgs::BoxPosition>);
     std::vector<ArrayInt> write_2d_instance(common_msgs::BoxPosition);

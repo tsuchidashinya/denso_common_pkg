@@ -88,7 +88,7 @@ public:
         ros::service::waitForService(service_name);
         if (client.call(msg))
         {
-            ;
+            // ROS_INFO_STREAM("client request: " << service_name);
         }
         else
         {

@@ -22,30 +22,30 @@ ImageSize FuncDataConvertion::get_image_size(cv::Mat img)
     return outdata;
 }
 
-Point2D FuncDataConvertion::func_3d_to_2d_pointcloud(Point3D xyz, sensor_msgs::CameraInfo cinfo_msg)
+Point2D FuncDataConvertion::func_3d_to_2d_pointcloud(Point3D xyz, std::vector<float> K)
 {
     double fx, tx, cx, fy, ty, cy;
-    fx = cinfo_msg.K[0] * f_scale_;
-    tx = cinfo_msg.K[1];
-    cx = cinfo_msg.K[2] * cx_scale_;
-    fy = cinfo_msg.K[4] * f_scale_;
-    ty = cinfo_msg.K[3];
-    cy = cinfo_msg.K[5] * cy_scale_;
+    fx = K[0] * f_scale_;
+    tx = K[1];
+    cx = K[2] * cx_scale_;
+    fy = K[4] * f_scale_;
+    ty = K[3];
+    cy = K[5] * cy_scale_;
     Point2D output;
     output.x = (fx * xyz.x + tx) / xyz.z + cx;
     output.y = (fy * xyz.y + ty) / xyz.z + cy;
     return output;
 }
 
-Point2D FuncDataConvertion::func_3d_to_2d_coodinate(Point3D xyz, sensor_msgs::CameraInfo cinfo_msg)
+Point2D FuncDataConvertion::func_3d_to_2d_coodinate(Point3D xyz, std::vector<float> K)
 {
     double fx, tx, cx, fy, ty, cy;
-    fx = cinfo_msg.K[0] * f_scale_;
-    tx = cinfo_msg.K[1];
-    cx = cinfo_msg.K[2] * cx_scale_;
-    fy = cinfo_msg.K[4] * f_scale_;
-    ty = cinfo_msg.K[3];
-    cy = cinfo_msg.K[5] * cy_scale_;
+    fx = K[0] * f_scale_;
+    tx = K[1];
+    cx = K[2] * cx_scale_;
+    fy = K[4] * f_scale_;
+    ty = K[3];
+    cy = K[5] * cy_scale_;
     Point2D output;
     output.x = (fx * xyz.x + tx) / xyz.z + cx;
     output.y = (fy * -xyz.y + ty) / xyz.z + cy;

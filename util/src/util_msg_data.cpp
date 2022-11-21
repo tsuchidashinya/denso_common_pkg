@@ -17,6 +17,23 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+ImageSize UtilMsgData::get_image_size(cv::Mat img)
+{
+    ImageSize outdata;
+    outdata.height = img.rows;
+    outdata.width = img.cols;
+    return outdata;
+}
+
+std::vector<float> UtilMsgData::caminfo_to_floatlist(sensor_msgs::CameraInfo cinfo)
+{
+  std::vector<float> K;
+  for (int i = 0; i < cinfo.K.size(); i++) {
+    K.push_back(cinfo.K[i]);
+  }
+  return K;
+}
+
 common_msgs::CloudData UtilMsgData::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
 {
   common_msgs::CloudData outdata;

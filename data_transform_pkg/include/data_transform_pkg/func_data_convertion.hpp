@@ -4,11 +4,6 @@
 #include <common_msgs/BoxPosition.h>
 #include <math.h>
 
-struct ImageSize
-{
-    int width;
-    int height;
-};
 
 struct Point2D
 {
@@ -38,8 +33,8 @@ class FuncDataConvertion
 {
 public:
     FuncDataConvertion();
-    Point2D func_3d_to_2d_pointcloud(Point3D, sensor_msgs::CameraInfo);
-    Point2D func_3d_to_2d_coodinate(Point3D, sensor_msgs::CameraInfo);
+    Point2D func_3d_to_2d_pointcloud(Point3D, std::vector<float>);
+    Point2D func_3d_to_2d_coodinate(Point3D, std::vector<float>);
     static bool point_is_in_image(Point2D, ImageSize, int);
     static ImageSize get_image_size(cv::Mat);
     XmlRpc::XmlRpcValue param_list;

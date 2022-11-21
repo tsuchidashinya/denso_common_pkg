@@ -56,6 +56,7 @@ def make_pose_mask(translation, rotation):
 def rosimg_to_npimg(rosimg):
     bridge = CvBridge()
     np_img = bridge.imgmsg_to_cv2(rosimg, "bgr8")
+    np_img = np.array(np_img)
     return np_img
 
 def npimg_to_rosimg(npimg):

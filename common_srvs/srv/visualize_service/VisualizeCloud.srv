@@ -1,3 +1,4 @@
-common_msgs/CloudData[] cloud_data 
+common_msgs/CloudData[] cloud_data_list
+string[] topic_name_list
 ---
 bool ok

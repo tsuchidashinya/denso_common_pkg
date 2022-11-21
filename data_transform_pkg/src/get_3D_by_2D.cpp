@@ -1,8 +1,8 @@
 #include <data_transform_pkg/get_3D_by_2D.hpp>
 
-Get3DBy2D::Get3DBy2D(sensor_msgs::CameraInfo cinfo, ImageSize im_size)
+Get3DBy2D::Get3DBy2D(std::vector<float> cinfo_list, ImageSize im_size)
 {
-    cinfo_ = cinfo;
+    cinfo_list_ = cinfo_list;
     im_size_ = im_size;
 }
 
@@ -73,7 +73,7 @@ std::vector<common_msgs::CloudData> Get3DBy2D::extract_data_multi(common_msgs::C
     FuncDataConvertion data_convert;
     for (int i = 0; i < cloud.x.size(); i++) {
         Point3D point3d(cloud.x[i], cloud.y[i], cloud.z[i]);
-        Point2D point2d = data_convert.func_3d_to_2d_pointcloud(point3d, cinfo_);
+        Point2D point2d = data_convert.func_3d_to_2d_pointcloud(point3d, cinfo_list_);
         if (FuncDataConvertion::point_is_in_image(point2d, im_size_, 1)) {
             int x = int(point2d.x);
             int y = int(point2d.y);
@@ -96,7 +96,7 @@ common_msgs::CloudData Get3DBy2D::extract_data(common_msgs::CloudData cloud, std
     FuncDataConvertion data_convert;
     for (int i = 0; i < cloud.x.size(); i++) {
         Point3D point3d(cloud.x[i], cloud.y[i], cloud.z[i]);
-        Point2D point2d = data_convert.func_3d_to_2d_pointcloud(point3d, cinfo_);
+        Point2D point2d = data_convert.func_3d_to_2d_pointcloud(point3d, cinfo_list_);
         if (FuncDataConvertion::point_is_in_image(point2d, im_size_, 1)) {
             int x = int(point2d.x);
             int y = int(point2d.y);
