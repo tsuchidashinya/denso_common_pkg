@@ -13,12 +13,15 @@
 #include "util.hpp"
 #include <common_msgs/CloudData.h>
 #include <common_msgs/BoxPosition.h>
+#include <common_msgs/ObjectInfo.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <cv_bridge/cv_bridge.h>
 #include <algorithm>
+#include <gazebo_msgs/ModelState.h>
+
 
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
@@ -55,6 +58,8 @@ public:
   static YoloFormat pascalvoc_to_yolo(common_msgs::BoxPosition);
   static common_msgs::BoxPosition yolo_to_pascalvoc(YoloFormat, ImageSize);
   static common_msgs::BoxPosition box_position_normalized(common_msgs::BoxPosition);
+  static gazebo_msgs::ModelState make_gazebo_model_state(common_msgs::ObjectInfo);
+  static gazebo_msgs::ModelState make_gazebo_model_state(std::string, geometry_msgs::Transform);
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;

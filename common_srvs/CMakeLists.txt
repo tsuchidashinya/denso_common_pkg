@@ -58,6 +58,7 @@ add_service_files(
   FILES
   SensorService.srv
   GazeboMoveService.srv
+  GazeboSensorMoveService.srv
   visualize_service/VisualizeCloud.srv
   visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv

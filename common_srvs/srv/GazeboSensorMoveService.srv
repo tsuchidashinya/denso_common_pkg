@@ -1,0 +1,3 @@
+common_msgs/ObjectInfo object_info
+---
+int32 ok

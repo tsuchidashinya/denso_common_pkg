@@ -279,3 +279,32 @@ common_msgs::BoxPosition UtilMsgData::yolo_to_pascalvoc(YoloFormat yolo_boxes, I
   boxes.tf_name = yolo_boxes.tf_name;
   return boxes;
 }
+
+/**
+ * @brief gazebo_modelメッセージを生成する関数です。
+ *
+ * @param object_name Gazeboオブジェクトの名前
+ * @param trans geometry_msgs::Transform型の姿勢データ
+ * @return gazebo_msgs::ModelState
+ */
+gazebo_msgs::ModelState UtilMsgData::make_gazebo_model_state(std::string object_name, geometry_msgs::Transform trans)
+{
+    gazebo_msgs::ModelState model;
+    model.model_name = object_name;
+    model.pose.position.x = trans.translation.x;
+    model.pose.position.y = trans.translation.y;
+    model.pose.position.z = trans.translation.z;
+    tf2::convert(trans.rotation, model.pose.orientation);
+    return model;
+}
+
+gazebo_msgs::ModelState UtilMsgData::make_gazebo_model_state(common_msgs::ObjectInfo object_info)
+{
+    gazebo_msgs::ModelState model;
+    model.model_name = object_info.tf_name;
+    model.pose.position.x = object_info.position.translation.x;
+    model.pose.position.y = object_info.position.translation.y;
+    model.pose.position.z = object_info.position.translation.z;
+    tf2::convert(object_info.position.rotation, model.pose.orientation);
+    return model;
+}
