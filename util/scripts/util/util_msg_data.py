@@ -90,7 +90,7 @@ def npcloud_to_msgcloud(npcloud):
         msgcloud.x.append(npcloud[i, 0])
         msgcloud.y.append(npcloud[i, 1])
         msgcloud.z.append(npcloud[i, 2])
-        msgcloud.instance.append(npcloud[i, 3])
+        msgcloud.instance.append(int(npcloud[i, 3]))
     return msgcloud
 
 def extract_mask_from_npcloud(npcloud):

@@ -45,7 +45,7 @@ def write_hdf5(h5pyObject, data_dict, index):
     h5pyObject.flush()
 
 def open_writed_hdf5(file_path):
-    if not os.path.exists(file_path):
+    if not os.path.exists(os.path.dirname(file_path)):
         print("hdf5 file is not found!!")
         raise Exception
     return h5py.File(file_path, "w")
