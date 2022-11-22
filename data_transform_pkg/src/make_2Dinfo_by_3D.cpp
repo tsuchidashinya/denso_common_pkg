@@ -72,7 +72,7 @@ std::vector<Point3D> Make2DInfoBy3D::get_3Dpoint_from_sensor(std::vector<std::st
     sensor_tf = tf_basic_.tf_listen(sensor_frame_, world_frame_);
     for (int i = 0; i < tf_frames.size(); i++) {
         sensor_tf = tf_basic_.tf_listen(sensor_frame_, world_frame_);
-        // TfBasic::tf_data_show(sensor_tf, sensor_frame_);
+        TfBasic::tf_data_show(sensor_tf, sensor_frame_);
         // Util::message_show(world_frame_, sensor_frame_);
         tf2::Quaternion source_quat;
         tf2::convert(sensor_tf.rotation, source_quat);
