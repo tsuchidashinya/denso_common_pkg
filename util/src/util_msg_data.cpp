@@ -17,14 +17,6 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
-ImageSize UtilMsgData::get_image_size(cv::Mat img)
-{
-    ImageSize outdata;
-    outdata.height = img.rows;
-    outdata.width = img.cols;
-    return outdata;
-}
-
 std::vector<float> UtilMsgData::caminfo_to_floatlist(sensor_msgs::CameraInfo cinfo)
 {
   std::vector<float> K;
@@ -242,7 +234,7 @@ common_msgs::CloudData UtilMsgData::pc2_to_cloudmsg(sensor_msgs::PointCloud2 pc2
  * 白黒であればsensor_msgs::image_encodings::MONO8が適切です。
  * @return cv::Mat
  */
-cv::Mat UtilMsgData::img_to_cv(sensor_msgs::Image img_msg, std::string encording)
+cv::Mat UtilMsgData::rosimg_to_cvimg(sensor_msgs::Image img_msg, std::string encording)
 {
 
   cv_bridge::CvImageConstPtr cv_img_ptr;
@@ -250,4 +242,40 @@ cv::Mat UtilMsgData::img_to_cv(sensor_msgs::Image img_msg, std::string encording
   cv::Mat cv_image(cv_img_ptr->image.rows, cv_img_ptr->image.cols, cv_img_ptr->image.type());
   cv_image = cv_img_ptr->image;
   return cv_image;
+}
+
+YoloFormat UtilMsgData::pascalvoc_to_yolo(common_msgs::BoxPosition boxes)
+{
+  YoloFormat outdata;
+  boxes = box_position_normalized(boxes);
+  outdata.x = boxes.x_one;
+  outdata.y = boxes.y_one;
+  outdata.w = boxes.x_two - boxes.x_one;
+  outdata.h = boxes.y_two - boxes.y_one;
+  outdata.tf_name = boxes.tf_name;
+  outdata.object_class_name = boxes.object_class_name;
+  return outdata;
+}
+
+common_msgs::BoxPosition UtilMsgData::box_position_normalized(common_msgs::BoxPosition boxes)
+{
+  if (boxes.x_one > boxes.x_two) {
+    std::swap(boxes.x_one, boxes.x_two);
+  }
+  if (boxes.y_one > boxes.y_two) {
+    std::swap(boxes.y_one, boxes.y_two);
+  }
+  return boxes;
+}
+
+common_msgs::BoxPosition UtilMsgData::yolo_to_pascalvoc(YoloFormat yolo_boxes, ImageSize image_size)
+{
+  common_msgs::BoxPosition boxes;
+  boxes.x_one = (yolo_boxes.x * 2 - yolo_boxes.w) * image_size.width / 2;
+  boxes.x_two = (yolo_boxes.x * 2 + yolo_boxes.w) * image_size.width / 2;
+  boxes.y_one = (yolo_boxes.y * 2 - yolo_boxes.h) * image_size.height / 2;
+  boxes.y_two = (yolo_boxes.y * 2 + yolo_boxes.h) * image_size.height / 2;
+  boxes.object_class_name = yolo_boxes.object_class_name;
+  boxes.tf_name = yolo_boxes.tf_name;
+  return boxes;
 }

@@ -175,3 +175,11 @@ std::string Util::get_name_by_typeinfo(std::type_info const &iTypeInfo)
   std::free(aName);
   return ret;
 }
+
+ImageSize Util::get_image_size(cv::Mat img)
+{
+    ImageSize outdata;
+    outdata.height = img.rows;
+    outdata.width = img.cols;
+    return outdata;
+}

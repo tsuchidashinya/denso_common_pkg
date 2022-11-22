@@ -82,7 +82,7 @@ std::vector<common_msgs::CloudData> Get3DBy2D::extract_data_multi(common_msgs::C
                 outdata[write_ins_point].x.push_back(cloud.x[i]);
                 outdata[write_ins_point].y.push_back(cloud.y[i]);
                 outdata[write_ins_point].z.push_back(cloud.z[i]);
-                outdata[write_ins_point].instance.push_back(0);
+                outdata[write_ins_point].instance.push_back(cloud.instance[i]);
                 outdata[write_ins_point].cloud_name = b_boxs[write_ins_point].tf_name;
             }
         }
@@ -104,7 +104,7 @@ common_msgs::CloudData Get3DBy2D::extract_data(common_msgs::CloudData cloud, std
                 outdata.x.push_back(cloud.x[i]);
                 outdata.y.push_back(cloud.y[i]);
                 outdata.z.push_back(cloud.z[i]);
-                outdata.instance.push_back(0);
+                outdata.instance.push_back(cloud.instance[i]);
                 outdata.cloud_name = b_box.tf_name;
             }
         }

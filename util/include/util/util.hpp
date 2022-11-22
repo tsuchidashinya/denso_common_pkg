@@ -10,9 +10,15 @@
  */
 #pragma once
 #include "common_header.hpp"
+#include <cv_bridge/cv_bridge.h>
 
 typedef std::vector<int> ArrayInt;
 typedef std::vector<double> ArrayDouble;
+struct ImageSize
+{
+    int width;
+    int height;
+};
 
 class Util
 {
@@ -101,7 +107,7 @@ public:
     static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
-
+    static ImageSize get_image_size(cv::Mat);
     XmlRpc::XmlRpcValue param_list;
 
 private:

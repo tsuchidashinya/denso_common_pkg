@@ -12,6 +12,7 @@
 #include "common_header.hpp"
 #include "util.hpp"
 #include <common_msgs/CloudData.h>
+#include <common_msgs/BoxPosition.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
@@ -22,10 +23,14 @@
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
 
-struct ImageSize
+struct YoloFormat
 {
-    int width;
-    int height;
+  float x;
+  float y;
+  float w;
+  float h;
+  std::string tf_name;
+  std::string object_class_name;
 };
 
 class UtilMsgData
@@ -45,9 +50,11 @@ public:
   static sensor_msgs::PointCloud2 cloudmsg_to_pc2(common_msgs::CloudData);
   sensor_msgs::PointCloud2 cloudmsg_to_pc2_color(common_msgs::CloudData);
   static common_msgs::CloudData pc2_to_cloudmsg(sensor_msgs::PointCloud2);
-  static cv::Mat img_to_cv(sensor_msgs::Image, std::string);
+  static cv::Mat rosimg_to_cvimg(sensor_msgs::Image, std::string);
   static std::vector<float> caminfo_to_floatlist(sensor_msgs::CameraInfo);
-  static ImageSize get_image_size(cv::Mat);
+  static YoloFormat pascalvoc_to_yolo(common_msgs::BoxPosition);
+  static common_msgs::BoxPosition yolo_to_pascalvoc(YoloFormat, ImageSize);
+  static common_msgs::BoxPosition box_position_normalized(common_msgs::BoxPosition);
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;
