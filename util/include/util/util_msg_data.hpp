@@ -44,6 +44,7 @@ public:
   sensor_msgs::PointCloud2 cloudmsg_to_pc2_color(common_msgs::CloudData);
   static common_msgs::CloudData pc2_to_cloudmsg(sensor_msgs::PointCloud2);
   static cv::Mat rosimg_to_cvimg(sensor_msgs::Image, std::string);
+  static sensor_msgs::Image cvimg_to_rosimg(cv::Mat, std::string);
   static std::vector<float> caminfo_to_floatlist(sensor_msgs::CameraInfo);
   static YoloFormat pascalvoc_to_yolo(common_msgs::BoxPosition, ImageSize);
   static common_msgs::BoxPosition yolo_to_pascalvoc(YoloFormat, ImageSize);

@@ -244,6 +244,12 @@ cv::Mat UtilMsgData::rosimg_to_cvimg(sensor_msgs::Image img_msg, std::string enc
   return cv_image;
 }
 
+sensor_msgs::Image UtilMsgData::cvimg_to_rosimg(cv::Mat img, std::string encording)
+{
+  sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), encording, img).toImageMsg();
+  return *msg;
+}
+
 YoloFormat UtilMsgData::pascalvoc_to_yolo(common_msgs::BoxPosition boxes, ImageSize image_size)
 {
   YoloFormat outdata;
