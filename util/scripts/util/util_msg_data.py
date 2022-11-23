@@ -26,13 +26,13 @@ def msgposelist_to_trans_rotate(pose):
     translation = np.zeros((data_size, 3), dtype=np.float32)
     rotation = np.zeros((data_size, 4), dtype=np.float32)
     for i in range(data_size):
-        translation[i, 0] = pose[i].translation.x
-        translation[i, 1] = pose[i].translation.y
-        translation[i, 2] = pose[i].translation.z
-        rotation[i, 0] = pose[i].rotation.x
-        rotation[i, 1] = pose[i].rotation.y
-        rotation[i, 2] = pose[i].rotation.z
-        rotation[i, 3] = pose[i].rotation.w
+        translation[i, 0] = pose[i].trans.x
+        translation[i, 1] = pose[i].trans.y
+        translation[i, 2] = pose[i].trans.z
+        rotation[i, 0] = pose[i].rot.x
+        rotation[i, 1] = pose[i].rot.y
+        rotation[i, 2] = pose[i].rot.z
+        rotation[i, 3] = pose[i].rot.w
     return translation, rotation
 
 def trans_rotate_to_msgposelist(translation, rotation):

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
-    <node pkg="hdf5_package" type="record_server.py" name="record_server" output="screen">
-        <rosparam file="$(find hdf5_package)/config/record_server.yaml" command="load" />
+    <node pkg="hdf5_package" type="hdf5_record_server.py" name="hdf5_record_server" output="screen">
+        <rosparam file="$(find hdf5_package)/config/hdf5_record_server.yaml" command="load" />
     </node>
 
 </launch>

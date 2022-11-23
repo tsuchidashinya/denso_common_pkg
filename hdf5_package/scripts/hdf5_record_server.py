@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import os, sys
-from common_msgs.msg import CloudData
-from anno_srvs.srv import RecordAcc, RecordAccResponse
+import os
+# from common_msgs.msg import CloudData
+from anno_srvs.srv import RecordAcc, RecordAccResponse, RecordAccRequest
 from anno_srvs.srv import RecordClustering, RecordClusteringResponse
 from anno_srvs.srv import RecordSegmentation, RecordSegmentationResponse
 from anno_srvs.srv import RecordPoseEstimation, RecordPoseEstimationResponse
@@ -17,13 +17,14 @@ class RecordServiceClass():
     def __init__(self):
         rospy.init_node('record_service')
         self.set_parameter()
+        print(self.record_acc_name)
         rospy.Service(self.record_acc_name, RecordAcc, self.record_acc_service_callback)
         rospy.Service(self.record_segmentation_name, RecordSegmentation, self.record_segmentation_service_callback)
         rospy.Service(self.record_pose_estimation_name, RecordPoseEstimation, self.record_pose_estimation_service_callback)
         rospy.Service(self.record_clustering_name, RecordClustering, self.record_clustering_service_callback)
 
     def set_parameter(self):
-        param_list = rosparam.get_param(rospy.get_name() + "/record_server/")
+        param_list = rosparam.get_param(rospy.get_name() + "/hdf5_record_server/")
         self.record_acc_name = param_list["record_acc_service_name"]
         self.record_segmentation_name = param_list["record_segmentation_service_name"]
         self.record_pose_estimation_name = param_list["record_pose_estimation_service_name"]
@@ -34,15 +35,21 @@ class RecordServiceClass():
         self.hdf5_service_counter = 0
         
     def record_acc_service_callback(self, request):
+        # request = RecordAccRequest()
+        response = RecordAccResponse()
+        response.ok = True
         index = self.hdf5_service_counter % self.hdf5_save_interval
         if self.hdf5_service_counter == 0:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = os.path.join(self.hdf5_file_dir, request.annotation_task)
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+        elif self.hdf5_service_counter + 1 > request.the_number_of_dataset:
+            return response
         elif request.the_number_of_dataset == self.hdf5_service_counter + 1:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            self.bar.update(1)
+            return response
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
@@ -50,14 +57,12 @@ class RecordServiceClass():
         np_img = util_msg_data.rosimg_to_npimg(request.image)
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud, np_mask = util_msg_data.extract_mask_from_npcloud(np_cloud)
-        translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_datas)
+        translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_data_list)
         data_dict = {"Points": np_cloud, "masks": np_mask, "translation": translation,
             "rotation": rotation, "image": np_img, "camera_info": np_cam}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         self.hdf5_service_counter = self.hdf5_service_counter + 1
-        response = RecordAccResponse()
-        response.ok = True
         return response
     
     def record_segmentation_service_callback(self, request):
