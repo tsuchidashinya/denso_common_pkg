@@ -9,9 +9,24 @@ def get_time_str():
                 + str(dt_now.second)
     return time_str
 
+def get_time_str_dir():
+    dt_now = datetime.datetime.now()
+    time_str = str(dt_now.minute)+ str(dt_now.second)
+    return time_str
+    
+def get_time_str_not_second():
+    dt_now = datetime.datetime.now()
+    time_str = str(dt_now.month) + str(dt_now.day) \
+                + str(dt_now.hour) + str(dt_now.minute)+ str(dt_now.second)
+    return time_str
+
+def exclude_ext_str(filename):
+    root, _ = os.path.splitext(filename)
+    return root
+
 def insert_time_str(filename):
     root, ext = os.path.splitext(filename)
-    return root + "_" + get_time_str() + ext
+    return root + "_" + get_time_str_not_second() + ext
 
 def ext_exist(basename):
     _, ext = os.path.splitext(basename)

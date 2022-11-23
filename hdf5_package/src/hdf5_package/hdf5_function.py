@@ -65,3 +65,5 @@ def get_len_hdf5(hdf5_object):
     for k1 in hdf5_object:
         file_count += 1
     return file_count
+
+# if __name__=='__main__':

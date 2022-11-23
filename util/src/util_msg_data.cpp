@@ -244,14 +244,14 @@ cv::Mat UtilMsgData::rosimg_to_cvimg(sensor_msgs::Image img_msg, std::string enc
   return cv_image;
 }
 
-YoloFormat UtilMsgData::pascalvoc_to_yolo(common_msgs::BoxPosition boxes)
+YoloFormat UtilMsgData::pascalvoc_to_yolo(common_msgs::BoxPosition boxes, ImageSize image_size)
 {
   YoloFormat outdata;
   boxes = box_position_normalized(boxes);
-  outdata.x = boxes.x_one;
-  outdata.y = boxes.y_one;
-  outdata.w = boxes.x_two - boxes.x_one;
-  outdata.h = boxes.y_two - boxes.y_one;
+  outdata.x = (boxes.x_one + boxes.x_two) / (2 * image_size.width);
+  outdata.y = (boxes.y_one + boxes.y_two) / (2 * image_size.height);
+  outdata.w = (boxes.x_two - boxes.x_one) / image_size.width;
+  outdata.h = (boxes.y_two - boxes.y_one) / image_size.height;
   outdata.tf_name = boxes.tf_name;
   outdata.object_class_name = boxes.object_class_name;
   return outdata;

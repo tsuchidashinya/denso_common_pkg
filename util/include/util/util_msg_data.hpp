@@ -26,16 +26,6 @@
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
 
-struct YoloFormat
-{
-  float x;
-  float y;
-  float w;
-  float h;
-  std::string tf_name;
-  std::string object_class_name;
-};
-
 class UtilMsgData
 {
 public:
@@ -55,7 +45,7 @@ public:
   static common_msgs::CloudData pc2_to_cloudmsg(sensor_msgs::PointCloud2);
   static cv::Mat rosimg_to_cvimg(sensor_msgs::Image, std::string);
   static std::vector<float> caminfo_to_floatlist(sensor_msgs::CameraInfo);
-  static YoloFormat pascalvoc_to_yolo(common_msgs::BoxPosition);
+  static YoloFormat pascalvoc_to_yolo(common_msgs::BoxPosition, ImageSize);
   static common_msgs::BoxPosition yolo_to_pascalvoc(YoloFormat, ImageSize);
   static common_msgs::BoxPosition box_position_normalized(common_msgs::BoxPosition);
   static gazebo_msgs::ModelState make_gazebo_model_state(common_msgs::ObjectInfo);

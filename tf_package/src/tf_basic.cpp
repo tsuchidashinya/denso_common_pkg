@@ -274,9 +274,9 @@ void TfBasic::tf_data_show(geometry_msgs::Transform trans, std::string name)
 tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z)
 {
   tf2::Quaternion quaternion(0, 0, 0, 1);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, x);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y);
-  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z);
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, x) * quaternion;
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, y) * quaternion;
+  quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, z) * quaternion;
   return quaternion;
 }
 

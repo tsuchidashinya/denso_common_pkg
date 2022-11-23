@@ -11,6 +11,9 @@
 #pragma once
 #include "common_header.hpp"
 #include <cv_bridge/cv_bridge.h>
+#include <common_msgs/BoxPosition.h>
+#include <common_msgs/ObjectInfo.h>
+
 
 typedef std::vector<int> ArrayInt;
 typedef std::vector<double> ArrayDouble;
@@ -18,6 +21,16 @@ struct ImageSize
 {
     int width;
     int height;
+};
+
+struct YoloFormat
+{
+  float x;
+  float y;
+  float w;
+  float h;
+  std::string tf_name;
+  std::string object_class_name;
 };
 
 class Util
@@ -70,16 +83,6 @@ public:
         }
     }
 
-    // template <typename T>
-    // static void array_message_show(std::string name, std::vector<T> array)
-    // {
-    //     std::cout << name << ": ";
-    //     for (int i = 0; i < array.size(); i++) {
-    //         std::cout << std::to_string(array[i]) << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-
     /**
      * @brief クライアントがリクエストを送信します。
      *
@@ -102,18 +105,17 @@ public:
             return;
         }
     }
-
-    
     static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
     static ImageSize get_image_size(cv::Mat);
     XmlRpc::XmlRpcValue param_list;
+    static void box_position_show(common_msgs::BoxPosition, std::string);
+    static void yolo_format_show(YoloFormat, std::string);
+    static std::vector<common_msgs::ObjectInfo> delete_empty_object_info(std::vector<common_msgs::ObjectInfo>);
 
 private:
-    
     std::random_device rd_;
     std::default_random_engine eng_;
-
     static std::string get_name_by_typeinfo(std::type_info const &);
 };

@@ -73,6 +73,12 @@ def roscam_to_npcam(roscam):
         npcam = np.append(npcam, info)
     return npcam
 
+def msgcam_to_npcam(msgcam):
+    npcam = np.empty((0))
+    for cam in msgcam:
+        npcam = np.append(npcam, cam)
+    return npcam
+
 def npcam_to_msgcam(npcam):
     msgcam = []
     for i in range(npcam.shape[0]):
@@ -110,3 +116,8 @@ def extract_ins_cloud_msg(cloud, ins):
             outcloud.z.append(cloud.z[i])
             outcloud.instance.append(cloud.instance[i])
     return outcloud
+
+def concatenate_npcloud_and_npmask(npcloud, npmask):
+    outdata = np.hstack([npcloud, npmask])
+    return outdata
+    

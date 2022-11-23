@@ -183,3 +183,27 @@ ImageSize Util::get_image_size(cv::Mat img)
     outdata.width = img.cols;
     return outdata;
 }
+
+void Util::box_position_show(common_msgs::BoxPosition box_pos, std::string title)
+{
+  ROS_INFO_STREAM(title << ": " << box_pos.x_one << " " << box_pos.x_two << " " << box_pos.y_one << " " << box_pos.y_two);
+}
+
+void Util::yolo_format_show(YoloFormat yolo_data, std::string title)
+{
+  ROS_INFO_STREAM(title << ": " << yolo_data.x << " " << yolo_data.y << " " << yolo_data.w << " " << yolo_data.h);
+}
+
+std::vector<common_msgs::ObjectInfo> Util::delete_empty_object_info(std::vector<common_msgs::ObjectInfo> object_info)
+{
+  std::vector<common_msgs::ObjectInfo> outdata;
+  for (int i = 0; i < object_info.size(); i++) {
+    if (object_info[i].object_name.size() == 0 || object_info[i].tf_name.size() == 0) {
+      ;
+    }
+    else {
+      outdata.push_back(object_info[i]);
+    }
+  }
+  return outdata;
+}
