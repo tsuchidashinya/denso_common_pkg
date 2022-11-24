@@ -1,0 +1,15 @@
+sensor_server:
+  pc_pub_topic: real_pc_pub
+  pc_sub_topic: /photoneo_center/pointcloud
+  img_sub_topic: /photoneo_center/rgb_texture
+  cam_sub_topic: /photoneo_center/camera_info
+  sensor_service_name: sensor_service
+  
+cloud_process:
+  planar_threshold: 0.01
+  x_min: -1.1
+  y_min: -1.1
+  z_min: 0.01
+  x_max: 1.1
+  y_max: 1.1
+  z_max: 1.01
