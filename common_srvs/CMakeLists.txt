@@ -64,7 +64,8 @@ add_service_files(
   visualize_service/VisualizeImage.srv
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
-  Hdf5OpenService.srv 
+  hdf5_open_service/Hdf5OpenService.srv
+  hdf5_open_service/Hdf5RealPhoxiOpenService.srv 
   network_service/SemanticSegmentationService.srv 
   accuracy_service/IouCalcurateService.srv 
 )
