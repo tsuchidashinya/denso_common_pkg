@@ -45,7 +45,9 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 0:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif self.hdf5_service_counter + 1 > request.the_number_of_dataset:
             return response
         elif request.the_number_of_dataset == self.hdf5_service_counter + 1:
@@ -55,7 +57,8 @@ class RecordServiceClass():
             return response
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cam = util_msg_data.msgcam_to_npcam(request.camera_info)
         np_img = util_msg_data.rosimg_to_npimg(request.image)
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
@@ -74,24 +77,22 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_time_str_dir())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
             return
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
-        # print(np_cloud.shape)
         np_cloud, np_mask = util_msg_data.extract_mask_from_npcloud(np_cloud)
-        # print(np_cloud.shape)
-        # print(np_mask.shape)
         data_dict = {"Points": np_cloud, "masks": np_mask}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
-        
         response = RecordSegmentationResponse()
         response.ok = True
         return response
@@ -102,14 +103,16 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = os.path.join(self.hdf5_file_dir, "pose_estimation")
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud,  = util_msg_data.extract_mask_from_npcloud(np_cloud)
         translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_datas)
@@ -126,14 +129,16 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 0:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = os.path.join(self.hdf5_file_dir, "clustering")
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter + 1:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud,  = util_msg_data.extract_mask_from_npcloud(np_cloud)
         data_dict = {"pcl": np_cloud, "class": request.class_id}
@@ -153,7 +158,8 @@ class RecordServiceClass():
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
             self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_time_str_dir())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             self.bar.update(1)
             hdf5_function.close_hdf5(self.hdf5_object)
@@ -161,7 +167,8 @@ class RecordServiceClass():
             return response
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
+            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud, _ = util_msg_data.extract_mask_from_npcloud(np_cloud)
         np_cam = util_msg_data.msgcam_to_npcam(request.camera_info)

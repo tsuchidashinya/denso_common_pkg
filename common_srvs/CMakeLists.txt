@@ -67,7 +67,7 @@ add_service_files(
   hdf5_open_service/Hdf5OpenService.srv
   hdf5_open_service/Hdf5RealPhoxiOpenService.srv 
   network_service/SemanticSegmentationService.srv 
-  accuracy_service/IouCalcurateService.srv 
+  accuracy_service/AccuracyIouService.srv
 )
 
 ## Generate actions in the 'action' folder
