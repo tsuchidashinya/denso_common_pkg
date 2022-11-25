@@ -26,6 +26,21 @@ std::vector<float> UtilMsgData::caminfo_to_floatlist(sensor_msgs::CameraInfo cin
   return K;
 }
 
+common_msgs::CloudData UtilMsgData::extract_ins_cloudmsg(common_msgs::CloudData cloud, int ins)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud.x.size(); i++) {
+    if (cloud.instance[i] == ins) {
+      outdata.x.push_back(cloud.x[i]);
+      outdata.y.push_back(cloud.y[i]);
+      outdata.z.push_back(cloud.z[i]);
+      outdata.instance.push_back(cloud.instance[i]);
+    }
+  }
+  outdata.cloud_name = cloud.cloud_name;
+  return outdata;
+}
+
 common_msgs::CloudData UtilMsgData::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
 {
   common_msgs::CloudData outdata;

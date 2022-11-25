@@ -107,7 +107,7 @@ catkin_python_setup()
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES Util UtilMsgData
-#  CATKIN_DEPENDS roscpp
+ CATKIN_DEPENDS roscpp pcl_ros cv_bridge common_msgs
 #  DEPENDS system_lib
 )
 

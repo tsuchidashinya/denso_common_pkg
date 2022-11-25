@@ -8,7 +8,6 @@ project(tf_package)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  common_msgs
   common_srvs
   roscpp
   util
@@ -109,7 +108,7 @@ catkin_python_setup()
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES tf_basic
-#  CATKIN_DEPENDS common_msgs common_srvs roscpp util
+ CATKIN_DEPENDS common_srvs roscpp util tf2_ros
 #  DEPENDS system_lib
 )
 
