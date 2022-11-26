@@ -105,6 +105,17 @@ public:
             return;
         }
     }
+
+    template <typename T>
+    static bool is_same_element_exist(std::vector<T> list, int current_index)
+    {
+        for (int i = 0; i < current_index; i++) {
+            if (list[i] == list[current_index]) {
+                return true;
+            }
+        }
+        return false;
+    }
     static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);

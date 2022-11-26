@@ -7,8 +7,13 @@
 
 struct KeyBoardTf
 {
-    geometry_msgs::Transform transform;
-    bool quit;
+    float x_add = 0;
+    float y_add = 0;
+    float z_add = 0;
+    float qx_add = 0;
+    float qy_add = 0;
+    float qz_add = 0;
+    bool quit = false;
 };
 
 enum RotationOption
@@ -30,6 +35,7 @@ public:
     static tf2::Quaternion make_tf2_quaternion(geometry_msgs::Quaternion);
     void static_broadcast(geometry_msgs::TransformStamped);
     void broadcast(geometry_msgs::TransformStamped);
+    geometry_msgs::Transform add_keyboard_tf(geometry_msgs::Transform, KeyBoardTf);
     KeyBoardTf get_keyboard_tf(double, double);
     static geometry_msgs::Transform make_geo_transform(double, double, double, tf2::Quaternion);
     static geometry_msgs::TransformStamped make_geo_trans_stamped(std::string, std::string, geometry_msgs::Transform);

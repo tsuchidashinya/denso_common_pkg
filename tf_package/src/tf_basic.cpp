@@ -15,12 +15,6 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
 {
     KeyBoardTf output;
     output.quit = false;
-    geometry_msgs::Transform final_change_trans;
-    final_change_trans.translation.x = 0;
-    final_change_trans.translation.y = 0;
-    final_change_trans.translation.z = 0;
-    tf2::Quaternion q(0, 0, 0, 1);
-    tf2::convert(q, final_change_trans.rotation);
     ROS_INFO_STREAM("1:x     2:y    3:z   4:q_x    5:q_y     6:q_z ");
     ROS_INFO_STREAM("n: -x   m: +x   j: -y   k: +y  u: -z    i: +z");
     ROS_INFO_STREAM("c: -qx   v: +qx   d: -qy   f: +qy   e: -qz    r: +qz");
@@ -44,7 +38,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.translation.x = std::stod(v[1]);
+                output.x_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -57,7 +51,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.translation.y = std::stod(v[1]);
+                output.y_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -70,7 +64,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.translation.z = std::stod(v[1]);
+                output.z_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -83,7 +77,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.rotation.x = std::stod(v[1]);
+                output.qx_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -96,7 +90,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.rotation.y = std::stod(v[1]);
+                output.qy_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -110,7 +104,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
         else {
             try {
-                final_change_trans.rotation.z = std::stod(v[1]);
+                output.qz_add = std::stod(v[1]);
             }
             catch (...) {
                 ROS_ERROR_STREAM("error");
@@ -118,40 +112,40 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
         }
     }
     else if (v[0] == "n") {
-        final_change_trans.translation.x = -xyz_step;
+        output.x_add = -xyz_step;
     }
     else if (v[0] == "m") {
-        final_change_trans.translation.x = xyz_step;
+        output.x_add = xyz_step;
     }
     else if (v[0] == "j") {
-        final_change_trans.translation.y = -xyz_step;
+        output.y_add = -xyz_step;
     }
     else if (v[0] == "k") {
-        final_change_trans.translation.y = xyz_step;
+        output.y_add = xyz_step;
     }
     else if (v[0] == "u") {
-        final_change_trans.translation.z = -xyz_step;
+        output.z_add = -xyz_step;
     }
     else if (v[0] == "i") {
-        final_change_trans.translation.z = xyz_step;
+        output.z_add = xyz_step;
     }
     else if (v[0] == "c") {
-        final_change_trans.rotation.x = -qxyz_step;
+        output.qx_add = -qxyz_step;
     }
     else if (v[0] == "v") {
-        final_change_trans.rotation.x = qxyz_step;
+        output.qx_add = qxyz_step;
     }
     else if (v[0] == "d") {
-        final_change_trans.rotation.y = -qxyz_step;
+        output.qy_add = -qxyz_step;
     }
     else if (v[0] == "f") {
-        final_change_trans.rotation.y = qxyz_step;
+        output.qy_add = qxyz_step;
     }
     else if (v[0] == "e") {
-        final_change_trans.rotation.z = -qxyz_step;
+        output.qz_add = -qxyz_step;
     }
     else if (v[0] == "r") {
-        final_change_trans.rotation.z = qxyz_step;
+        output.qz_add = qxyz_step;
     }
     else if (v[0] == "aq") {
         output.quit = true;
@@ -159,8 +153,28 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
     else {
         ROS_WARN_STREAM("parameter not collect");
     }
-    output.transform = final_change_trans;
     return output;
+}
+
+geometry_msgs::Transform TfBasic::add_keyboard_tf(geometry_msgs::Transform previous_trans, KeyBoardTf add_key)
+{   
+    geometry_msgs::Transform out_tf;
+    out_tf.translation.x = previous_trans.translation.x + add_key.x_add;
+    out_tf.translation.y = previous_trans.translation.y + add_key.y_add;
+    out_tf.translation.z = previous_trans.translation.z + add_key.z_add;
+    tf2::Quaternion quaternion;
+    tf2::convert(previous_trans.rotation, quaternion);
+    if (add_key.qx_add != 0) {
+        quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, add_key.qx_add) * quaternion;
+    }
+    else if (add_key.qy_add != 0) {
+        quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::y, add_key.qy_add) * quaternion;
+    }
+    else if (add_key.qz_add != 0) {
+        quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::z, add_key.qz_add) * quaternion;
+    }
+    tf2::convert(quaternion, out_tf.rotation);
+    return out_tf;
 }
 
 

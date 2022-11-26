@@ -18,6 +18,14 @@
 #include <tf2/utils.h>
 #include <tf_package/tf_basic.hpp>
 
+struct MyPointType
+{
+    float x;
+    float y;
+    float z;
+    int instance;
+};
+
 class CloudProcess
 {
 public:
@@ -26,6 +34,16 @@ public:
     void set_crop_frame(std::string, std::string);
     pcl::PointCloud<PclXyz> cropbox_segmenter(pcl::PointCloud<PclXyz>);
     static pcl::PointCloud<PclXyz> downsample_by_voxelgrid(pcl::PointCloud<PclXyz>, double);
+    template <typename T>
+    static pcl::PointCloud<T> downsample_by_voxelgrid(pcl::PointCloud<T> pcl_data, double leaf_size)
+    {
+        pcl::PointCloud<T> output;
+        pcl::VoxelGrid<T> voxelGrid;
+        voxelGrid.setInputCloud(pcl_data.makeShared());
+        voxelGrid.setLeafSize(leaf_size, leaf_size, leaf_size);
+        voxelGrid.filter(output);
+        return output;
+    }
     static pcl::PointCloud<PclXyz> downsample_random(pcl::PointCloud<PclXyz>, int);
 
 private:
