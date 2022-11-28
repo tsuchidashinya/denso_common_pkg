@@ -21,17 +21,16 @@ void VisualizeServiceClass::set_parameter()
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
 {
-    if (cloud_pub_.size() == 0) {
+    if (vis_cloud_pub_list_.size() == 0) {
         ;
     }
-    else if (cloud_pub_.size() != pc2_multi_.size()) {
+    else if (vis_cloud_pub_list_.size() != vis_cloud_pc2_list_.size()) {
         ROS_ERROR_STREAM("cloud pub size and pc2 size is not same!!");
         ;
     }
     else {
-        for (int i = 0; i < cloud_pub_.size(); i++) {
-            pc2_multi_[i].header.frame_id = sensor_frame_;
-            cloud_pub_[i].publish(pc2_multi_[i]);
+        for (int i = 0; i < vis_cloud_pub_list_.size(); i++) {
+            vis_cloud_pub_list_[i].publish(vis_cloud_pc2_list_[i]);
         }
     }
     if (image_pub_list_.size() == 0) {
@@ -40,6 +39,14 @@ void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
     else {
         for (int i = 0; i < image_pub_list_.size(); i++) {
             image_pub_list_[i].publish(image_list_[i]);
+        }
+    }
+    if (vis_sensor_pc2_pub_list_.size() == 0) {
+        ;
+    }
+    else {
+        for (int i = 0; i < vis_sensor_pc2_pub_list_.size(); i++) {
+            vis_sensor_pc2_pub_list_[i].publish(vis_sensor_pc2_list_[i]);
         }
     }
 
@@ -71,14 +78,32 @@ bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloud
         ROS_ERROR_STREAM("Please cloud topic!!");
         return true;
     }
-    cloud_pub_.resize(request.cloud_data_list.size());
-    for (int i = 0; i < cloud_pub_.size(); i++) {
-        cloud_pub_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.topic_name_list[i] + "_visualize", 10);
+    vis_cloud_pub_list_.resize(request.cloud_data_list.size());
+    for (int i = 0; i < vis_cloud_pub_list_.size(); i++) {
+        vis_cloud_pub_list_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.topic_name_list[i] + "_visualize", 10);
     }
-    pc2_multi_.resize(cloud_pub_.size());
+    vis_cloud_pc2_list_.resize(vis_cloud_pub_list_.size());
     for (int i = 0; i < request.cloud_data_list.size(); i++) {
-        pc2_multi_[i] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
+        vis_cloud_pc2_list_[i] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
+        vis_cloud_pc2_list_[i].header.frame_id = sensor_frame_;
     }
+    response.ok = true;
+    return true;
+}
+
+bool VisualizeServiceClass::vis_sensor_pc2_callback(common_srvs::VisualizeSensorPC2Request &request,
+                                                common_srvs::VisualizeSensorPC2Response &response)
+{
+    if (request.new_topic_name_list.size() != request.pc2_list.size()) {
+        ROS_ERROR_STREAM("Please cloud topic!!");
+        return true;
+    }
+    vis_sensor_pc2_pub_list_.resize(request.pc2_list.size());
+    for (int i = 0; i < vis_cloud_pc2_list_.size(); i++) {
+        vis_sensor_pc2_pub_list_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.new_topic_name_list[i], 10);
+    }
+    vis_sensor_pc2_list_.resize(request.pc2_list.size());
+    vis_sensor_pc2_list_ = request.pc2_list;
     response.ok = true;
     return true;
 }
