@@ -17,11 +17,13 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   sensor_service/SensorService.srv
+  sensor_service/SensorPC2Service.srv
   gazebo_service/GazeboMoveService.srv
   gazebo_service/GazeboSensorMoveService.srv
   visualize_service/VisualizeCloud.srv
   visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv
+  visualize_service/VisualizeSensorPC2.srv
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
   hdf5_open_service/Hdf5OpenService.srv

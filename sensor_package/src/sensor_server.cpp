@@ -22,6 +22,7 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
     img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
     cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
     server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
+    pc2_server_ = nh_.advertiseService(sensor_pc2_service_name_, &SensorServer::sensor_pc2_service_callback, this);
     timer_ = nh_.createTimer(ros::Duration(0.3), &SensorServer::visualize_callback, this);
 }
 
@@ -50,6 +51,7 @@ void SensorServer::set_parameter() {
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     pnh_.getParam("sensor_server", param_list);
     sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    sensor_pc2_service_name_ = static_cast<std::string>(param_list["sensor_pc2_service_name"]);
     pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
     pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
     img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
@@ -90,5 +92,11 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
     response.image = img_data_;
     response.camera_info = cam_data_;
     pc_response_data_ = UtilMsgData::pcl_to_pc2(pcl_data);
+    return true;
+}
+
+bool SensorServer::sensor_pc2_service_callback(common_srvs::SensorPC2Service::Request &request, common_srvs::SensorPC2Service::Response &response)
+{
+    response.pc2_data = pc_data_;
     return true;
 }
