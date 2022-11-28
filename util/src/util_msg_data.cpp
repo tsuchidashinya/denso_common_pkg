@@ -128,6 +128,34 @@ common_msgs::CloudData UtilMsgData::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_
   return cloud_data;
 }
 
+pcl::PointCloud<MyPointType> UtilMsgData::cloudmsg_to_mypoint(common_msgs::CloudData cloud_data)
+{
+  pcl::PointCloud<MyPointType> mypoints;
+  for (int i = 0; i < cloud_data.x.size(); i++) {
+    MyPointType mypoint;
+    mypoint.x = cloud_data.x[i];
+    mypoint.y = cloud_data.y[i];
+    mypoint.z = cloud_data.z[i];
+    mypoint.instance = cloud_data.instance[i];
+    mypoints.push_back(mypoint);
+  }
+  mypoints.header.frame_id = cloud_data.cloud_name;
+  return mypoints;
+}
+
+common_msgs::CloudData UtilMsgData::mypoint_to_cloudmsg(pcl::PointCloud<MyPointType> mypoints)
+{
+  common_msgs::CloudData cloud_data;
+  for (int i = 0; i < mypoints.points.size(); i++) {
+    cloud_data.x.push_back(mypoints.points[i].x);
+    cloud_data.y.push_back(mypoints.points[i].y);
+    cloud_data.z.push_back(mypoints.points[i].z);
+    cloud_data.instance.push_back(mypoints.points[i].instance);
+  }
+  cloud_data.cloud_name = mypoints.header.frame_id;
+  return cloud_data;
+}
+
 sensor_msgs::PointCloud2 UtilMsgData::pcl_to_pc2(pcl::PointCloud<PclXyz> pcl_data)
 {
   sensor_msgs::PointCloud2 pc2;

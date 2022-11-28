@@ -18,13 +18,6 @@
 #include <tf2/utils.h>
 #include <tf_package/tf_basic.hpp>
 
-struct MyPointType
-{
-    float x;
-    float y;
-    float z;
-    int instance;
-};
 
 class CloudProcess
 {

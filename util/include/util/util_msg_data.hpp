@@ -26,6 +26,14 @@
 typedef pcl::PointXYZ PclXyz;
 typedef pcl::PointXYZRGB PclRgb;
 
+struct MyPointType
+{
+    float x;
+    float y;
+    float z;
+    int instance;
+};
+
 class UtilMsgData
 {
 public:
@@ -52,6 +60,8 @@ public:
   static common_msgs::BoxPosition box_position_normalized(common_msgs::BoxPosition);
   static gazebo_msgs::ModelState make_gazebo_model_state(common_msgs::ObjectInfo);
   static gazebo_msgs::ModelState make_gazebo_model_state(std::string, geometry_msgs::Transform);
+  static pcl::PointCloud<MyPointType> cloudmsg_to_mypoint(common_msgs::CloudData);
+  static common_msgs::CloudData mypoint_to_cloudmsg(pcl::PointCloud<MyPointType>);
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;
