@@ -7,7 +7,7 @@
 class TfBroadcastServer
 {
 public:
-    TfBroadcastServer();
+    TfBroadcastServer(ros::NodeHandle &);
     void timer_callback(const ros::TimerEvent&);
     bool tf_broadcast_service_callback(common_srvs::TfBroadcastService::Request&, common_srvs::TfBroadcastService::Response&);
     void set_parameter();
@@ -15,6 +15,10 @@ private:
     ros::NodeHandle nh_, pnh_;
     std::string tf_broadcast_service_name_;
     double timer_duration_;
+    TfFunction tf_function_;
     std::vector<std::string> tf_name_list_;
     std::vector<geometry_msgs::TransformStamped> tf_stamp_list_;
+    XmlRpc::XmlRpcValue param_list;
+    ros::Timer timer_;
+    ros::ServiceServer server_;
 };

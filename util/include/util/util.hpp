@@ -116,6 +116,15 @@ public:
         }
         return false;
     }
+
+    template <typename Ti>
+    static int find_element_vector(std::vector<Ti> list, Ti element) {
+        auto iter = std::find(list.begin(), list.end(), element);
+        if (iter == list.end()) {
+            return -1;
+        }
+        return std::distance(list.begin(), iter);
+    }
     static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);
