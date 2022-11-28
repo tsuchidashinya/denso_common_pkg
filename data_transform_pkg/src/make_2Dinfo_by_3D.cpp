@@ -69,20 +69,20 @@ std::vector<Point3D> Make2DInfoBy3D::get_3Dpoint_from_sensor(std::vector<std::st
     std::vector<Point3D> outdata;
     outdata.resize(tf_frames.size());
     geometry_msgs::Transform object_tf, sensor_tf; 
-    sensor_tf = tf_basic_.tf_listen(sensor_frame_, world_frame_);
+    sensor_tf = tf_func_.tf_listen(sensor_frame_, world_frame_);
     for (int i = 0; i < tf_frames.size(); i++) {
-        sensor_tf = tf_basic_.tf_listen(sensor_frame_, world_frame_);
-        // TfBasic::tf_data_show(sensor_tf, sensor_frame_);
+        sensor_tf = tf_func_.tf_listen(sensor_frame_, world_frame_);
+        // TfFunction::tf_data_show(sensor_tf, sensor_frame_);
         // Util::message_show(world_frame_, sensor_frame_);
         tf2::Quaternion source_quat;
         tf2::convert(sensor_tf.rotation, source_quat);
-        object_tf = tf_basic_.tf_listen(tf_frames[i], world_frame_);
-        // TfBasic::tf_data_show(object_tf, tf_frames[i]);
+        object_tf = tf_func_.tf_listen(tf_frames[i], world_frame_);
+        // TfFunction::tf_data_show(object_tf, tf_frames[i]);
         double x = object_tf.translation.x - sensor_tf.translation.x;
         double y = object_tf.translation.y - sensor_tf.translation.y;
         double z = object_tf.translation.z - sensor_tf.translation.z;
         tf2::Quaternion q_before(x, y, z, 0), q_after, q_convert;
-        q_convert = TfBasic::rotate_quaternion_by_axis(source_quat, RotationOption::z, -M_PI/2) * source_quat;
+        q_convert = TfFunction::rotate_quaternion_by_axis(source_quat, RotationOption::z, -M_PI/2) * source_quat;
         q_after = q_convert * q_before * q_convert.inverse();
         outdata[i].x = q_after.x();
         outdata[i].y = q_after.y();

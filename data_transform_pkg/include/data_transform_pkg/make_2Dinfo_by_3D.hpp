@@ -18,5 +18,5 @@ private:
     double object_radious_x_, object_radious_y_;
     std::vector<float> cinfo_list_;
     ImageSize img_size_;
-    TfBasic tf_basic_;
+    TfFunction tf_func_;
 };

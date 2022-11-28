@@ -47,5 +47,5 @@ private:
     void segment(pcl::PointIndices::Ptr, pcl::PointCloud<PclXyz>);
     pcl::PointCloud<PclXyz> extract(pcl::PointIndices::Ptr, pcl::PointCloud<PclXyz>);
     double crop_x_max_, crop_x_min_, crop_y_min_, crop_y_max_, crop_z_min_, crop_z_max_;
-    TfBasic tfbase_;
+    TfFunction tfbase_;
 };
