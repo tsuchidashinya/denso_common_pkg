@@ -16,9 +16,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_service_files(
   FILES
-  SensorService.srv
-  GazeboMoveService.srv
-  GazeboSensorMoveService.srv
+  sensor_service/SensorService.srv
+  gazebo_service/GazeboMoveService.srv
+  gazebo_service/GazeboSensorMoveService.srv
   visualize_service/VisualizeCloud.srv
   visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv
@@ -28,6 +28,8 @@ add_service_files(
   hdf5_open_service/Hdf5RealPhoxiOpenService.srv 
   network_service/SemanticSegmentationService.srv 
   accuracy_service/AccuracyIouService.srv
+  calibration_service/CalibrationTfMove.srv
+  tf_service/TfBroadcastService.srv
 )
 
 generate_messages(
