@@ -107,7 +107,7 @@ catkin_python_setup()
 
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES tf_basic
+ LIBRARIES tf_function
  CATKIN_DEPENDS common_srvs roscpp util tf2_ros
 #  DEPENDS system_lib
 )
@@ -207,7 +207,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-add_library(tf_basic src/tf_basic.cpp)
-target_link_libraries(tf_basic
+add_library(tf_function src/tf_function.cpp)
+target_link_libraries(tf_function
   ${catkin_LIBRARIES}
 )
