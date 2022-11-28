@@ -1,6 +1,6 @@
 #include <tf_package/tf_basic.hpp>
 
-TfBasic::TfBasic() :
+TfFunction::TfFunction() :
     buffer_(),
     listener_(buffer_)
 {
@@ -11,7 +11,7 @@ TfBasic::TfBasic() :
 1: double: xyz_step
 2: double: qxyz_step
 */
-KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
+KeyBoardTf TfFunction::get_keyboard_tf(double xyz_step, double qxyz_step)
 {
     KeyBoardTf output;
     output.quit = false;
@@ -156,7 +156,7 @@ KeyBoardTf TfBasic::get_keyboard_tf(double xyz_step, double qxyz_step)
     return output;
 }
 
-geometry_msgs::Transform TfBasic::add_keyboard_tf(geometry_msgs::Transform previous_trans, KeyBoardTf add_key)
+geometry_msgs::Transform TfFunction::add_keyboard_tf(geometry_msgs::Transform previous_trans, KeyBoardTf add_key)
 {   
     geometry_msgs::Transform out_tf;
     out_tf.translation.x = previous_trans.translation.x + add_key.x_add;
@@ -186,7 +186,7 @@ geometry_msgs::Transform TfBasic::add_keyboard_tf(geometry_msgs::Transform previ
  * @param source source_frame
  * @return geometry_msgs::Transform
  */
-geometry_msgs::Transform TfBasic::tf_listen(std::string target, std::string source)
+geometry_msgs::Transform TfFunction::tf_listen(std::string target, std::string source)
 {
   geometry_msgs::TransformStamped final_tf;
   while (true)
@@ -216,7 +216,7 @@ geometry_msgs::Transform TfBasic::tf_listen(std::string target, std::string sour
  * @param quaterion
  * @return geometry_msgs::Transform
  */
-geometry_msgs::Transform TfBasic::make_geo_transform(double x, double y, double z, tf2::Quaternion quaterion)
+geometry_msgs::Transform TfFunction::make_geo_transform(double x, double y, double z, tf2::Quaternion quaterion)
 {
   geometry_msgs::Transform output;
   output.translation.x = x;
@@ -231,7 +231,7 @@ geometry_msgs::Transform TfBasic::make_geo_transform(double x, double y, double 
 2: frame_id
 3: transform
 */
-geometry_msgs::TransformStamped TfBasic::make_geo_trans_stamped(std::string child_frame, std::string frame_id, geometry_msgs::Transform trans)
+geometry_msgs::TransformStamped TfFunction::make_geo_trans_stamped(std::string child_frame, std::string frame_id, geometry_msgs::Transform trans)
 {
     geometry_msgs::TransformStamped outdata;
     outdata.child_frame_id = child_frame;
@@ -248,7 +248,7 @@ geometry_msgs::TransformStamped TfBasic::make_geo_trans_stamped(std::string chil
  * @param angle
  * @return tf2::Quaternion
  */
-tf2::Quaternion TfBasic::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, RotationOption option, double angle)
+tf2::Quaternion TfFunction::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat, RotationOption option, double angle)
 {
   tf2::Quaternion q_ori(0, 0, 0, 0);
   if (option == RotationOption::x)
@@ -270,7 +270,7 @@ tf2::Quaternion TfBasic::rotate_quaternion_by_axis(tf2::Quaternion rotated_quat,
   return q_final;
 }
 
-tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
+tf2::Quaternion TfFunction::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
 {
   tf2::Quaternion quaternion;
   quaternion = rotate_quaternion_by_axis(q_moto, RotationOption::x, x) * q_moto;
@@ -279,13 +279,13 @@ tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z, tf2::Quat
   return quaternion;
 }
 
-void TfBasic::tf_data_show(geometry_msgs::Transform trans, std::string name)
+void TfFunction::tf_data_show(geometry_msgs::Transform trans, std::string name)
 {
     ROS_INFO_STREAM(name << "  x: " << trans.translation.x << "  y: " << trans.translation.y << " z: " << trans.translation.z);
     ROS_INFO_STREAM("qx: " << trans.rotation.x << " qy: " << trans.rotation.y << " qz: " << trans.rotation.z << " qw: " << trans.rotation.w);
 }
 
-tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z)
+tf2::Quaternion TfFunction::rotate_xyz_make(double x, double y, double z)
 {
   tf2::Quaternion quaternion(0, 0, 0, 1);
   quaternion = rotate_quaternion_by_axis(quaternion, RotationOption::x, x) * quaternion;
@@ -294,7 +294,7 @@ tf2::Quaternion TfBasic::rotate_xyz_make(double x, double y, double z)
   return quaternion;
 }
 
-void TfBasic::broadcast(geometry_msgs::TransformStamped transform)
+void TfFunction::broadcast(geometry_msgs::TransformStamped transform)
 {
   
   for (int i = 0; i < 3; i++) {
@@ -304,7 +304,7 @@ void TfBasic::broadcast(geometry_msgs::TransformStamped transform)
   }
 }
 
-void TfBasic::static_broadcast(geometry_msgs::TransformStamped transform)
+void TfFunction::static_broadcast(geometry_msgs::TransformStamped transform)
 {
   
     for (int i = 0; i < 3; i++) {
@@ -314,14 +314,14 @@ void TfBasic::static_broadcast(geometry_msgs::TransformStamped transform)
     }
 }
 
-geometry_msgs::Quaternion TfBasic::make_geo_quaternion(tf2::Quaternion tf2_quat)
+geometry_msgs::Quaternion TfFunction::make_geo_quaternion(tf2::Quaternion tf2_quat)
 {
     geometry_msgs::Quaternion geo_quat;
     tf2::convert(tf2_quat, geo_quat);
     return geo_quat;
 }
 
-tf2::Quaternion TfBasic::make_tf2_quaternion(geometry_msgs::Quaternion geo_quat)
+tf2::Quaternion TfFunction::make_tf2_quaternion(geometry_msgs::Quaternion geo_quat)
 {
     tf2::Quaternion tf2_quat;
     tf2::convert(geo_quat, tf2_quat);
