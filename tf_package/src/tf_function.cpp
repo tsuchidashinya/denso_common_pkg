@@ -1,4 +1,4 @@
-#include <tf_package/tf_basic.hpp>
+#include <tf_package/tf_function.hpp>
 
 TfFunction::TfFunction() :
     buffer_(),
