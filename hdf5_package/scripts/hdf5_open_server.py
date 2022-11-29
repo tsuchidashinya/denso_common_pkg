@@ -17,6 +17,8 @@ class Hdf5OpenServer():
         self.service_name = param_list["hdf5_open_service_name"]
         hdf5_file_path = param_list["hdf5_file_path"]
         self.hdf5_object = hdf5_function.open_readed_hdf5(hdf5_file_path)
+        data_size = len(self.hdf5_object)
+        rospy.set_param("hdf5_data_size", data_size)
         self.real_phoxi_service_name = param_list["hdf5_real_phoxi_open_service_name"]
     
     def real_phoxi_service_callback(self, request):
