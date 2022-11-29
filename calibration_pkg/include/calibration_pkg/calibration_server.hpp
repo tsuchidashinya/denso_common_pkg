@@ -19,10 +19,10 @@ private:
     ros::NodeHandle nh_, pnh_;
     XmlRpc::XmlRpcValue param_list;
     std::string new_pc_topic_name_;
-    std::string new_tf_frame_name_;
     std::string calibration_service_name_, tf_broad_service_name_, vis_sensor_pc2_service_name_, sensor_service_name_;
     ros::Timer timer_;
     TfFunction tf_func_;
     geometry_msgs::Transform new_tf_transform_;
     ros::ServiceClient tf_broad_client_, vis_cloud_client_, sensor_client_;
+    ros::ServiceServer calib_server_;
 };

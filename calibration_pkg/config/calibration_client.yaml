@@ -4,3 +4,5 @@ calibration_client:
   calibration_service_name: calibration_service
   tf_broadcast_service_name: tf_broadcast_service
   move_tf_frame: move_tf
+  write_yaml_file_path: /home/dl-box/tsuchida/ros_package/study_ws/src/denso_common_pkg/calibration_pkg/config/calibrate_tf_broadcaster.yaml
+  new_tf_frame_name: new_tf_frame

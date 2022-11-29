@@ -35,4 +35,10 @@ target_link_libraries(calibration_server
 add_executable(calibration_client src/calibration_client.cpp src/calibration_client_node.cpp)
 target_link_libraries(calibration_client
   ${catkin_LIBRARIES}
+  yaml-cpp
+)
+
+add_executable(calibrate_tf_broadcaster src/calibrate_tf_broadcaster.cpp)
+target_link_libraries(calibrate_tf_broadcaster
+  ${catkin_LIBRARIES}
 )

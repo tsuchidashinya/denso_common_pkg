@@ -297,21 +297,21 @@ tf2::Quaternion TfFunction::rotate_xyz_make(double x, double y, double z)
 void TfFunction::broadcast(geometry_msgs::TransformStamped transform)
 {
   
-  for (int i = 0; i < 3; i++) {
+//   for (int i = 0; i < 2; i++) {
     transform.header.stamp = ros::Time::now();
     br_.sendTransform(transform);
-    ros::Duration(0.001).sleep();
-  }
+    // ros::Duration(0.001).sleep();
+//   }
 }
 
 void TfFunction::static_broadcast(geometry_msgs::TransformStamped transform)
 {
   
-    for (int i = 0; i < 3; i++) {
+    // for (int i = 0; i < 2; i++) {
         transform.header.stamp = ros::Time::now();
         static_br_.sendTransform(transform);
-        ros::Duration(0.001).sleep();
-    }
+        // ros::Duration(0.001).sleep();
+    // }
 }
 
 geometry_msgs::Quaternion TfFunction::make_geo_quaternion(tf2::Quaternion tf2_quat)

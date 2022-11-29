@@ -2,6 +2,6 @@ calibration_server:
   calibration_service_name: calibration_service
   tf_broadcast_service_name: tf_broadcast_service
   vis_sensor_pc2_service_name: vis_sensor_pc2_service
-  sensor_service_name: sensor_service
+  sensor_service_name: sensor_pc2_service
   new_pc_topic_name: new_pc_topic
-  new_tf_frame_name: new_tf_frame
+  

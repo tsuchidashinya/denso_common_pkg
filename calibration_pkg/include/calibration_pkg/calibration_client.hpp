@@ -4,6 +4,7 @@
 #include <tf_package/tf_function.hpp>
 #include <common_srvs/CalibrationTfMove.h>
 #include <common_srvs/TfBroadcastService.h>
+#include <yaml-cpp/yaml.h>
 
 class CalibrationClient
 {
@@ -17,6 +18,8 @@ private:
     ros::NodeHandle nh_, pnh_;
     XmlRpc::XmlRpcValue param_list;
     TfFunction tf_func_;
+    std::string new_tf_frame_name_;
     ros::ServiceClient tf_client_, calibration_client_;
-    std::string world_frame_, move_tf_frame_;
+    std::string world_frame_, move_tf_frame_, sensor_frame_;
+    std::string write_yaml_file_path_;
 };

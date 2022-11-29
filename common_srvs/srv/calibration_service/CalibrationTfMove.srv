@@ -1,5 +1,5 @@
 geometry_msgs/Transform geo_trans
 string keymove_tf_frame
-string source_tf_frame
+string new_tf_frame_name
 ---
 int32 ok

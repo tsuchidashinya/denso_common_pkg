@@ -29,6 +29,7 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
 void SensorServer::visualize_callback(const ros::TimerEvent &event)
 {
     pc_response_data_.header.frame_id = sensor_frame_;
+    pc_response_data_.header.stamp = ros::Time::now();
     sensor_pub_.publish(pc_response_data_);
 }
 
@@ -97,6 +98,9 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
 
 bool SensorServer::sensor_pc2_service_callback(common_srvs::SensorPC2Service::Request &request, common_srvs::SensorPC2Service::Response &response)
 {
-    response.pc2_data = pc_data_;
+    pcl::PointCloud<PclXyz> pcl_data;
+    pcl::fromROSMsg(pc_data_, pcl_data);
+    pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, 0.0035);
+    response.pc2_data = UtilMsgData::pcl_to_pc2(pcl_data);;
     return true;
 }
