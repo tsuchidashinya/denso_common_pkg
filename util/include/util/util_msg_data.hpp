@@ -39,6 +39,7 @@ class UtilMsgData
 public:
   UtilMsgData();
   static void cloud_size_ok(common_msgs::CloudData&);
+  static common_msgs::CloudData change_ins_cloudmsg(common_msgs::CloudData, int, int);
   static common_msgs::CloudData remove_ins_cloudmsg(common_msgs::CloudData, int);
   static common_msgs::CloudData extract_ins_cloudmsg(common_msgs::CloudData, int);
   static common_msgs::CloudData concat_cloudmsg(common_msgs::CloudData, common_msgs::CloudData);

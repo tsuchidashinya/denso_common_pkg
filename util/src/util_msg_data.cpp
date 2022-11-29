@@ -26,6 +26,29 @@ std::vector<float> UtilMsgData::caminfo_to_floatlist(sensor_msgs::CameraInfo cin
   return K;
 }
 
+/*
+1: cloud_data
+2: ins_before 変更対象のインスタンス番号
+3: ins_after 変更後のインスタンス番号
+*/
+common_msgs::CloudData UtilMsgData::change_ins_cloudmsg(common_msgs::CloudData cloud, int ins_before, int ins_after)
+{
+  common_msgs::CloudData outdata;
+  for (int i = 0; i < cloud.x.size(); i++) {
+    outdata.x.push_back(cloud.x[i]);
+    outdata.y.push_back(cloud.y[i]);
+    outdata.z.push_back(cloud.z[i]);
+    if (cloud.instance[i] == ins_before) {
+      outdata.instance.push_back(ins_after);
+    }
+    else {
+      outdata.instance.push_back(cloud.instance[i]);
+    }
+  }
+  outdata.cloud_name = cloud.cloud_name;
+  return outdata;
+}
+
 common_msgs::CloudData UtilMsgData::extract_ins_cloudmsg(common_msgs::CloudData cloud, int ins)
 {
   common_msgs::CloudData outdata;
@@ -40,6 +63,8 @@ common_msgs::CloudData UtilMsgData::extract_ins_cloudmsg(common_msgs::CloudData 
   outdata.cloud_name = cloud.cloud_name;
   return outdata;
 }
+
+
 
 common_msgs::CloudData UtilMsgData::remove_ins_cloudmsg(common_msgs::CloudData cloud, int remove_ins)
 {
