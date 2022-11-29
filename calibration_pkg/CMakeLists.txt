@@ -31,3 +31,8 @@ add_executable(calibration_server src/calibration_server.cpp src/calibration_ser
 target_link_libraries(calibration_server
   ${catkin_LIBRARIES}
 )
+
+add_executable(calibration_client src/calibration_client.cpp src/calibration_client_node.cpp)
+target_link_libraries(calibration_client
+  ${catkin_LIBRARIES}
+)

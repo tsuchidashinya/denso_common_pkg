@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-
-    
-
+    <node pkg="calibration_pkg" type="calibration_server" name="calibration_server">
+        <rosparam file="$(find calibration_pkg)/config/calibration_server.yaml" command="load" ns="" />
+    </node>
+    <node pkg="visualize_package" type="visualize_server" name="visualize_server" output="screen">
+        <rosparam file="$(find visualize_package)/config/visualize_server.yaml" command="load" />
+        <rosparam file="$(find annotation_common)/config/common_parameter.yaml" command="load" />
+    </node>
+    <node pkg="tf_package" type="tf_broadcast_server" name="tf_broadcast_server">
+        <rosparam file="$(find tf_package)/config/tf_broadcast_server.yaml" command="load" ns="" />
+    </node>
 </launch>

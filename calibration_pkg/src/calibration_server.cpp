@@ -18,7 +18,6 @@ void CalibrationServer::set_paramenter()
     tf_broad_service_name_ = static_cast<std::string>(param_list["tf_broadcast_service_name"]);
     vis_sensor_pc2_service_name_ = static_cast<std::string>(param_list["vis_sensor_pc2_service_name"]);
     sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
-    pc_sub_topic_name_ = static_cast<std::string>(param_list["pc_sub_topic_name"]);
     new_pc_topic_name_ = static_cast<std::string>(param_list["new_pc_topic_name"]);
     new_tf_frame_name_ = static_cast<std::string>(param_list["new_tf_frame_name"]);
 }

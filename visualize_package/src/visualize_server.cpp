@@ -7,6 +7,7 @@ VisualizeServiceClass::VisualizeServiceClass():
     timer_ = nh_.createTimer(ros::Duration(timer_duration_), &VisualizeServiceClass::timer_callback, this);
     visualize_cloud_server_ = nh_.advertiseService(visualize_cloud_service_name_, &VisualizeServiceClass::visualize_cloud_callback, this);
     vis_image_server_ = nh_.advertiseService(vis_image_service_name_, &VisualizeServiceClass::vis_image_callback, this);
+    vis_sensor_server_ = nh_.advertiseService(vis_sensor_pc2_service_name_, &VisualizeServiceClass::vis_sensor_pc2_callback, this);
 }
 
 void VisualizeServiceClass::set_parameter()
@@ -17,6 +18,7 @@ void VisualizeServiceClass::set_parameter()
     timer_duration_ = param_list["timer_duration"];
     visualize_cloud_service_name_ = static_cast<std::string>(param_list["visualize_cloud_service_name"]);
     vis_image_service_name_ = static_cast<std::string>(param_list["visualize_image_service_name"]);
+    vis_sensor_pc2_service_name_ = static_cast<std::string>(param_list["vis_sensor_pc2_service_name"]);
 }
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)

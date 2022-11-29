@@ -26,8 +26,7 @@ private:
     int cloud_counter;
     double timer_duration_;
     UtilMsgData util_msg_data_;
-    ros::ServiceServer visualize_cloud_server_, vis_image_server_;
-    std::string visualize_cloud_service_name_, vis_image_service_name_;
-
+    ros::ServiceServer visualize_cloud_server_, vis_image_server_, vis_sensor_server_;
+    std::string visualize_cloud_service_name_, vis_image_service_name_, vis_sensor_pc2_service_name_;
     void set_parameter();
 };

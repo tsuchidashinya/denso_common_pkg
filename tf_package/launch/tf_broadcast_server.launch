@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="tf_package" type="tf_broadcast_server" name="tf_broadcast_server">
+        <rosparam file="$(find tf_package)/config/tf_broadcast_server.yaml" command="load" ns="" />
+    </node>
+
+</launch>
