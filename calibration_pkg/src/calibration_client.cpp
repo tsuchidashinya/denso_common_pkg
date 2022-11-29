@@ -28,8 +28,14 @@ void CalibrationClient::main()
     move_tf.header.frame_id = world_frame_;
     while (ros::ok()) {
         KeyBoardTf key_tf = tf_func_.get_keyboard_tf(xyz_step_, qxyz_step_);
+        move_tf.transform = tf_func_.add_keyboard_tf(move_tf.transform, key_tf);
+        common_srvs::TfBroadcastService tf_broad_srv;
+        tf_broad_srv.request.broadcast_tf = move_tf;
+        tf_broad_srv.request.tf_name = move_tf_frame_;
+        Util::client_request(tf_client_, tf_broad_srv, tf_broad_service_name_);
+        if (key_tf.quit) {
+            break;
+        }
     }
-    
-    
-    
 }
+
