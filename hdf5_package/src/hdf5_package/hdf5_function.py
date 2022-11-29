@@ -66,4 +66,6 @@ def get_len_hdf5(hdf5_object):
         file_count += 1
     return file_count
 
-# if __name__=='__main__':
+if __name__=='__main__':
+    path = "/home/dl-box/tsuchida/2022_11/annotation/sum"
+    concatenate_hdf5(path, "acc_real.hdf5")
