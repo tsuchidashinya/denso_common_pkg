@@ -107,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES func_data_convertion get_3D_by_2D make_2Dinfo_by_3D
+ LIBRARIES func_data_convertion data_2D_to_3D data_3D_to_2D
 #  CATKIN_DEPENDS common_msgs cv_bridge pcl_ros roscpp tf_package util
 #  DEPENDS system_lib
 )
@@ -129,14 +129,14 @@ target_link_libraries(func_data_convertion
   ${catkin_LIBRARIES}
 )
 
-add_library(get_3D_by_2D src/get_3D_by_2D.cpp)
-target_link_libraries(get_3D_by_2D
+add_library(data_2D_to_3D src/data_2D_to_3D.cpp)
+target_link_libraries(data_2D_to_3D
   func_data_convertion
   ${catkin_LIBRARIES}
 )
 
-add_library(make_2Dinfo_by_3D src/make_2Dinfo_by_3D.cpp)
-target_link_libraries(make_2Dinfo_by_3D
+add_library(data_3D_to_2D src/data_3D_to_2D.cpp)
+target_link_libraries(data_3D_to_2D
   func_data_convertion
   ${catkin_LIBRARIES}
 )

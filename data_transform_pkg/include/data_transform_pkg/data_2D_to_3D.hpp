@@ -1,10 +1,10 @@
 #pragma once
 #include "func_data_convertion.hpp"
 
-class Get3DBy2D
+class Data2Dto3D
 {
 public:
-    Get3DBy2D(std::vector<float>, ImageSize);
+    Data2Dto3D(std::vector<float>, ImageSize);
     std::vector<common_msgs::CloudData> get_out_data(common_msgs::CloudData, std::vector<common_msgs::BoxPosition>);
     
     

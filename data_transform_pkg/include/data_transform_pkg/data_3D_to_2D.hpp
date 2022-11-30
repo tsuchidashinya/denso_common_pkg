@@ -3,10 +3,10 @@
 #include <common_msgs/PoseData.h>
 #include <tf_package/tf_function.hpp>
 
-class Make2DInfoBy3D
+class Data3Dto2D
 {
 public:
-    Make2DInfoBy3D(std::vector<float>, ImageSize);
+    Data3Dto2D(std::vector<float>, ImageSize);
     std::vector<common_msgs::BoxPosition> get_out_data(std::vector<std::string>);
     static cv::Mat draw_b_box(cv::Mat, std::vector<common_msgs::BoxPosition>);
     XmlRpc::XmlRpcValue param_list;
