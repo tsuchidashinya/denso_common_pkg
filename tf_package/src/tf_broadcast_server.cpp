@@ -42,8 +42,6 @@ bool TfBroadcastServer::tf_delete_service_callback(common_srvs::TfDeleteService:
         response.is_delete_completed = 0;
     }
     else {
-        tf_stamp_list_[index].header.frame_id = "";
-        tf_function_.broadcast(tf_stamp_list_[index]);
         tf_name_list_.erase(tf_name_list_.begin() + index);
         tf_stamp_list_.erase(tf_stamp_list_.begin() + index);
         response.is_delete_completed = 1;

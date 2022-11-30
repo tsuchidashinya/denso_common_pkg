@@ -1,5 +1,6 @@
 import datetime
 import os
+import rospy
 
 
 def get_timestr_mdhms_under():
@@ -57,6 +58,14 @@ def decide_allpath(dir_path, file_path):
     else:
         make_dir(dirname)
         return str(os.path.join(dirname, file_path))
+
+def client_request(client, request, service_name):
+    rospy.wait_for_service(service_name)
+    try:
+        res = client(request)
+    except rospy.ServiceException as e:
+        rospy.logerr("Service call failed: %s" % e)
+    return res
 
 
         
