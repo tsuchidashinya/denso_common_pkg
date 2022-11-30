@@ -1,3 +1,4 @@
 int32 index
 ---
 common_msgs/CloudData cloud_data
+int32 data_size

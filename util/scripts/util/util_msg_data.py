@@ -12,6 +12,7 @@ def get_instance_dict(cloud):
             instance_list.append(cloud.instance[i])
             info[str(int(cloud.instance[i]))] = 0
         info[str(int(cloud.instance[i]))] += 1
+    info = sorted(info.items(), key=lambda i: int(i[0]))
     return info
 
 def get_max_instance(cloud):

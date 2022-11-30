@@ -17,6 +17,23 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+std::map<int, int> UtilMsgData::get_instance_dict(common_msgs::CloudData cloud)
+{
+  Util::message_show("map", "ok");
+  std::map<int, int> info;
+  std::vector<int> instance_list;
+  Util::message_show(std::to_string(cloud.x.size()), cloud.instance.size());
+  for (int i = 0; i < cloud.x.size(); i++) {
+    int same_exist = Util::find_element_vector(instance_list, cloud.instance[i]);
+    if (same_exist == -1) {
+      instance_list.push_back(cloud.instance[i]);
+      info[cloud.instance[i]] = 0;
+    }
+    info[cloud.instance[i]]++;
+  }
+  return info;
+}
+
 std::vector<float> UtilMsgData::caminfo_to_floatlist(sensor_msgs::CameraInfo cinfo)
 {
   std::vector<float> K;

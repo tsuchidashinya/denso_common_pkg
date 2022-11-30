@@ -19,20 +19,20 @@ void VisualizeClient::set_parameter()
 
 void VisualizeClient::main()
 {
-    int data_size;
-    nh_.getParam("hdf5_data_size", data_size);
-    std::vector<common_msgs::CloudData> cloud_list;
-    std::vector<std::string> topic_list;
-    for (int i = 1; i <= data_size; i++) {
+    int index = 1;
+    while (1) {
         common_srvs::Hdf5SegmentationOpenService hdf5_srv;
-        hdf5_srv.request.index = i;
+        hdf5_srv.request.index = index;
+        Util::message_show("index", index);
         Util::client_request(hdf5_client_, hdf5_srv, hdf5_open_service_name_);
-        cloud_list.push_back(hdf5_srv.response.cloud_data);
-        topic_list.push_back("index_" + std::to_string(i));
+        common_srvs::VisualizeCloud visualize_srv;
+        visualize_srv.request.cloud_data_list.push_back(hdf5_srv.response.cloud_data);
+        visualize_srv.request.topic_name_list.push_back("index_" + std::to_string(index));
+        Util::client_request(visualize_client_, visualize_srv, visualize_service_name_);
+        if (index >= hdf5_srv.response.data_size) {
+            break;
+        }
+        index++;
     }
-    common_srvs::VisualizeCloud visualize_srv;
-    visualize_srv.request.cloud_data_list = cloud_list;
-    visualize_srv.request.topic_name_list = topic_list;
-    Util::client_request(visualize_client_, visualize_srv, visualize_service_name_);
 }
 

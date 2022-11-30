@@ -37,6 +37,15 @@ class Util
 {
 public:
     Util();
+
+    template<typename T1, typename T2>
+    static void print_map(std::map<T1, T2> info) {
+        for (auto i = info.begin(); i != info.end(); ++i) {
+            std::cout << "'" << i->first << "'" << ": " << i->second << ", ";
+        }
+        std::cout << std::endl;
+    }
+
     template <typename T>
     static std::vector<T> concatenate_array(std::vector<T> array_original, std::vector<T> array_add)
     {
