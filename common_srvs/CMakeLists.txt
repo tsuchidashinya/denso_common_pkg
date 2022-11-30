@@ -18,8 +18,6 @@ add_service_files(
   FILES
   sensor_service/SensorService.srv
   sensor_service/SensorPC2Service.srv
-  gazebo_service/GazeboMoveService.srv
-  gazebo_service/GazeboSensorMoveService.srv
   visualize_service/VisualizeCloud.srv
   visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv
@@ -28,10 +26,12 @@ add_service_files(
   network_service/ObjectDetectionService.srv 
   hdf5_open_service/Hdf5OpenService.srv
   hdf5_open_service/Hdf5RealPhoxiOpenService.srv 
+  hdf5_open_service/Hdf5SegmentationOpenService.srv
   network_service/SemanticSegmentationService.srv 
   accuracy_service/AccuracyIouService.srv
   calibration_service/CalibrationTfMove.srv
   tf_service/TfBroadcastService.srv
+  tf_service/TfDeleteService.srv
 )
 
 generate_messages(
