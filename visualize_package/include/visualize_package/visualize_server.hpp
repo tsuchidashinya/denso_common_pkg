@@ -21,6 +21,7 @@ private:
     std::vector<ros::Publisher> vis_cloud_pub_list_, image_pub_list_, vis_sensor_pc2_pub_list_;
     std::vector<sensor_msgs::PointCloud2> vis_cloud_pc2_list_, vis_sensor_pc2_list_;
     std::vector<sensor_msgs::Image> image_list_;
+    std::vector<std::string> topic_image_list_, topic_cloud_pc2_list_, topic_sensor_pc2_list_;
     std::string sensor_frame_;
     ros::Timer timer_;
     int cloud_counter;
