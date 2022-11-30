@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="tf_package" type="tf_delete_client.py" name="tf_delete_client">
+        <rosparam file="$(find tf_package)/config/tf_delete_client.yaml" command="load" ns="" />
+    </node>
+
+</launch>
