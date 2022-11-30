@@ -50,7 +50,6 @@ void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
     }
     else {
         for (int i = 0; i < vis_sensor_pc2_pub_list_.size(); i++) {
-            // Util::message_show("pc2_pub_list", vis_sensor_pc2_list_[i].header.frame_id);
             vis_sensor_pc2_list_[i].header.stamp = ros::Time::now();
             vis_sensor_pc2_pub_list_[i].publish(vis_sensor_pc2_list_[i]);
         }
@@ -80,10 +79,12 @@ bool VisualizeServiceClass::vis_image_callback(common_srvs::VisualizeImageReques
 bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloudRequest &request, 
                                                 common_srvs::VisualizeCloudResponse &response)
 {
+    Util::message_show("visualize_cloud", "ok");
     if (request.cloud_data_list.size() != request.topic_name_list.size()) {
         ROS_ERROR_STREAM("Please cloud topic!!");
         return true;
     }
+    Util::message_show("cloud_data_size", request.cloud_data_list.size());
     vis_cloud_pub_list_.resize(request.cloud_data_list.size());
     for (int i = 0; i < vis_cloud_pub_list_.size(); i++) {
         vis_cloud_pub_list_[i] = nh_.advertise<sensor_msgs::PointCloud2>(request.topic_name_list[i] + "_visualize", 10);
