@@ -38,6 +38,7 @@ void VisualizeClient::main()
     visualize_srv.request.cloud_data_list = cloud_list;
     visualize_srv.request.topic_name_list = topic_list;
     Util::client_request(visualize_client_, visualize_srv, visualize_service_name_);
+    
     common_srvs::VisualizeImage visualize_img_srv;
     visualize_img_srv.request.image_list = image_list;
     visualize_img_srv.request.topic_name_list = topic_list;

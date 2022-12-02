@@ -1,0 +1,5 @@
+string[] delete_image_topic_list
+string[] delete_sensor_cloud_topic_list
+string[] delete_cloud_topic_list
+---
+bool delete_ok
