@@ -18,13 +18,17 @@ class RecordServiceClass():
     def __init__(self):
         rospy.init_node('record_service')
         self.set_parameter()
-        print(self.record_acc_name)
+        self.hdf5_initialize()
         rospy.Service(self.record_acc_name, RecordAcc, self.record_acc_service_callback)
         rospy.Service(self.record_segmentation_name, RecordSegmentation, self.record_segmentation_service_callback)
         rospy.Service(self.record_pose_estimation_name, RecordPoseEstimation, self.record_pose_estimation_service_callback)
         rospy.Service(self.record_clustering_name, RecordClustering, self.record_clustering_service_callback)
         rospy.Service(self.record_real_sensor_service_name, RecordRealSensorData, self.record_real_sensor_data_service_callback)
 
+    def hdf5_initialize(self):
+        self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
+        filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
+        self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
     def set_parameter(self):
         param_list = rosparam.get_param(rospy.get_name() + "/hdf5_record_server/")
         self.record_acc_name = param_list["record_acc_service_name"]
@@ -45,9 +49,7 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 0:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
-            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
+            
         elif self.hdf5_service_counter + 1 > request.the_number_of_dataset:
             return response
         elif request.the_number_of_dataset == self.hdf5_service_counter + 1:
@@ -77,9 +79,6 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
-            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
@@ -103,9 +102,6 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
-            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
@@ -129,9 +125,6 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 0:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
-            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter + 1:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
@@ -157,9 +150,6 @@ class RecordServiceClass():
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-            self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_time_str_dir())
-            filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         elif request.the_number_of_dataset == self.hdf5_service_counter:
             self.bar.update(1)
             hdf5_function.close_hdf5(self.hdf5_object)

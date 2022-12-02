@@ -22,6 +22,7 @@ add_service_files(
   visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv
   visualize_service/VisualizeSensorPC2.srv
+  visualize_service/VisualizeCloudDelete.srv 
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
   hdf5_open_service/Hdf5OpenService.srv

@@ -18,6 +18,15 @@ Util::Util()
 {
 }
 
+int Util::find_tfname_from_cloudlist(std::vector<common_msgs::CloudData> cloud_list, std::string tf_name) {
+  int index = -1;
+  for (int i = 0; i < cloud_list.size(); i++) {
+    if (cloud_list[i].tf_name == tf_name) {
+      index = i;
+    }
+  }
+  return index;
+}
 
 /**
  * @brief 小数点以下に少しでも値があれば+1した整数値を渡す関数

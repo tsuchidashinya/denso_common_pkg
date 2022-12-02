@@ -56,7 +56,7 @@ void TfBroadcastServer::timer_callback(const ros::TimerEvent &event)
     }
     else {
         for (int i = 0; i < tf_stamp_list_.size(); i++) {
-            tf_function_.broadcast(tf_stamp_list_[i]);
+            tf_function_.static_broadcast(tf_stamp_list_[i]);
         }
     }
 }

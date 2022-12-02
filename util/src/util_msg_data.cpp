@@ -62,7 +62,8 @@ common_msgs::CloudData UtilMsgData::change_ins_cloudmsg(common_msgs::CloudData c
       outdata.instance.push_back(cloud.instance[i]);
     }
   }
-  outdata.cloud_name = cloud.cloud_name;
+  outdata.tf_name = cloud.tf_name;
+  outdata.object_name = cloud.object_name;
   return outdata;
 }
 
@@ -77,7 +78,8 @@ common_msgs::CloudData UtilMsgData::extract_ins_cloudmsg(common_msgs::CloudData 
       outdata.instance.push_back(cloud.instance[i]);
     }
   }
-  outdata.cloud_name = cloud.cloud_name;
+  outdata.tf_name = cloud.tf_name;
+  outdata.object_name = cloud.object_name;
   return outdata;
 }
 
@@ -94,7 +96,8 @@ common_msgs::CloudData UtilMsgData::remove_ins_cloudmsg(common_msgs::CloudData c
       outdata.instance.push_back(cloud.instance[i]);
     }
   }
-  outdata.cloud_name = cloud.cloud_name;
+  outdata.tf_name = cloud.tf_name;
+  outdata.object_name = cloud.object_name;
   return outdata;
 }
 
@@ -113,7 +116,8 @@ common_msgs::CloudData UtilMsgData::concat_cloudmsg(common_msgs::CloudData cloud
     outdata.z.push_back(cloud_add.z[i]);
     outdata.instance.push_back(cloud_add.instance[i]);
   }
-  outdata.cloud_name = cloud_ori.cloud_name + cloud_add.cloud_name;
+  outdata.object_name = cloud_ori.object_name + cloud_add.object_name;
+  outdata.tf_name = cloud_ori.tf_name + cloud_add.tf_name;
   return outdata;
 }
 
@@ -181,7 +185,7 @@ pcl::PointCloud<MyPointType> UtilMsgData::cloudmsg_to_mypoint(common_msgs::Cloud
     mypoint.instance = cloud_data.instance[i];
     mypoints.push_back(mypoint);
   }
-  mypoints.header.frame_id = cloud_data.cloud_name;
+  mypoints.header.frame_id = cloud_data.tf_name;
   return mypoints;
 }
 
@@ -194,7 +198,7 @@ common_msgs::CloudData UtilMsgData::mypoint_to_cloudmsg(pcl::PointCloud<MyPointT
     cloud_data.z.push_back(mypoints.points[i].z);
     cloud_data.instance.push_back(mypoints.points[i].instance);
   }
-  cloud_data.cloud_name = mypoints.header.frame_id;
+  cloud_data.tf_name = mypoints.header.frame_id;
   return cloud_data;
 }
 
@@ -344,7 +348,7 @@ YoloFormat UtilMsgData::pascalvoc_to_yolo(common_msgs::BoxPosition boxes, ImageS
   outdata.w = (boxes.x_two - boxes.x_one) / image_size.width;
   outdata.h = (boxes.y_two - boxes.y_one) / image_size.height;
   outdata.tf_name = boxes.tf_name;
-  outdata.object_class_name = boxes.object_class_name;
+  outdata.object_name = boxes.object_name;
   return outdata;
 }
 
@@ -366,7 +370,7 @@ common_msgs::BoxPosition UtilMsgData::yolo_to_pascalvoc(YoloFormat yolo_boxes, I
   boxes.x_two = (yolo_boxes.x * 2 + yolo_boxes.w) * image_size.width / 2;
   boxes.y_one = (yolo_boxes.y * 2 - yolo_boxes.h) * image_size.height / 2;
   boxes.y_two = (yolo_boxes.y * 2 + yolo_boxes.h) * image_size.height / 2;
-  boxes.object_class_name = yolo_boxes.object_class_name;
+  boxes.object_name = yolo_boxes.object_name;
   boxes.tf_name = yolo_boxes.tf_name;
   return boxes;
 }

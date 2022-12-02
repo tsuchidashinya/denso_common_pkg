@@ -13,6 +13,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <common_msgs/BoxPosition.h>
 #include <common_msgs/ObjectInfo.h>
+#include <common_msgs/CloudData.h>
 
 
 typedef std::vector<int> ArrayInt;
@@ -30,7 +31,7 @@ struct YoloFormat
   float w;
   float h;
   std::string tf_name;
-  std::string object_class_name;
+  std::string object_name;
 };
 
 class Util
@@ -134,6 +135,8 @@ public:
         }
         return std::distance(list.begin(), iter);
     }
+
+    static int find_tfname_from_cloudlist(std::vector<common_msgs::CloudData>, std::string);
     static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
     int random_int(int, int);
     float random_float(float, float);

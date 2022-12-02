@@ -8,6 +8,7 @@ VisualizeServiceClass::VisualizeServiceClass():
     visualize_cloud_server_ = nh_.advertiseService(visualize_cloud_service_name_, &VisualizeServiceClass::visualize_cloud_callback, this);
     vis_image_server_ = nh_.advertiseService(vis_image_service_name_, &VisualizeServiceClass::vis_image_callback, this);
     vis_sensor_server_ = nh_.advertiseService(vis_sensor_pc2_service_name_, &VisualizeServiceClass::vis_sensor_pc2_callback, this);
+    vis_cloud_delete_server_ = nh_.advertiseService(vis_cloud_delete_service_name_, &VisualizeServiceClass::vis_delete_service_callback, this);
 }
 
 void VisualizeServiceClass::set_parameter()
@@ -19,6 +20,7 @@ void VisualizeServiceClass::set_parameter()
     visualize_cloud_service_name_ = static_cast<std::string>(param_list["visualize_cloud_service_name"]);
     vis_image_service_name_ = static_cast<std::string>(param_list["visualize_image_service_name"]);
     vis_sensor_pc2_service_name_ = static_cast<std::string>(param_list["vis_sensor_pc2_service_name"]);
+    vis_cloud_delete_service_name_ = static_cast<std::string>(param_list["vis_cloud_delete_service_name"]);
 }
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
@@ -93,8 +95,8 @@ bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloud
             vis_cloud_pc2_list_.push_back(pc2);
         }
         else {
-            vis_cloud_pc2_list_[i] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
-            vis_cloud_pc2_list_[i].header.frame_id = sensor_frame_;
+            vis_cloud_pc2_list_[index] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
+            vis_cloud_pc2_list_[index].header.frame_id = sensor_frame_;
         }
     }
     response.ok = true;
@@ -121,4 +123,15 @@ bool VisualizeServiceClass::vis_sensor_pc2_callback(common_srvs::VisualizeSensor
     }
     response.ok = true;
     return true;
+}
+
+bool VisualizeServiceClass::vis_delete_service_callback(common_srvs::VisualizeCloudDeleteRequest &request,
+                                                    common_srvs::VisualizeCloudDeleteResponse &response)
+{
+    for (int i = 0; i < request.delete_cloud_topic_list.size(); i++) {
+        int index = Util::find_element_vector(topic_cloud_pc2_list_, request.delete_cloud_topic_list[i]);
+        if (index != -1) {
+            
+        }
+    }
 }

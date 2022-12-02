@@ -12,13 +12,13 @@ Data3Dto2D::Data3Dto2D(std::vector<float> cinfo_list, ImageSize img_size): pnh_(
     img_size_ = img_size;
 }
 
-std::vector<common_msgs::BoxPosition> Data3Dto2D::get_out_data(std::vector<std::string> tf_frames)
+std::vector<common_msgs::BoxPosition> Data3Dto2D::get_out_data(std::vector<common_msgs::ObjectInfo> object_info_list)
 {
-    std::vector<Point3D> point_3d_datas = get_3Dpoint_from_sensor(tf_frames);
-    return convert_3Dto2D(point_3d_datas, tf_frames);
+    std::vector<Point3D> point_3d_datas = get_3Dpoint_from_sensor(object_info_list);
+    return convert_3Dto2D(point_3d_datas, object_info_list);
 }
 
-std::vector<common_msgs::BoxPosition> Data3Dto2D::convert_3Dto2D(std::vector<Point3D> point3D_objects, std::vector<std::string> tf_names)
+std::vector<common_msgs::BoxPosition> Data3Dto2D::convert_3Dto2D(std::vector<Point3D> point3D_objects, std::vector<common_msgs::ObjectInfo> object_info_list)
 {
     std::vector<common_msgs::BoxPosition> outdata;
     for (int i = 0; i < point3D_objects.size(); i++) {
@@ -38,12 +38,13 @@ std::vector<common_msgs::BoxPosition> Data3Dto2D::convert_3Dto2D(std::vector<Poi
             b_box.x_two = uv_right.x;
             b_box.y_one = uv_left.y;
             b_box.y_two = uv_right.y;
-            b_box.tf_name = tf_names[i];
+            b_box.tf_name = object_info_list[i].tf_name;
+            b_box.object_name = object_info_list[i].object_name;
             outdata.push_back(b_box);
             // Util::message_show("tf_id", i);
         }
         else {
-           std::cout << "Not Detect" << ": " << uv_left.x << " " << uv_left.y << " " << uv_right.x << " " << uv_right.y << std::endl;
+           std::cout << "Not Detect" << object_info_list[i].tf_name << ": " << uv_left.x << " " << uv_left.y << " " << uv_right.x << " " << uv_right.y << std::endl;
         }
     }
     return outdata;
@@ -64,20 +65,20 @@ cv::Mat Data3Dto2D::draw_b_box(cv::Mat img, std::vector<common_msgs::BoxPosition
     return img;
 }
 
-std::vector<Point3D> Data3Dto2D::get_3Dpoint_from_sensor(std::vector<std::string> tf_frames)
+std::vector<Point3D> Data3Dto2D::get_3Dpoint_from_sensor(std::vector<common_msgs::ObjectInfo> object_info_list)
 {
     std::vector<Point3D> outdata;
-    outdata.resize(tf_frames.size());
+    outdata.resize(object_info_list.size());
     geometry_msgs::Transform object_tf, sensor_tf; 
-    sensor_tf = tf_func_.tf_listen(sensor_frame_, world_frame_);
-    for (int i = 0; i < tf_frames.size(); i++) {
+    for (int i = 0; i < object_info_list.size(); i++) {
         sensor_tf = tf_func_.tf_listen(sensor_frame_, world_frame_);
         // TfFunction::tf_data_show(sensor_tf, sensor_frame_);
         // Util::message_show(world_frame_, sensor_frame_);
         tf2::Quaternion source_quat;
         tf2::convert(sensor_tf.rotation, source_quat);
-        object_tf = tf_func_.tf_listen(tf_frames[i], world_frame_);
-        // TfFunction::tf_data_show(object_tf, tf_frames[i]);
+        // Util::message_show("world_frame", world_frame_);
+        object_tf = tf_func_.tf_listen(object_info_list[i].tf_name, world_frame_);
+        // TfFunction::tf_data_show(object_tf, object_info_list[i].tf_name);
         double x = object_tf.translation.x - sensor_tf.translation.x;
         double y = object_tf.translation.y - sensor_tf.translation.y;
         double z = object_tf.translation.z - sensor_tf.translation.z;

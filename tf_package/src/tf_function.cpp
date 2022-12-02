@@ -194,11 +194,11 @@ geometry_msgs::Transform TfFunction::tf_listen(std::string target, std::string s
     try
     {
       final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
-      ROS_INFO_STREAM_ONCE("tf_listen: source: " << source << "  target: " << target);
       break;
     }
     catch (const std::exception &e)
     {
+        ROS_ERROR_STREAM("target: " << target << "   source: " << source);
       ROS_WARN_STREAM(e.what());
       ros::Duration(0.1).sleep();
       continue;
