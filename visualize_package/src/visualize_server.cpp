@@ -25,6 +25,7 @@ void VisualizeServiceClass::set_parameter()
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
 {
+    Util::message_show("vis_pc2_list", vis_cloud_pc2_list_.size());
     if (vis_cloud_pub_list_.size() == 0) {
         ;
     }
@@ -81,6 +82,7 @@ bool VisualizeServiceClass::vis_image_callback(common_srvs::VisualizeImageReques
 bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloudRequest &request, 
                                                 common_srvs::VisualizeCloudResponse &response)
 {
+    Util::message_show("service_come! ", "ok");
     if (request.cloud_data_list.size() != request.topic_name_list.size()) {
         ROS_ERROR_STREAM("Please cloud topic!!");
         return true;
@@ -128,10 +130,32 @@ bool VisualizeServiceClass::vis_sensor_pc2_callback(common_srvs::VisualizeSensor
 bool VisualizeServiceClass::vis_delete_service_callback(common_srvs::VisualizeCloudDeleteRequest &request,
                                                     common_srvs::VisualizeCloudDeleteResponse &response)
 {
+    response.delete_ok = 0;
     for (int i = 0; i < request.delete_cloud_topic_list.size(); i++) {
         int index = Util::find_element_vector(topic_cloud_pc2_list_, request.delete_cloud_topic_list[i]);
         if (index != -1) {
-            
+            topic_cloud_pc2_list_.erase(topic_cloud_pc2_list_.begin() + index);
+            vis_cloud_pc2_list_.erase(vis_cloud_pc2_list_.begin() + index);
+            vis_cloud_pub_list_.erase(vis_cloud_pub_list_.begin() + index);
+            response.delete_ok = 1;
         }
     }
+    for (int i = 0; i < request.delete_image_topic_list.size(); i++) {
+        int index = Util::find_element_vector(topic_image_list_, request.delete_image_topic_list[i]);
+        if (index != -1) {
+            topic_image_list_.erase(topic_image_list_.begin() + index);
+            image_list_.erase(image_list_.begin() + index);
+            image_pub_list_.erase(image_pub_list_.begin() + index);
+            response.delete_ok = 1;
+        }
+    }
+    for (int i = 0; i < request.delete_sensor_cloud_topic_list.size(); i++) {
+        int index = Util::find_element_vector(topic_sensor_pc2_list_, request.delete_sensor_cloud_topic_list[i]);
+        if (index != -1) {
+            topic_sensor_pc2_list_.erase(topic_sensor_pc2_list_.begin() + index);
+            vis_sensor_pc2_list_.erase(vis_sensor_pc2_list_.begin() + index);
+            vis_sensor_pc2_pub_list_.erase(vis_sensor_pc2_pub_list_.begin() + index);
+        }
+    }
+    return true;
 }
