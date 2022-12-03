@@ -75,14 +75,21 @@ class RecordServiceClass():
     
     def record_segmentation_service_callback(self, request):
         self.hdf5_service_counter = self.hdf5_service_counter + 1
+        rospy.set_param("record_counter", self.hdf5_service_counter)
+        response = RecordSegmentationResponse()
         index = self.hdf5_service_counter % self.hdf5_save_interval
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
-        elif request.the_number_of_dataset == self.hdf5_service_counter:
+        elif self.hdf5_service_counter == request.the_number_of_dataset:
             hdf5_function.close_hdf5(self.hdf5_object)
             hdf5_function.concatenate_hdf5(self.hdf5_file_dir, util.decide_allpath(self.hdf5_file_dir, self.hdf5_file_name))
-            return
+            self.bar.update(1)
+            response.ok = True
+            return response
+        elif self.hdf5_service_counter > request.the_number_of_dataset:
+            response.ok = False
+            return response
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
@@ -92,7 +99,7 @@ class RecordServiceClass():
         data_dict = {"Points": np_cloud, "masks": np_mask}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
-        response = RecordSegmentationResponse()
+        
         response.ok = True
         return response
     
