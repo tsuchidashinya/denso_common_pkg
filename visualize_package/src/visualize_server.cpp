@@ -25,7 +25,7 @@ void VisualizeServiceClass::set_parameter()
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)
 {
-    Util::message_show("vis_pc2_list", vis_cloud_pc2_list_.size());
+    // Util::message_show("vis_pc2_list", vis_cloud_pc2_list_.size());
     if (vis_cloud_pub_list_.size() == 0) {
         ;
     }
@@ -82,7 +82,7 @@ bool VisualizeServiceClass::vis_image_callback(common_srvs::VisualizeImageReques
 bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloudRequest &request, 
                                                 common_srvs::VisualizeCloudResponse &response)
 {
-    Util::message_show("service_come! ", "ok");
+    // Util::message_show("service_come! ", "ok");
     if (request.cloud_data_list.size() != request.topic_name_list.size()) {
         ROS_ERROR_STREAM("Please cloud topic!!");
         return true;
