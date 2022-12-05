@@ -67,13 +67,17 @@ bool VisualizeServiceClass::vis_image_callback(common_srvs::VisualizeImageReques
         ROS_ERROR_STREAM("Please image topic!!");
         return true;
     }
-    image_pub_list_.resize(request.image_list.size());
-    for (int i = 0; i < image_pub_list_.size(); i++) {
-        image_pub_list_[i] = nh_.advertise<sensor_msgs::Image>(request.topic_name_list[i] + "_imageVisualze", 10);
-    }
-    image_list_.resize(image_pub_list_.size());
-    for (int i = 0; i < image_list_.size(); i++) {
-        image_list_[i] = request.image_list[i];
+    for (int i = 0; i < request.topic_name_list.size(); i++) {
+        int index = Util::find_element_vector(topic_image_list_, request.topic_name_list[i]);
+        if (index == -1) {
+            image_pub_list_.push_back(nh_.advertise<sensor_msgs::Image>(request.topic_name_list[i], 10));
+            topic_image_list_.push_back(request.topic_name_list[i]);
+            image_list_.push_back(request.image_list[i]);
+        }
+        else {
+            topic_image_list_[index] = request.topic_name_list[i];
+            image_list_[index] = request.image_list[i];
+        }
     }
     response.ok = true;
     return true;

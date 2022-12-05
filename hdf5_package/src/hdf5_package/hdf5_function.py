@@ -2,6 +2,35 @@ import os
 import h5py
 
 
+def change_data(input_file_path, out_file_path):
+    keys_1 = []
+    keys_2 = []
+    all_data = []
+    h_object = open_readed_hdf5(input_file_path)
+    for k1 in h_object.keys():
+        keys_1.append(k1)
+    for k2 in h_object[keys_1[0]].keys():
+        print(k2)
+        keys_2.append(k2)
+    for i in range(len(keys_1)):
+        part_data = []
+        for j in range(len(keys_2)):
+            part_data.append(h_object[keys_1[i]][keys_2[j]][()])
+        all_data.append(part_data)
+    f = h_w_object = open_writed_hdf5(out_file_path)
+    for i in range(len(all_data)):
+        print("data_" + str(i))
+        f.create_group('data_' + str(i+1))
+        for j in range(len(keys_2)):
+            if keys_2[j] == "masks":
+                for k in range(all_data[i][j].shape[0]):
+                    if all_data[i][j][k] == 2 or all_data[i][j][k] == 3:
+                        print(all_data[i][j][k])
+                        all_data[i][j][k] = 0
+            f['data_' + str(i+1)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
+    
+
+
 def concatenate_hdf5(dir_path, out_file_name):
     files = os.listdir(dir_path)
     keys_1_all = []
@@ -67,5 +96,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/dl-box/tsuchida/2022_11/annotation/sum"
-    concatenate_hdf5(path, "acc_real.hdf5")
+    # path = "/home/dl-box/tsuchida/2022_11/annotation/sum"
+    # concatenate_hdf5(path, "acc_real.hdf5")
+    input_path = "/home/ericlab/tsuchida/2022_11/annotation/segmentation/multi_object_randomize/temp/saikou.hdf5"
+    out_path = "/home/ericlab/tsuchida/2022_11/annotation/segmentation/multi_object_randomize/temp/saikou_1.hdf5"
+    change_data(input_path, out_path)
