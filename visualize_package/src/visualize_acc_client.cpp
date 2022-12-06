@@ -26,6 +26,7 @@ void VisualizeClient::main()
     std::vector<common_msgs::CloudData> cloud_list;
     std::vector<sensor_msgs::Image> image_list;
     std::vector<std::string> topic_list;
+    std::vector<std::string> image_topic_list;
     for (int i = 1; i <= data_size; i++) {
         common_srvs::Hdf5OpenService hdf5_srv;
         hdf5_srv.request.index = i;
@@ -33,6 +34,7 @@ void VisualizeClient::main()
         cloud_list.push_back(hdf5_srv.response.cloud_data);
         topic_list.push_back("index_" + std::to_string(i));
         image_list.push_back(hdf5_srv.response.image);
+        image_topic_list.push_back("image_index_" + std::to_string(i));
     }
     common_srvs::VisualizeCloud visualize_srv;
     visualize_srv.request.cloud_data_list = cloud_list;
@@ -41,7 +43,7 @@ void VisualizeClient::main()
     
     common_srvs::VisualizeImage visualize_img_srv;
     visualize_img_srv.request.image_list = image_list;
-    visualize_img_srv.request.topic_name_list = topic_list;
+    visualize_img_srv.request.topic_name_list = image_topic_list;
     Util::client_request(vis_img_client_, visualize_img_srv, visualize_service_name_);
 }
 
