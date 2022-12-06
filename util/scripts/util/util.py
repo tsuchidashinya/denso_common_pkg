@@ -2,6 +2,10 @@ import datetime
 import os
 import rospy
 
+def devide_dir_and_file(path):
+    dir = os.path.dirname(path)
+    file = os.path.basename(path)
+    return dir, file
 
 def get_timestr_mdhms_under():
     dt_now = datetime.datetime.now()
