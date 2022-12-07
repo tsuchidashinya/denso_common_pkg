@@ -167,10 +167,10 @@ class RecordServiceClass():
             filename = util.insert_str(self.hdf5_file_name, util.get_timestr_hms())
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.hdf5_file_dir, filename))
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
-        np_cloud, _ = util_msg_data.extract_mask_from_npcloud(np_cloud)
+        np_cloud, mask_cloud = util_msg_data.extract_mask_from_npcloud(np_cloud)
         np_cam = util_msg_data.msgcam_to_npcam(request.camera_info)
         np_img = util_msg_data.rosimg_to_npimg(request.image)
-        data_dict = {"Points": np_cloud, "image": np_img, "camera_info": np_cam}
+        data_dict = {"Points": np_cloud, "masks": mask_cloud, "image": np_img, "camera_info": np_cam}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         return response
