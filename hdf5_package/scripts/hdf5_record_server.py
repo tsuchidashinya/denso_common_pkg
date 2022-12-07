@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import os
 # from common_msgs.msg import CloudData
-from anno_srvs.srv import RecordAcc, RecordAccResponse, RecordAccRequest
-from anno_srvs.srv import RecordClustering, RecordClusteringResponse
-from anno_srvs.srv import RecordSegmentation, RecordSegmentationResponse
-from anno_srvs.srv import RecordPoseEstimation, RecordPoseEstimationResponse
-from anno_srvs.srv import RecordRealSensorData, RecordRealSensorDataResponse
+from common_srvs.srv import RecordAcc, RecordAccResponse, RecordAccRequest
+from common_srvs.srv import RecordClustering, RecordClusteringResponse
+from common_srvs.srv import RecordSegmentation, RecordSegmentationResponse
+from common_srvs.srv import RecordPoseEstimation, RecordPoseEstimationResponse
+from common_srvs.srv import RecordRealSensorData, RecordRealSensorDataResponse
 import rospy
 import rosparam
 from util import util

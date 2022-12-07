@@ -33,6 +33,12 @@ add_service_files(
   calibration_service/CalibrationTfMove.srv
   tf_service/TfBroadcastService.srv
   tf_service/TfDeleteService.srv
+  record_service/RecordAcc.srv
+  record_service/RecordClustering.srv
+  record_service/RecordPoseEstimation.srv
+  record_service/RecordSegmentation.srv
+  record_service/RecordRealSensorData.srv
+  mesh_service/MeshCloudService.srv 
 )
 
 generate_messages(
