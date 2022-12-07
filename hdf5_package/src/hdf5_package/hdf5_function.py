@@ -25,7 +25,7 @@ def change_data(input_file_path, out_file_path):
             if keys_2[j] == "masks":
                 for k in range(all_data[i][j].shape[0]):
                     if all_data[i][j][k] == 2 or all_data[i][j][k] == 3:
-                        print(all_data[i][j][k])
+                        # print(all_data[i][j][k])
                         all_data[i][j][k] = 0
             f['data_' + str(i+1)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
     
@@ -98,6 +98,6 @@ def get_len_hdf5(hdf5_object):
 if __name__=='__main__':
     # path = "/home/dl-box/tsuchida/2022_11/annotation/sum"
     # concatenate_hdf5(path, "acc_real.hdf5")
-    input_path = "/home/ericlab/tsuchida/2022_11/annotation/segmentation/multi_object_randomize/temp/saikou.hdf5"
-    out_path = "/home/ericlab/tsuchida/2022_11/annotation/segmentation/multi_object_randomize/temp/saikou_1.hdf5"
+    input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai.hdf5"
+    out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai_1.hdf5"
     change_data(input_path, out_path)
