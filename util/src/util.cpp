@@ -18,6 +18,17 @@ Util::Util()
 {
 }
 
+void Util::write_b_box_label(std::vector<common_msgs::BoxPosition> boxes, std::string save_file_path)
+{
+    std::ofstream file(save_file_path);
+    for (int i = 0; i < boxes.size(); i++) {
+        file << boxes[i].object_name;
+        file << " " << boxes[i].x_one << " " << boxes[i].y_one;
+        file << " " << boxes[i].x_two << " " << boxes[i].y_two;
+        file << std::endl;
+    }
+}
+
 int Util::find_tfname_from_cloudlist(std::vector<common_msgs::CloudData> cloud_list, std::string tf_name) {
   int index = -1;
   for (int i = 0; i < cloud_list.size(); i++) {

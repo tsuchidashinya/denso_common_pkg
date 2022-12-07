@@ -38,7 +38,7 @@ class Util
 {
 public:
     Util();
-
+    static void write_b_box_label(std::vector<common_msgs::BoxPosition>, std::string);
     template<typename T1, typename T2>
     static void print_map(std::map<T1, T2> info) {
         for (auto i = info.begin(); i != info.end(); ++i) {
