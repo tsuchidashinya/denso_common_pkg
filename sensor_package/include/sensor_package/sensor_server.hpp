@@ -27,13 +27,11 @@ private:
     void pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &);
     void img_sub_callback(const sensor_msgs::ImageConstPtr &);
     void cam_sub_callback(const sensor_msgs::CameraInfoConstPtr &);
-    void visualize_callback(const ros::TimerEvent &);
     void set_parameter();
 
     ros::NodeHandle nh_, pnh_;
     ros::Publisher sensor_pub_;
     ros::ServiceServer server_, pc2_server_;
-    ros::Timer timer_;
     ros::Subscriber pc_sub_, cam_sub_, img_sub_;
     sensor_msgs::PointCloud2 pc_data_, pc_response_data_;
     sensor_msgs::Image img_data_;

@@ -23,15 +23,8 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
     cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
     server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
     pc2_server_ = nh_.advertiseService(sensor_pc2_service_name_, &SensorServer::sensor_pc2_service_callback, this);
-    timer_ = nh_.createTimer(ros::Duration(0.3), &SensorServer::visualize_callback, this);
 }
 
-void SensorServer::visualize_callback(const ros::TimerEvent &event)
-{
-    pc_response_data_.header.frame_id = sensor_frame_;
-    pc_response_data_.header.stamp = ros::Time::now();
-    sensor_pub_.publish(pc_response_data_);
-}
 
 /**
  * @brief pointcloud2のSubscriberのコールバック関数
