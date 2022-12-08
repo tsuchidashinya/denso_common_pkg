@@ -27,6 +27,7 @@ class TfFunction
 {
 public:
     TfFunction();
+    static geometry_msgs::Transform change_tf_frame_by_rotate(geometry_msgs::Transform, geometry_msgs::Transform);
     geometry_msgs::Transform tf_listen(std::string, std::string);
     static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, RotationOption, double);
     static tf2::Quaternion rotate_xyz_make(double, double, double, tf2::Quaternion);

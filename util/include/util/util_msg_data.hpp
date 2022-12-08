@@ -14,6 +14,7 @@
 #include <common_msgs/CloudData.h>
 #include <common_msgs/BoxPosition.h>
 #include <common_msgs/ObjectInfo.h>
+#include <common_msgs/PoseData.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
@@ -64,6 +65,8 @@ public:
   static gazebo_msgs::ModelState make_gazebo_model_state(std::string, geometry_msgs::Transform);
   static pcl::PointCloud<MyPointType> cloudmsg_to_mypoint(common_msgs::CloudData);
   static common_msgs::CloudData mypoint_to_cloudmsg(pcl::PointCloud<MyPointType>);
+  static common_msgs::PoseData tranform_to_posedata(geometry_msgs::Transform);
+  static geometry_msgs::Transform posedata_to_transform(common_msgs::PoseData);
 private:
   ros::NodeHandle pnh_;
   XmlRpc::XmlRpcValue param_list;

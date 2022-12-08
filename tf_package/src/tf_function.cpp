@@ -270,6 +270,22 @@ tf2::Quaternion TfFunction::rotate_quaternion_by_axis(tf2::Quaternion rotated_qu
   return q_final;
 }
 
+geometry_msgs::Transform TfFunction::change_tf_frame_by_rotate(geometry_msgs::Transform tf_ori, geometry_msgs::Transform tf_add)
+{
+    geometry_msgs::Transform out_tf;
+    // out_tf.rotation = tf_ori.rotation;
+    tf2::Quaternion q_ori(tf_ori.translation.x, tf_ori.translation.y, tf_ori.translation.z, 0), q_after, q_rotate, q_rotate_ori;
+    tf2::convert(tf_ori.rotation, q_rotate_ori);
+    tf2::convert(tf_add.rotation, q_rotate);
+    q_rotate_ori = q_rotate * q_rotate_ori;
+    tf2::convert(q_rotate_ori, out_tf.rotation);
+    q_after = q_rotate.inverse() * q_ori * q_rotate;
+    out_tf.translation.x = q_after[0] + tf_add.translation.x;
+    out_tf.translation.y = q_after[1] + tf_add.translation.y;
+    out_tf.translation.z = q_after[2] + tf_add.translation.z;
+    return out_tf;
+}
+
 tf2::Quaternion TfFunction::rotate_xyz_make(double x, double y, double z, tf2::Quaternion q_moto)
 {
   tf2::Quaternion quaternion;

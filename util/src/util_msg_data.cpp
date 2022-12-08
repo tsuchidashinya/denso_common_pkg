@@ -17,6 +17,32 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+common_msgs::PoseData UtilMsgData::tranform_to_posedata(geometry_msgs::Transform trans)
+{
+  common_msgs::PoseData pose;
+  pose.trans.x = trans.translation.x;
+  pose.trans.y = trans.translation.y;
+  pose.trans.z = trans.translation.z;
+  pose.rot.x = trans.rotation.x;
+  pose.rot.y = trans.rotation.y;
+  pose.rot.z = trans.rotation.z;
+  pose.rot.w = trans.rotation.w;
+  return pose;
+}
+
+geometry_msgs::Transform UtilMsgData::posedata_to_transform(common_msgs::PoseData pose)
+{
+  geometry_msgs::Transform trans;
+  trans.translation.x = pose.trans.x;
+  trans.translation.y = pose.trans.y;
+  trans.translation.z = pose.trans.z;
+  trans.rotation.x = pose.rot.x;
+  trans.rotation.y = pose.rot.y;
+  trans.rotation.z = pose.rot.z;
+  trans.rotation.w = pose.rot.w;
+  return trans;
+}
+
 std::map<int, int> UtilMsgData::get_instance_dict(common_msgs::CloudData cloud)
 {
   Util::message_show("map", "ok");
