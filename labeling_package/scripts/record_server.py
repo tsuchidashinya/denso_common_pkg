@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import os, sys
 from common_msgs.msg import CloudData
-from common_srvs.srv import RecordAcc, RecordAccResponse
-from common_srvs.srv import RecordClustering, RecordClusteringResponse
-from common_srvs.srv import RecordSegmentation, RecordSegmentationResponse
-from common_srvs.srv import RecordPoseEstimation, RecordPoseEstimationResponse
+from common_srvs.srv import Hdf5RecordAcc, Hdf5RecordAccResponse
+from common_srvs.srv import Hdf5RecordClustering, Hdf5RecordClusteringResponse
+from common_srvs.srv import Hdf5RecordSegmentation, Hdf5RecordSegmentationResponse
+from common_srvs.srv import Hdf5RecordPoseEstimation, Hdf5RecordPoseEstimationResponse
 import rospy
 import rosparam
 from util import util_python
@@ -16,10 +16,10 @@ class RecordServiceClass():
     def __init__(self):
         rospy.init_node('record_service')
         self.set_parameter()
-        rospy.Service(self.record_acc_name, RecordAcc, self.record_acc_service_callback)
-        rospy.Service(self.record_segmentation_name, RecordSegmentation, self.record_segmentation_service_callback)
-        rospy.Service(self.record_pose_estimation_name, RecordPoseEstimation, self.record_pose_estimation_service_callback)
-        rospy.Service(self.record_clustering_name, RecordClustering, self.record_clustering_service_callback)
+        rospy.Service(self.record_acc_name, Hdf5RecordAcc, self.record_acc_service_callback)
+        rospy.Service(self.record_segmentation_name, Hdf5RecordSegmentation, self.record_segmentation_service_callback)
+        rospy.Service(self.record_pose_estimation_name, Hdf5RecordPoseEstimation, self.record_pose_estimation_service_callback)
+        rospy.Service(self.record_clustering_name, Hdf5RecordClustering, self.record_clustering_service_callback)
 
     def set_parameter(self):
         param_list = rosparam.get_param(rospy.get_name() + "/record_server/")
@@ -55,7 +55,7 @@ class RecordServiceClass():
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         self.hdf5_service_counter = self.hdf5_service_counter + 1
-        response = RecordAccResponse()
+        response = Hdf5RecordAccResponse()
         response.ok = True
         return response
     
@@ -82,7 +82,7 @@ class RecordServiceClass():
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         
-        response = RecordSegmentationResponse()
+        response = Hdf5RecordSegmentationResponse()
         response.ok = True
         return response
     
@@ -107,7 +107,7 @@ class RecordServiceClass():
         data_dict = {"pcl": np_cloud, "pose": pose_mask}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
-        response = RecordPoseEstimationResponse()
+        response = Hdf5RecordPoseEstimationResponse()
         response.ok = True
         return response
 
@@ -130,7 +130,7 @@ class RecordServiceClass():
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         self.hdf5_service_counter = self.hdf5_service_counter + 1
-        response = RecordClusteringResponse()
+        response = Hdf5RecordClusteringResponse()
         response.ok = True
         return response
     

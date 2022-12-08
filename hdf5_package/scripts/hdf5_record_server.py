@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import os
 # from common_msgs.msg import CloudData
-from common_srvs.srv import RecordAcc, RecordAccResponse, RecordAccRequest
-from common_srvs.srv import RecordClustering, RecordClusteringResponse
-from common_srvs.srv import RecordSegmentation, RecordSegmentationResponse
-from common_srvs.srv import RecordPoseEstimation, RecordPoseEstimationResponse
-from common_srvs.srv import RecordRealSensorData, RecordRealSensorDataResponse
+from common_srvs.srv import Hdf5RecordAcc, Hdf5RecordAccResponse, Hdf5RecordAccRequest
+from common_srvs.srv import Hdf5RecordClustering, Hdf5RecordClusteringResponse
+from common_srvs.srv import Hdf5RecordSegmentation, Hdf5RecordSegmentationResponse
+from common_srvs.srv import Hdf5RecordPoseEstimation, Hdf5RecordPoseEstimationResponse
+from common_srvs.srv import Hdf5RecordRealSensorData, Hdf5RecordRealSensorDataResponse
 import rospy
 import rosparam
 from util import util
@@ -19,11 +19,11 @@ class RecordServiceClass():
         rospy.init_node('record_service')
         self.set_parameter()
         self.hdf5_initialize()
-        rospy.Service(self.record_acc_name, RecordAcc, self.record_acc_service_callback)
-        rospy.Service(self.record_segmentation_name, RecordSegmentation, self.record_segmentation_service_callback)
-        rospy.Service(self.record_pose_estimation_name, RecordPoseEstimation, self.record_pose_estimation_service_callback)
-        rospy.Service(self.record_clustering_name, RecordClustering, self.record_clustering_service_callback)
-        rospy.Service(self.record_real_sensor_service_name, RecordRealSensorData, self.record_real_sensor_data_service_callback)
+        rospy.Service(self.record_acc_name, Hdf5RecordAcc, self.record_acc_service_callback)
+        rospy.Service(self.record_segmentation_name, Hdf5RecordSegmentation, self.record_segmentation_service_callback)
+        rospy.Service(self.record_pose_estimation_name, Hdf5RecordPoseEstimation, self.record_pose_estimation_service_callback)
+        rospy.Service(self.record_clustering_name, Hdf5RecordClustering, self.record_clustering_service_callback)
+        rospy.Service(self.record_real_sensor_service_name, Hdf5RecordRealSensorData, self.record_real_sensor_data_service_callback)
 
     def hdf5_initialize(self):
         self.hdf5_file_dir = util.dir_join_and_make(self.hdf5_file_dir, util.exclude_ext_str(self.hdf5_file_name) + util.get_timestr_ms())
@@ -42,8 +42,8 @@ class RecordServiceClass():
         self.record_real_sensor_service_name = param_list["record_real_sensor_data_service_name"]
         
     def record_acc_service_callback(self, request):
-        # request = RecordAccRequest()
-        response = RecordAccResponse()
+        # request = Hdf5RecordAccRequest()
+        response = Hdf5RecordAccResponse()
         response.ok = True
         index = self.hdf5_service_counter % self.hdf5_save_interval
         if self.hdf5_service_counter == 0:
@@ -76,7 +76,7 @@ class RecordServiceClass():
     def record_segmentation_service_callback(self, request):
         self.hdf5_service_counter = self.hdf5_service_counter + 1
         rospy.set_param("record_counter", self.hdf5_service_counter)
-        response = RecordSegmentationResponse()
+        response = Hdf5RecordSegmentationResponse()
         index = self.hdf5_service_counter % self.hdf5_save_interval
         if self.hdf5_service_counter == 1:
             self.bar = tqdm(total=request.the_number_of_dataset)
@@ -123,7 +123,7 @@ class RecordServiceClass():
         data_dict = {"pcl": np_cloud, "pose": pose_mask}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
-        response = RecordPoseEstimationResponse()
+        response = Hdf5RecordPoseEstimationResponse()
         response.ok = True
         return response
 
@@ -145,12 +145,12 @@ class RecordServiceClass():
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
         self.hdf5_service_counter = self.hdf5_service_counter + 1
-        response = RecordClusteringResponse()
+        response = Hdf5RecordClusteringResponse()
         response.ok = True
         return response
     
     def record_real_sensor_data_service_callback(self, request):
-        response = RecordRealSensorDataResponse()
+        response = Hdf5RecordRealSensorDataResponse()
         response.ok = True
         self.hdf5_service_counter = self.hdf5_service_counter + 1
         index = self.hdf5_service_counter % self.hdf5_save_interval
