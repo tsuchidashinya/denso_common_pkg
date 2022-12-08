@@ -26,8 +26,8 @@ add_service_files(
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
   hdf5_open_service/Hdf5OpenService.srv
-  hdf5_open_service/Hdf5RealPhoxiOpenService.srv 
-  hdf5_open_service/Hdf5SegmentationOpenService.srv
+  hdf5_open_service/Hdf5OpenRealPhoxiService.srv 
+  hdf5_open_service/Hdf5OpenSegmentationService.srv
   network_service/SemanticSegmentationService.srv 
   accuracy_service/AccuracyIouService.srv
   calibration_service/CalibrationTfMove.srv

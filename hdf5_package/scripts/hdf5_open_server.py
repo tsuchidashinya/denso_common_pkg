@@ -2,8 +2,8 @@
 import rospy
 import rosparam
 from common_srvs.srv import Hdf5OpenService, Hdf5OpenServiceResponse
-from common_srvs.srv import Hdf5RealPhoxiOpenService, Hdf5RealPhoxiOpenServiceResponse
-from common_srvs.srv import Hdf5SegmentationOpenService, Hdf5SegmentationOpenServiceResponse, Hdf5SegmentationOpenServiceRequest
+from common_srvs.srv import Hdf5OpenRealPhoxiService, Hdf5OpenRealPhoxiServiceResponse
+from common_srvs.srv import Hdf5OpenSegmentationService, Hdf5OpenSegmentationServiceResponse, Hdf5OpenSegmentationServiceRequest
 from hdf5_package import hdf5_function
 from util import util_msg_data
 
@@ -11,8 +11,8 @@ class Hdf5OpenServer():
     def __init__(self):
         self.set_parameter()
         rospy.Service(self.service_name, Hdf5OpenService, self.service_callback)
-        rospy.Service(self.real_phoxi_service_name, Hdf5RealPhoxiOpenService, self.real_phoxi_service_callback)
-        rospy.Service(self.hdf5_segmentation_service_name, Hdf5SegmentationOpenService, self.hdf5_segmentation_service_callback)
+        rospy.Service(self.real_phoxi_service_name, Hdf5OpenRealPhoxiService, self.real_phoxi_service_callback)
+        rospy.Service(self.hdf5_segmentation_service_name, Hdf5OpenSegmentationService, self.hdf5_segmentation_service_callback)
 
     
     def set_parameter(self):
@@ -30,7 +30,7 @@ class Hdf5OpenServer():
         np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         mask_data = self.hdf5_object["data_" + str(index)]['masks'][()]
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(np_cloud, mask_data)
-        response = Hdf5SegmentationOpenServiceResponse()
+        response = Hdf5OpenSegmentationServiceResponse()
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_concat_cloud)
         response.data_size = len(self.hdf5_object)
         return response
@@ -40,7 +40,7 @@ class Hdf5OpenServer():
         np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         image = self.hdf5_object["data_" + str(index)]['image'][()]
         camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
-        response = Hdf5RealPhoxiOpenServiceResponse()
+        response = Hdf5OpenRealPhoxiServiceResponse()
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_cloud)

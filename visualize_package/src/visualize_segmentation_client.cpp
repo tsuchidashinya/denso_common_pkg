@@ -5,7 +5,7 @@ nh_(nh),
 pnh_("~")
 {
     set_parameter();
-    hdf5_client_ = nh_.serviceClient<common_srvs::Hdf5SegmentationOpenService>(hdf5_open_service_name_);
+    hdf5_client_ = nh_.serviceClient<common_srvs::Hdf5OpenSegmentationService>(hdf5_open_service_name_);
     visualize_client_ = nh_.serviceClient<common_srvs::VisualizeCloud>(visualize_service_name_);
 }
 
@@ -21,7 +21,7 @@ void VisualizeClient::main()
 {
     int index = 1;
     while (1) {
-        common_srvs::Hdf5SegmentationOpenService hdf5_srv;
+        common_srvs::Hdf5OpenSegmentationService hdf5_srv;
         hdf5_srv.request.index = index;
         Util::message_show("index", index);
         Util::client_request(hdf5_client_, hdf5_srv, hdf5_open_service_name_);

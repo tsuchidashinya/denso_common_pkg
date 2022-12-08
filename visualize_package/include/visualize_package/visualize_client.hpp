@@ -4,7 +4,7 @@
 #include <common_srvs/VisualizeCloud.h>
 #include <common_srvs/VisualizeImage.h>
 #include <common_srvs/Hdf5OpenService.h>
-#include <common_srvs/Hdf5SegmentationOpenService.h>
+#include <common_srvs/Hdf5OpenSegmentationService.h>
 
 class VisualizeClient
 {
