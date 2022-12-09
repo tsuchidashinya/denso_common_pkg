@@ -1,2 +1,2 @@
 get_hdf5_info:
-  hdf5_file_path: /home/ericlab/tsuchida/2022_05/try/annotation/SemSeg/6_29_4_38_18/6_29_4_42_24_100.hdf5
+  hdf5_file_path: /home/dl-box/tsuchida/2022_12/annotation/real_data/kai5851/kai.hdf5
