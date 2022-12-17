@@ -12,7 +12,7 @@ common_parameter:
       color:
         - 255
         - 0
-        - 255
+        - 0
     - instance: 2
       color:
         - 0
