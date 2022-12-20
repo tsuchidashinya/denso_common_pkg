@@ -279,7 +279,7 @@ geometry_msgs::Transform TfFunction::change_tf_frame_by_rotate(geometry_msgs::Tr
     tf2::convert(tf_add.rotation, q_rotate);
     q_rotate_ori = q_rotate * q_rotate_ori;
     tf2::convert(q_rotate_ori, out_tf.rotation);
-    q_after = q_rotate.inverse() * q_ori * q_rotate;
+    q_after = q_rotate * q_ori * q_rotate.inverse();
     out_tf.translation.x = q_after[0] + tf_add.translation.x;
     out_tf.translation.y = q_after[1] + tf_add.translation.y;
     out_tf.translation.z = q_after[2] + tf_add.translation.z;
