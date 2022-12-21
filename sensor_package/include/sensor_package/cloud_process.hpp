@@ -26,6 +26,9 @@ public:
     pcl::PointCloud<PclXyz> planar_segmentar(pcl::PointCloud<PclXyz>);
     void set_crop_frame(std::string, std::string);
     pcl::PointCloud<PclXyz> cropbox_segmenter(pcl::PointCloud<PclXyz>);
+    pcl::PointCloud<pcl::PointXYZL> cropbox_segmenter(pcl::PointCloud<pcl::PointXYZL>);
+    
+
     static pcl::PointCloud<PclXyz> downsample_by_voxelgrid(pcl::PointCloud<PclXyz>, double);
     template <typename T>
     static pcl::PointCloud<T> downsample_by_voxelgrid(pcl::PointCloud<T> pcl_data, double leaf_size)
