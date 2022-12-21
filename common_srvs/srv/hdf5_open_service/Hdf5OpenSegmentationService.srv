@@ -1,5 +1,5 @@
 int32 index
-string open_file_path
+string hdf5_open_file_path
 ---
 common_msgs/CloudData cloud_data
 int32 data_size
