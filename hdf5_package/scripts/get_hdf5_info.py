@@ -6,7 +6,7 @@ import h5py
 if __name__=='__main__':
     rospy.init_node("hdf5_info")
     param_list = rosparam.get_param(rospy.get_name() + "/get_hdf5_info")
-    path = param_list["hdf5_file_path"]
+    path = param_list["hdf5_open_file_path"]
     h5_file = h5py.File(path, 'r')
     file_count = 0
     for k1 in h5_file:

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 import rosparam
-from common_srvs.srv import Hdf5OpenService, Hdf5OpenServiceResponse
-from common_srvs.srv import Hdf5OpenRealPhoxiService, Hdf5OpenRealPhoxiServiceResponse
+from common_srvs.srv import Hdf5OpenService, Hdf5OpenServiceResponse, Hdf5OpenServiceRequest
+from common_srvs.srv import Hdf5OpenRealPhoxiService, Hdf5OpenRealPhoxiServiceResponse, Hdf5OpenRealPhoxiServiceRequest
 from common_srvs.srv import Hdf5OpenSegmentationService, Hdf5OpenSegmentationServiceResponse, Hdf5OpenSegmentationServiceRequest
 from hdf5_package import hdf5_function
 from util import util_msg_data
@@ -10,6 +10,7 @@ from util import util_msg_data
 class Hdf5OpenServer():
     def __init__(self):
         self.set_parameter()
+        
         rospy.Service(self.service_name, Hdf5OpenService, self.service_callback)
         rospy.Service(self.real_phoxi_service_name, Hdf5OpenRealPhoxiService, self.real_phoxi_service_callback)
         rospy.Service(self.hdf5_segmentation_service_name, Hdf5OpenSegmentationService, self.hdf5_segmentation_service_callback)
@@ -18,14 +19,16 @@ class Hdf5OpenServer():
     def set_parameter(self):
         param_list = rosparam.get_param(rospy.get_name() + "/hdf5_open_server")
         self.service_name = param_list["hdf5_open_service_name"]
-        hdf5_file_path = param_list["hdf5_file_path"]
-        self.hdf5_object = hdf5_function.open_readed_hdf5(hdf5_file_path)
-        data_size = len(self.hdf5_object)
-        rospy.set_param("hdf5_data_size", data_size)
         self.real_phoxi_service_name = param_list["hdf5_real_phoxi_open_service_name"]
         self.hdf5_segmentation_service_name = param_list["hdf5_segmentation_service_name"]
+        self.hdf5_open_file_path = ""
     
     def hdf5_segmentation_service_callback(self, request):
+        # request = Hdf5OpenSegmentationServiceRequest()
+        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            data_size = len(self.hdf5_object)
+            rospy.set_param("hdf5_data_size", data_size)
         index = request.index
         np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         mask_data = self.hdf5_object["data_" + str(index)]['masks'][()]
@@ -37,6 +40,10 @@ class Hdf5OpenServer():
     
     def real_phoxi_service_callback(self, request):
         index = request.index
+        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            data_size = len(self.hdf5_object)
+            rospy.set_param("hdf5_data_size", data_size)
         np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         image = self.hdf5_object["data_" + str(index)]['image'][()]
         camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
@@ -49,6 +56,10 @@ class Hdf5OpenServer():
     def service_callback(self, request):
         # request = Hdf5OpenServiceRequest()
         index = request.index
+        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            data_size = len(self.hdf5_object)
+            rospy.set_param("hdf5_data_size", data_size)
         numpy_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         mask_data = self.hdf5_object["data_" + str(index)]['masks'][()]
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(numpy_cloud, mask_data)

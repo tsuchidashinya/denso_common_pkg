@@ -31,7 +31,7 @@ def change_data(input_file_path, out_file_path):
     
 
 
-def concatenate_hdf5(dir_path, out_file_name):
+def concatenate_hdf5(dir_path, out_file_path):
     files = os.listdir(dir_path)
     keys_1_all = []
     keys_2 = []
@@ -58,20 +58,47 @@ def concatenate_hdf5(dir_path, out_file_name):
                 for k in range(len(keys_2)):
                     part_data.append(f[keys_1_all[i][j]][keys_2[k]][()])
                 all_data.append(part_data)
-    with h5py.File(os.path.join(dir_path, out_file_name), mode="w") as f:
-        for i in range(len(all_data)):
-            f.create_group('data_' + str(i+1))
-            for j in range(len(keys_2)):
-                f['data_' + str(i+1)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
     for ff in files:
         os.remove(os.path.join(dir_path, ff))
+    with h5py.File(out_file_path, mode="w") as f:
+        for i in range(len(all_data)):
+            f.create_group('data_' + str(i))
+            for j in range(len(keys_2)):
+                f['data_' + str(i)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
+    
 
 
 def write_hdf5(h5pyObject, data_dict, index):
-    data_group = h5pyObject.create_group("data_" + str(index))
-    for key, value in data_dict.items():
-        data_group.create_dataset(key, data=value, compression="lzf")
+    # h5pyObject = h5py.File()
+    index_str = "data_" + str(index)
+    print(h5pyObject.keys())
+    is_exist = index_str in h5pyObject.keys()
+    if is_exist:
+        for key, value in data_dict.items():
+            h5pyObject[index_str][key] = value
+            data_group = h5pyObject[index_str]
+            data_group.update()
+            # data_group.create_dataset(key, data=value, compression="lzf")
+    else:   
+        data_group = h5pyObject.create_group(index_str)
+        for key, value in data_dict.items():
+            data_group.create_dataset(key, data=value, compression="lzf")
     h5pyObject.flush()
+
+def write_update_hdf5(h5pyObject_write, h5pyObject_read, data_dict, index_update):
+    # h5pyObject_write = h5py.File()
+    # h5pyObject_read = h5py.File()
+    update_index = "data_" + str(index_update)
+    for index in h5pyObject_read.keys():
+        data_group = h5pyObject_write.create_group(index)
+        if index == update_index:  
+            for key, value in data_dict.items():
+                data_group.create_dataset(key, data=value, compression="lzf")
+        else:
+            for key, value in h5pyObject_read[index].items():
+                data_group.create_dataset(key, data=value, compression="lzf")
+    h5pyObject_write.flush()
+    return h5pyObject_write
 
 def open_writed_hdf5(file_path):
     if not os.path.exists(os.path.dirname(file_path)):
@@ -96,8 +123,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/data_num_experiment/data_4000"
-    concatenate_hdf5(path, "sensor_b_box_4000.hdf5")
+    path = "/media/ericlab/DE59-9C00/test/concate"
+    concatenate_hdf5(path, os.path.join(path, "acc_real1.hdf5"))
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)
