@@ -10,7 +10,6 @@ from util import util_msg_data
 class Hdf5OpenServer():
     def __init__(self):
         self.set_parameter()
-        
         rospy.Service(self.service_name, Hdf5OpenService, self.service_callback)
         rospy.Service(self.real_phoxi_service_name, Hdf5OpenRealPhoxiService, self.real_phoxi_service_callback)
         rospy.Service(self.hdf5_segmentation_service_name, Hdf5OpenSegmentationService, self.hdf5_segmentation_service_callback)
