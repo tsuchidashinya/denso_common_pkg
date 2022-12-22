@@ -228,8 +228,8 @@ class RecordServiceClass():
         record_dir, record_file_name = os.path.split(request.record_file_path)
         response = Hdf5RecordRealSensorDataResponse()
         response.ok = True
-        self.counter = self.counter + 1
         if self.hdf5_record_file_path != request.record_file_path:
+            self.counter = 0
             self.hdf5_record_file_path = request.record_file_path
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
