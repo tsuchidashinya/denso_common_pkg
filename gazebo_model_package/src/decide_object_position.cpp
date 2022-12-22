@@ -103,7 +103,10 @@ std::vector<common_msgs::ObjectInfo> DecidePosition::get_randam_place_position(s
             }
 
             double z = z_position_ + box_height_ + map_index * 0.05;
-            object_info[i].position = TfFunction::make_geo_transform(x, y, z, TfFunction::rotate_xyz_make(0, 0, 0));
+            double roll = util.random_float(-M_PI, M_PI);
+            double pitch = util.random_float(-M_PI, M_PI);
+            double yaw = util.random_float(-M_PI, M_PI);
+            object_info[i].position = TfFunction::make_geo_transform(x, y, z, TfFunction::rotate_xyz_make(roll, pitch, yaw));
         }
     }
     return object_info;

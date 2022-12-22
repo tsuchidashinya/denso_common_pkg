@@ -132,7 +132,7 @@ class RecordServiceClass():
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir, temp_filename))
         response.ok = True
         return response
     
@@ -177,7 +177,7 @@ class RecordServiceClass():
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir, temp_filename))
         response.ok = True
         return response
 
@@ -219,7 +219,7 @@ class RecordServiceClass():
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir, temp_filename))
         response.ok = True
         return response
     
@@ -265,7 +265,7 @@ class RecordServiceClass():
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
+            self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir, temp_filename))
         response.ok = True
         return response
         
