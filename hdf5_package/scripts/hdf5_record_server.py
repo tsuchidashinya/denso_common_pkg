@@ -47,15 +47,18 @@ class RecordServiceClass():
         response = Hdf5RecordAccResponse()
         response.ok = True
         if self.hdf5_record_file_path != request.record_file_path:
+            self.hdf5_record_file_path = request.record_file_path
             self.counter = 0
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
             if os.path.exists(request.record_file_path):
+                self.is_update = True
                 self.hdf5_object = hdf5_function.open_readed_hdf5(request.record_file_path)
             else:
+                self.is_update = False
                 self.hdf5_object = hdf5_function.open_writed_hdf5(request.record_file_path)
         self.counter = self.counter + 1
-        self.bar.update(1)
+        
         if self.counter > request.the_number_of_dataset:
             return response
         np_cam = util_msg_data.msgcam_to_npcam(request.camera_info)
@@ -65,7 +68,7 @@ class RecordServiceClass():
         translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_data_list)
         data_dict = {"Points": np_cloud, "masks": np_mask, "translation": translation,
             "rotation": rotation, "image": np_img, "camera_info": np_cam}
-        if os.path.exists(request.record_file_path):
+        if self.is_update:
             hdf5_read_dict = {}
             for key in self.hdf5_object.keys():
                 key2_all = {}
@@ -75,11 +78,14 @@ class RecordServiceClass():
             hdf5_function.close_hdf5(self.hdf5_object)
             os.remove(request.record_file_path)
             hdf5_write_object = hdf5_function.open_writed_hdf5(request.record_file_path)
+            
             hdf5_function.write_update_hdf5(hdf5_write_object, hdf5_read_dict, data_dict, request.index)
         else:
             hdf5_function.write_hdf5(self.hdf5_object, data_dict, self.counter)
+            
+        self.bar.update(1)
         if request.the_number_of_dataset == self.counter:
-            if os.path.exists(request.record_file_path):
+            if self.is_update:
                 hdf5_function.close_hdf5(hdf5_write_object)
             else:
                 hdf5_function.close_hdf5(self.hdf5_object)
@@ -93,6 +99,7 @@ class RecordServiceClass():
         rospy.set_param("record_counter", self.counter)
         response = Hdf5RecordSegmentationResponse()
         if self.hdf5_record_file_path != request.record_file_path:
+            self.hdf5_record_file_path = request.record_file_path
             self.counter = 0
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
@@ -104,12 +111,12 @@ class RecordServiceClass():
         if self.counter > request.the_number_of_dataset:
             response.ok = False
             return response
+        index = self.counter % self.hdf5_save_interval
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud, np_mask = util_msg_data.extract_mask_from_npcloud(np_cloud)
         data_dict = {"Points": np_cloud, "masks": np_mask}
         hdf5_function.write_hdf5(self.hdf5_object, data_dict, index)
         self.bar.update(1)
-        index = self.counter % self.hdf5_save_interval
         if self.counter == request.the_number_of_dataset:
             hdf5_function.close_hdf5(self.hdf5_object)
             final_path = request.record_file_path
@@ -118,18 +125,16 @@ class RecordServiceClass():
                     break
                 else:
                     final_dir, final_file_name = os.path.split(final_path)
-                    final_file_name = util.insert_str(final_file_name, "_copy")
+                    final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
-            os.remove(os.path.join(self.record_temp_dir))
-            response.ok = True
-            return response
+            os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
-            response.ok = True
-            return response
+        response.ok = True
+        return response
     
     def record_pose_estimation_service_callback(self, request):
         # request = Hdf5RecordPoseEstimationRequest()
@@ -138,6 +143,7 @@ class RecordServiceClass():
         rospy.set_param("record_counter", self.counter)
         index = self.counter % self.hdf5_save_interval
         if self.hdf5_record_file_path != request.record_file_path:
+            self.hdf5_record_file_path = request.record_file_path
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
             self.record_temp_dir = util.dir_join_and_make(record_dir, util.exclude_ext_str(record_file_name) + util.get_timestr_ms())
@@ -164,18 +170,16 @@ class RecordServiceClass():
                     break
                 else:
                     final_dir, final_file_name = os.path.split(final_path)
-                    final_file_name = util.insert_str(final_file_name, "_copy")
+                    final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
-            os.remove(os.path.join(self.record_temp_dir))
-            response.ok = True
-            return response
+            os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
-            response.ok = True
-            return response
+        response.ok = True
+        return response
 
     def record_clustering_service_callback(self, request):
         # request = Hdf5RecordClusteringRequest()
@@ -183,6 +187,7 @@ class RecordServiceClass():
         response = Hdf5RecordClusteringResponse()
         rospy.set_param("record_counter", self.counter)
         if self.hdf5_record_file_path != request.record_file_path:
+            self.hdf5_record_file_path = request.record_file_path
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
             self.record_temp_dir = util.dir_join_and_make(record_dir, util.exclude_ext_str(record_file_name) + util.get_timestr_ms())
@@ -207,18 +212,16 @@ class RecordServiceClass():
                     break
                 else:
                     final_dir, final_file_name = os.path.split(final_path)
-                    final_file_name = util.insert_str(final_file_name, "_copy")
+                    final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
-            os.remove(os.path.join(self.record_temp_dir))
-            response.ok = True
-            return response
+            os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
-            response.ok = True
-            return response
+        response.ok = True
+        return response
     
     def record_real_sensor_data_service_callback(self, request):
         # request = Hdf5RecordRealSensorDataRequest()
@@ -226,8 +229,8 @@ class RecordServiceClass():
         response = Hdf5RecordRealSensorDataResponse()
         response.ok = True
         self.counter = self.counter + 1
-        
         if self.hdf5_record_file_path != request.record_file_path:
+            self.hdf5_record_file_path = request.record_file_path
             self.bar = tqdm(total=request.the_number_of_dataset)
             self.bar.set_description("Progress rate")
             self.record_temp_dir = util.dir_join_and_make(record_dir, util.exclude_ext_str(record_file_name) + util.get_timestr_ms())
@@ -255,19 +258,16 @@ class RecordServiceClass():
                     break
                 else:
                     final_dir, final_file_name = os.path.split(final_path)
-                    final_file_name = util.insert_str(final_file_name, "_copy")
+                    final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
-            os.remove(os.path.join(self.record_temp_dir))
-            response.ok = True
-            return response
+            os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
             temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
             self.hdf5_object = hdf5_function.open_writed_hdf5(util.decide_allpath(record_dir, temp_filename))
-            response.ok = True
-            return response
-    
+        response.ok = True
+        return response
         
 
 if __name__=='__main__':

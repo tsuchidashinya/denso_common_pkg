@@ -16,8 +16,6 @@ SensorServer::SensorServer(ros::NodeHandle &nh)
       cloud_process_()
 {
     set_parameter();
-    
-    sensor_pub_ = nh_.advertise<sensor_msgs::PointCloud2>(pc_pub_topic_, 10);
     pc_sub_ = nh_.subscribe(pc_sub_topic_, 10, &SensorServer::pc_sub_callback, this);
     img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
     cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
