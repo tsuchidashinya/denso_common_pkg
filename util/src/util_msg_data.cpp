@@ -200,7 +200,7 @@ common_msgs::CloudData UtilMsgData::pcl_to_cloudmsg(pcl::PointCloud<PclXyz> pcl_
   return cloud_data;
 }
 
-pcl::PointCloud<pcl::PointXYZL> UtilMsgData::cloudmsg_to_mypoint(common_msgs::CloudData cloud_data)
+pcl::PointCloud<pcl::PointXYZL> UtilMsgData::cloudmsg_to_pclLabel(common_msgs::CloudData cloud_data)
 {
   pcl::PointCloud<pcl::PointXYZL> mypoints;
   for (int i = 0; i < cloud_data.x.size(); i++) {
@@ -215,7 +215,7 @@ pcl::PointCloud<pcl::PointXYZL> UtilMsgData::cloudmsg_to_mypoint(common_msgs::Cl
   return mypoints;
 }
 
-common_msgs::CloudData UtilMsgData::mypoint_to_cloudmsg(pcl::PointCloud<pcl::PointXYZL> mypoints)
+common_msgs::CloudData UtilMsgData::pclLabel_to_cloudmsg(pcl::PointCloud<pcl::PointXYZL> mypoints)
 {
   common_msgs::CloudData cloud_data;
   for (int i = 0; i < mypoints.points.size(); i++) {

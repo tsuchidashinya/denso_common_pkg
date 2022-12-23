@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 import rosparam
-from common_srvs.srv import Hdf5OpenService, Hdf5OpenServiceResponse, Hdf5OpenServiceRequest
-from common_srvs.srv import Hdf5OpenRealPhoxiService, Hdf5OpenRealPhoxiServiceResponse, Hdf5OpenRealPhoxiServiceRequest
+from common_srvs.srv import Hdf5OpenAccService, Hdf5OpenAccServiceResponse, Hdf5OpenAccServiceRequest
+from common_srvs.srv import Hdf5OpenSensorDataService, Hdf5OpenSensorDataServiceResponse, Hdf5OpenSensorDataServiceRequest
 from common_srvs.srv import Hdf5OpenSegmentationService, Hdf5OpenSegmentationServiceResponse, Hdf5OpenSegmentationServiceRequest
 from hdf5_package import hdf5_function
 from util import util_msg_data
@@ -10,19 +10,19 @@ from util import util_msg_data
 class Hdf5OpenServer():
     def __init__(self):
         self.set_parameter()
-        rospy.Service(self.service_name, Hdf5OpenService, self.service_callback)
-        rospy.Service(self.real_phoxi_service_name, Hdf5OpenRealPhoxiService, self.real_phoxi_service_callback)
-        rospy.Service(self.hdf5_segmentation_service_name, Hdf5OpenSegmentationService, self.hdf5_segmentation_service_callback)
+        rospy.Service(self.service_name, Hdf5OpenAccService, self.service_callback)
+        rospy.Service(self.real_phoxi_service_name, Hdf5OpenSensorDataService, self.real_phoxi_service_callback)
+        rospy.Service(self.hdf5_open_segmentation_service_name, Hdf5OpenSegmentationService, self.hdf5_open_segmentation_service_callback)
 
     
     def set_parameter(self):
         param_list = rosparam.get_param(rospy.get_name() + "/hdf5_open_server")
-        self.service_name = param_list["hdf5_open_service_name"]
-        self.real_phoxi_service_name = param_list["hdf5_real_phoxi_open_service_name"]
-        self.hdf5_segmentation_service_name = param_list["hdf5_segmentation_service_name"]
+        self.service_name = param_list["hdf5_open_acc_service_name"]
+        self.real_phoxi_service_name = param_list["hdf5_open_sensor_data_service_name"]
+        self.hdf5_open_segmentation_service_name = param_list["hdf5_open_segmentation_service_name"]
         self.hdf5_open_file_path = ""
     
-    def hdf5_segmentation_service_callback(self, request):
+    def hdf5_open_segmentation_service_callback(self, request):
         # request = Hdf5OpenSegmentationServiceRequest()
         if request.hdf5_open_file_path != self.hdf5_open_file_path:
             self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
@@ -46,14 +46,14 @@ class Hdf5OpenServer():
         np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
         image = self.hdf5_object["data_" + str(index)]['image'][()]
         camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
-        response = Hdf5OpenRealPhoxiServiceResponse()
+        response = Hdf5OpenSensorDataServiceResponse()
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_cloud)
         return response
 
     def service_callback(self, request):
-        # request = Hdf5OpenServiceRequest()
+        # request = Hdf5OpenAccServiceRequest()
         index = request.index
         if request.hdf5_open_file_path != self.hdf5_open_file_path:
             self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
@@ -64,12 +64,13 @@ class Hdf5OpenServer():
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(numpy_cloud, mask_data)
         translation = self.hdf5_object["data_" + str(index)]['translation'][()]
         rotation = self.hdf5_object["data_" + str(index)]['rotation'][()]
+        instance = self.hdf5_object["data_" + str(index)]['instance'][()]
         image = self.hdf5_object["data_" + str(index)]['image'][()]
         camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
-        response = Hdf5OpenServiceResponse()
+        response = Hdf5OpenAccServiceResponse()
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
-        response.pose_data = util_msg_data.trans_rotate_to_msgposelist(translation, rotation)
+        response.pose_data = util_msg_data.trans_rotate_ins_to_msgposelist(translation, rotation, instance)
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_concat_cloud)
         return response
 

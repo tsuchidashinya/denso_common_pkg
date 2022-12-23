@@ -55,8 +55,8 @@ public:
   static common_msgs::BoxPosition box_position_normalized(common_msgs::BoxPosition);
   static gazebo_msgs::ModelState make_gazebo_model_state(common_msgs::ObjectInfo);
   static gazebo_msgs::ModelState make_gazebo_model_state(std::string, geometry_msgs::Transform);
-  static pcl::PointCloud<pcl::PointXYZL> cloudmsg_to_mypoint(common_msgs::CloudData);
-  static common_msgs::CloudData mypoint_to_cloudmsg(pcl::PointCloud<pcl::PointXYZL>);
+  static pcl::PointCloud<pcl::PointXYZL> cloudmsg_to_pclLabel(common_msgs::CloudData);
+  static common_msgs::CloudData pclLabel_to_cloudmsg(pcl::PointCloud<pcl::PointXYZL>);
   static common_msgs::PoseData tranform_to_posedata(geometry_msgs::Transform);
   static geometry_msgs::Transform posedata_to_transform(common_msgs::PoseData);
 private:

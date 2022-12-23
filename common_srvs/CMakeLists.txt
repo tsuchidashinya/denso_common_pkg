@@ -25,8 +25,8 @@ add_service_files(
   visualize_service/VisualizeCloudDelete.srv 
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
-  hdf5_open_service/Hdf5OpenService.srv
-  hdf5_open_service/Hdf5OpenRealPhoxiService.srv 
+  hdf5_open_service/Hdf5OpenAccService.srv
+  hdf5_open_service/Hdf5OpenSensorDataService.srv 
   hdf5_open_service/Hdf5OpenSegmentationService.srv
   network_service/SemanticSegmentationService.srv 
   accuracy_service/AccuracyIouService.srv

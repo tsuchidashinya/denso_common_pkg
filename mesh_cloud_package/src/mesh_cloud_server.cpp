@@ -1,4 +1,4 @@
-#include <mesh_cloud_package/mesh_cloud.hpp>
+#include <mesh_cloud_package/mesh_cloud_server.hpp>
 
 /*
 1: Nodehandle
@@ -79,7 +79,7 @@ common_msgs::PoseData MeshCloudServer::stamped_to_pose(tf::StampedTransform tf_s
 
 void MeshCloudServer::set_parameter()
 {
-    pnh_.getParam("mesh_cloud", param_list);
+    pnh_.getParam("mesh_cloud_server", param_list);
     sample_points = param_list["sample_points"];
     mesh_service_name_ = static_cast<std::string>(param_list["mesh_service_name"]);
     pnh_.getParam("common_parameter", param_list);

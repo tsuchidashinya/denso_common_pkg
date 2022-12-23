@@ -35,8 +35,6 @@ class RecordServiceClass():
         self.record_segmentation_name = param_list["record_segmentation_service_name"]
         self.record_pose_estimation_name = param_list["record_pose_estimation_service_name"]
         self.record_clustering_name = param_list["record_clustering_service_name"]
-        self.hdf5_file_dir = param_list["record_hdf5_file_dir"]
-        self.hdf5_file_name = param_list["record_hdf5_file_name"]
         self.hdf5_save_interval = param_list["hdf5_save_interval"]
         self.record_real_sensor_service_name = param_list["record_real_sensor_data_service_name"]
         self.counter = 0
@@ -65,9 +63,9 @@ class RecordServiceClass():
         np_img = util_msg_data.rosimg_to_npimg(request.image)
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud, np_mask = util_msg_data.extract_mask_from_npcloud(np_cloud)
-        translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_data_list)
+        translation, rotation, ins = util_msg_data.msgposelist_to_trans_rotate_ins(request.pose_data_list)
         data_dict = {"Points": np_cloud, "masks": np_mask, "translation": translation,
-            "rotation": rotation, "image": np_img, "camera_info": np_cam}
+            "rotation": rotation, "image": np_img, "camera_info": np_cam, "instance": ins}
         if self.is_update:
             hdf5_read_dict = {}
             for key in self.hdf5_object.keys():
@@ -128,6 +126,7 @@ class RecordServiceClass():
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
+            print("save on ", final_path)
             os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
@@ -173,6 +172,7 @@ class RecordServiceClass():
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
+            print("save on ", final_path)
             os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)
@@ -215,6 +215,7 @@ class RecordServiceClass():
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
             hdf5_function.concatenate_hdf5(self.record_temp_dir, final_path)
+            print("save on ", final_path)
             os.rmdir(os.path.join(self.record_temp_dir))
         elif index == 0:
             hdf5_function.close_hdf5(self.hdf5_object)

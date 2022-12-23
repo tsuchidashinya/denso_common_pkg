@@ -1,4 +1,4 @@
-#include <mesh_cloud_package/mesh_cloud.hpp>
+#include <mesh_cloud_package/mesh_cloud_server.hpp>
 
 int main(int argc, char** argv)
 {

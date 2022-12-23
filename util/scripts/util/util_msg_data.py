@@ -22,10 +22,11 @@ def get_max_instance(cloud):
             max = cloud.instance[i]
     return max
 
-def msgposelist_to_trans_rotate(pose):
+def msgposelist_to_trans_rotate_ins(pose):
     data_size = len(pose)
     translation = np.zeros((data_size, 3), dtype=np.float32)
     rotation = np.zeros((data_size, 4), dtype=np.float32)
+    instance = np.zeros((data_size, 1), dtype=np.int32)
     for i in range(data_size):
         translation[i, 0] = pose[i].trans.x
         translation[i, 1] = pose[i].trans.y
@@ -34,9 +35,10 @@ def msgposelist_to_trans_rotate(pose):
         rotation[i, 1] = pose[i].rot.y
         rotation[i, 2] = pose[i].rot.z
         rotation[i, 3] = pose[i].rot.w
-    return translation, rotation
+        instance[i, 0] = pose[i].instance
+    return translation, rotation, instance
 
-def trans_rotate_to_msgposelist(translation, rotation):
+def trans_rotate_ins_to_msgposelist(translation, rotation, instance):
     pose_list = []
     for i in range(translation.shape[0]):
         pose = PoseData()
@@ -47,6 +49,7 @@ def trans_rotate_to_msgposelist(translation, rotation):
         pose.rot.y = rotation[i, 1]
         pose.rot.z = rotation[i, 2]
         pose.rot.w = rotation[i, 3]
+        pose.instance = instance[i, 0]
         pose_list.append(pose)
     return pose_list
 

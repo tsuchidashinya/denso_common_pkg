@@ -1,10 +1,11 @@
 visualize_client:
-  hdf5_open_service_name: hdf5_open_service
+  hdf5_open_acc_service_name: hdf5_open_acc_service
   visualize_service_name: visualize_cloud_service
   visualize_image_service_name: visualize_image_service
+  hdf5_open_file_path: /media/ericlab/DE59-9C00/test/acc_real.hdf5
 
 hdf5_open_server:
-  hdf5_open_service_name: hdf5_open_service
-  hdf5_real_phoxi_open_service_name: hdf5_real_phoxi_open_service
-  hdf5_segmentation_service_name: hdf5_segmentation_service
-  hdf5_open_file_path: /media/ericlab/DE59-9C00/test/acc_real.hdf5
+  hdf5_open_acc_service_name: hdf5_open_acc_service
+  hdf5_open_sensor_data_service_name: hdf5_open_sensor_data_service
+  hdf5_open_segmentation_service_name: hdf5_open_segmentation_service
+  

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="visualize_package" type="visualize_acc_client" name="visualize_acc_client" output="screen">
+        <rosparam file="$(find visualize_package)/config/visualize_acc_client.yaml" command="load" ns="" />
+    </node>
+</launch>

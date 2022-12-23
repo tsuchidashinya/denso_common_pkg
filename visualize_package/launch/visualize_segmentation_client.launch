@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="crop" default="True"/>
+    <node pkg="visualize_package" type="visualize_segmentation_client" name="visualize_segmentation_client" output="screen">
+        <rosparam file="$(find visualize_package)/config/visualize_segmentation_client.yaml" command="load" ns="" />
+        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        <param name="crop" value="$(arg crop)"/>
+    </node>
+
+</launch>

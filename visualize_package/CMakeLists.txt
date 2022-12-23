@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf_package
   util
+  sensor_package
 )
 
 
