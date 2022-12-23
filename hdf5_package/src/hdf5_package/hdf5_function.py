@@ -84,7 +84,7 @@ def write_hdf5(h5pyObject, data_dict, index):
             data_group.create_dataset(key, data=value, compression="lzf")
     h5pyObject.flush()
 
-def write_update_hdf5(h5pyObject_write, h5pyObject_read, data_dict, index_update):
+def write_overwrite_hdf5(h5pyObject_write, h5pyObject_read, data_dict, index_update):
     # h5pyObject_write = h5py.File()
     # h5pyObject_read = h5py.File()
     update_index = "data_" + str(index_update)
@@ -97,7 +97,50 @@ def write_update_hdf5(h5pyObject_write, h5pyObject_read, data_dict, index_update
             for key, value in h5pyObject_read[index].items():
                 data_group.create_dataset(key, data=value, compression="lzf")
     h5pyObject_write.flush()
-    return h5pyObject_write
+
+def write_overwrite_dict(hdf5_read_dict, data_dict, index_update):
+    for key, value in data_dict.items():
+        hdf5_read_dict["data_" + str(index_update)][key] = value
+    return hdf5_read_dict
+
+def load_hdf5_data_on_dict(hdf5_object):
+    hdf5_read_dict = {}
+    for key in hdf5_object.keys():
+        key2_all = {}
+        for key2 in hdf5_object[key].keys():
+            key2_all[key2] = hdf5_object[key][key2][()]
+        hdf5_read_dict[key] = key2_all
+    return hdf5_read_dict
+
+def write_hdf5_from_dict(h5pyObject_write, h5pyObject_read):
+    for index in h5pyObject_read.keys():
+        data_group = h5pyObject_write.create_group(index)
+        for key, value in h5pyObject_read[index].items():
+            data_group.create_dataset(key, data=value, compression="lzf")
+        h5pyObject_write.flush()
+
+def write_insert_hdf5(h5pyObject_write, h5pyObject_read, data_dict):
+    # h5pyObject_write = h5py.File()
+    # h5pyObject_read = h5py.File()
+    start_index_num = 0
+    for index in h5pyObject_read.keys():
+        start_index_num = start_index_num + 1
+        data_group = h5pyObject_write.create_group(index)
+        for key, value in h5pyObject_read[index].items():
+            data_group.create_dataset(key, data=value, compression="lzf")
+    data_group = h5pyObject_write.create_group("data_" + str(start_index_num))
+    for key, value in data_dict.items():
+        data_group.create_dataset(key, data=value, compression="lzf")
+    h5pyObject_write.flush()
+
+def write_insert_dict(hdf5_read_dict, data_dict):
+    start_index_num = 0
+    for _ in hdf5_read_dict.keys():
+        start_index_num = start_index_num + 1
+    for key, value in data_dict.items():
+        hdf5_read_dict["data_" + str(start_index_num)][key] = value
+    return hdf5_read_dict
+
 
 def open_writed_hdf5(file_path):
     if not os.path.exists(os.path.dirname(file_path)):
@@ -122,8 +165,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/media/ericlab/DE59-9C00/test/data_real_HV8"
-    concatenate_hdf5(path, os.path.join(path, "real_HV8_data.hdf5"))
+    path = "/home/ericlab/Desktop/tsuchida_screen"
+    concatenate_hdf5(path, os.path.join(path, "acc_real.hdf5"))
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)

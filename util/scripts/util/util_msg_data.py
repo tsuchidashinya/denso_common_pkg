@@ -53,6 +53,20 @@ def trans_rotate_ins_to_msgposelist(translation, rotation, instance):
         pose_list.append(pose)
     return pose_list
 
+def trans_rotate_to_msgposelist(translation, rotation):
+    pose_list = []
+    for i in range(translation.shape[0]):
+        pose = PoseData()
+        pose.trans.x = translation[i, 0]
+        pose.trans.y = translation[i, 1]
+        pose.trans.z = translation[i, 2]
+        pose.rot.x = rotation[i, 0]
+        pose.rot.y = rotation[i, 1]
+        pose.rot.z = rotation[i, 2]
+        pose.rot.w = rotation[i, 3]
+        pose_list.append(pose)
+    return pose_list
+
 def make_pose_mask(translation, rotation):
     pose_mask = np.concatenate([translation, rotation])
     return pose_mask

@@ -39,26 +39,27 @@ class RecordServiceClass():
         self.record_real_sensor_service_name = param_list["record_real_sensor_data_service_name"]
         self.counter = 0
         self.hdf5_record_file_path = ""
+        print("")
         
     def record_acc_service_callback(self, request):
         # request = Hdf5RecordAccRequest()
         response = Hdf5RecordAccResponse()
         response.ok = True
+        
         if self.hdf5_record_file_path != request.record_file_path:
             self.hdf5_record_file_path = request.record_file_path
             self.counter = 0
-            self.bar = tqdm(total=request.the_number_of_dataset)
-            self.bar.set_description("Progress rate")
             if os.path.exists(request.record_file_path):
                 self.is_update = True
-                self.hdf5_object = hdf5_function.open_readed_hdf5(request.record_file_path)
+                hdf5_object = hdf5_function.open_readed_hdf5(request.record_file_path)
+                self.hdf5_read_dict = hdf5_function.load_hdf5_data_on_dict(hdf5_object)
+                hdf5_function.close_hdf5(hdf5_object)
+                os.remove(request.record_file_path)
+                self.hdf5_object = hdf5_function.open_writed_hdf5(request.record_file_path)
             else:
                 self.is_update = False
                 self.hdf5_object = hdf5_function.open_writed_hdf5(request.record_file_path)
         self.counter = self.counter + 1
-        
-        if self.counter > request.the_number_of_dataset:
-            return response
         np_cam = util_msg_data.msgcam_to_npcam(request.camera_info)
         np_img = util_msg_data.rosimg_to_npimg(request.image)
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
@@ -67,26 +68,17 @@ class RecordServiceClass():
         data_dict = {"Points": np_cloud, "masks": np_mask, "translation": translation,
             "rotation": rotation, "image": np_img, "camera_info": np_cam, "instance": ins}
         if self.is_update:
-            hdf5_read_dict = {}
-            for key in self.hdf5_object.keys():
-                key2_all = {}
-                for key2 in self.hdf5_object[key].keys():
-                    key2_all[key2] = self.hdf5_object[key][key2][()]
-                hdf5_read_dict[key] = key2_all
-            hdf5_function.close_hdf5(self.hdf5_object)
-            os.remove(request.record_file_path)
-            hdf5_write_object = hdf5_function.open_writed_hdf5(request.record_file_path)
-            
-            hdf5_function.write_update_hdf5(hdf5_write_object, hdf5_read_dict, data_dict, request.index)
+            if request.is_overwrite:
+                self.hdf5_read_dict = hdf5_function.write_overwrite_dict(self.hdf5_read_dict, data_dict, request.index)
+            else:
+                self.hdf5_read_dict = hdf5_function.write_insert_dict(self.hdf5_read_dict, data_dict)
         else:
             hdf5_function.write_hdf5(self.hdf5_object, data_dict, self.counter)
-            
-        self.bar.update(1)
-        if request.the_number_of_dataset == self.counter:
+        if request.is_end:
             if self.is_update:
-                hdf5_function.close_hdf5(hdf5_write_object)
-            else:
-                hdf5_function.close_hdf5(self.hdf5_object)
+                hdf5_function.write_hdf5_from_dict(self.hdf5_object, self.hdf5_read_dict)
+            hdf5_function.close_hdf5(self.hdf5_object)
+            print("save on ", request.record_file_path)
             return response
         else:
             return response
