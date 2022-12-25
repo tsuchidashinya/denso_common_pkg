@@ -11,7 +11,6 @@
 #pragma once
 #include <util/util_msg_data.hpp>
 #include <common_srvs/SensorService.h>
-#include <common_srvs/SensorPC2Service.h>
 #include "cloud_process.hpp"
 
 class SensorServer
@@ -23,7 +22,6 @@ public:
 
 private:
     bool service_callback(common_srvs::SensorService::Request &, common_srvs::SensorService::Response &);
-    bool sensor_pc2_service_callback(common_srvs::SensorPC2Service::Request&, common_srvs::SensorPC2ServiceResponse &);
     void pc_sub_callback(const sensor_msgs::PointCloud2ConstPtr &);
     void img_sub_callback(const sensor_msgs::ImageConstPtr &);
     void cam_sub_callback(const sensor_msgs::CameraInfoConstPtr &);
@@ -31,14 +29,16 @@ private:
 
     ros::NodeHandle nh_, pnh_;
     ros::Publisher sensor_pub_;
-    ros::ServiceServer server_, pc2_server_;
+    ros::ServiceServer server_;
     ros::Subscriber pc_sub_, cam_sub_, img_sub_;
     sensor_msgs::PointCloud2 pc_data_, pc_response_data_;
     sensor_msgs::Image img_data_;
     sensor_msgs::CameraInfo cam_data_;
     CloudProcess cloud_process_;
     double LEAF_SIZE;
-    std::string sensor_service_name_, sensor_pc2_service_name_;
+    std::string sensor_service_name_;
     std::string pc_pub_topic_, pc_sub_topic_, img_sub_topic_, cam_sub_topic_;
     std::string sensor_frame_, world_frame_;
+    bool is_crop_;
+    bool is_downsample_;
 };

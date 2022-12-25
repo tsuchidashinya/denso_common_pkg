@@ -13,14 +13,15 @@
 SensorServer::SensorServer(ros::NodeHandle &nh)
     : nh_(nh),
       pnh_("~"),
-      cloud_process_()
+      cloud_process_(),
+      is_crop_(true),
+      is_downsample_(true)
 {
     set_parameter();
     pc_sub_ = nh_.subscribe(pc_sub_topic_, 10, &SensorServer::pc_sub_callback, this);
     img_sub_ = nh_.subscribe(img_sub_topic_, 10, &SensorServer::img_sub_callback, this);
     cam_sub_ = nh_.subscribe(cam_sub_topic_, 10, &SensorServer::cam_sub_callback, this);
     server_ = nh_.advertiseService(sensor_service_name_, &SensorServer::service_callback, this);
-    pc2_server_ = nh_.advertiseService(sensor_pc2_service_name_, &SensorServer::sensor_pc2_service_callback, this);
 }
 
 
@@ -43,12 +44,12 @@ void SensorServer::set_parameter() {
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     pnh_.getParam("sensor_server", param_list);
     sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
-    sensor_pc2_service_name_ = static_cast<std::string>(param_list["sensor_pc2_service_name"]);
     pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
     pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
     img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);
     cam_sub_topic_ = static_cast<std::string>(param_list["cam_sub_topic"]);
-    
+    pnh_.getParam("crop", is_crop_);
+    pnh_.getParam("downsample", is_downsample_);
 }
 
 /**
@@ -77,21 +78,16 @@ bool SensorServer::service_callback(common_srvs::SensorService::Request &request
 {
     pcl::PointCloud<PclXyz> pcl_data;
     pcl::fromROSMsg(pc_data_, pcl_data);
-    pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
-    cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
-    pcl_data = cloud_process_.cropbox_segmenter(pcl_data);
+    if (is_downsample_) {
+        pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, LEAF_SIZE);
+    }
+    if (is_crop_) {
+        cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
+        pcl_data = cloud_process_.cropbox_segmenter(pcl_data);
+    }
     response.cloud_data = UtilMsgData::pcl_to_cloudmsg(pcl_data);
     response.image = img_data_;
     response.camera_info = cam_data_;
     pc_response_data_ = UtilMsgData::pcl_to_pc2(pcl_data);
-    return true;
-}
-
-bool SensorServer::sensor_pc2_service_callback(common_srvs::SensorPC2Service::Request &request, common_srvs::SensorPC2Service::Response &response)
-{
-    pcl::PointCloud<PclXyz> pcl_data;
-    pcl::fromROSMsg(pc_data_, pcl_data);
-    pcl_data = CloudProcess::downsample_by_voxelgrid(pcl_data, 0.0035);
-    response.pc2_data = UtilMsgData::pcl_to_pc2(pcl_data);;
     return true;
 }

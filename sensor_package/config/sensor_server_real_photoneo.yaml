@@ -4,7 +4,6 @@ sensor_server:
   img_sub_topic: /photoneo_center/rgb_texture
   cam_sub_topic: /photoneo_center/camera_info
   sensor_service_name: sensor_service
-  sensor_pc2_service_name: sensor_pc2_service
   
 cloud_process:
   planar_threshold: 0.01

@@ -4,7 +4,6 @@ sensor_server:
   img_sub_topic: /photoneo_center/sensor/image_color
   cam_sub_topic: /photoneo_center/sensor/camera_info
   sensor_service_name: sensor_service
-  sensor_pc2_service_name: sensor_pc2_service
 
   
 cloud_process:
