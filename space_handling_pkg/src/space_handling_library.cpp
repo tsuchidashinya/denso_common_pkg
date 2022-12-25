@@ -1,26 +1,19 @@
-#include <labeling_package/instance_label_drawer.hpp>
+#include <space_handling_pkg/space_handling_library.hpp>
 
-common_msgs::CloudData InstanceLabelDrawer::draw_instance_all(common_msgs::CloudData cloud, int instance)
-{
-    cloud.instance.resize(cloud.x.size());
-    for (int i = 0; i < cloud.x.size(); i++) {
-        cloud.instance[i] = instance;
-    }
-    return cloud;
-}
 
-InstanceLabelDrawer::InstanceLabelDrawer() : pnh_("~")
+
+SpaceHandlingLibrary::SpaceHandlingLibrary() : pnh_("~")
 {
     set_parameter();
 }
 
-void InstanceLabelDrawer::set_parameter()
+void SpaceHandlingLibrary::set_parameter()
 {
     pnh_.getParam("common_parameter", param_list);
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
 }
 
-common_msgs::CloudData InstanceLabelDrawer::extract_nearest_point(common_msgs::CloudData sensor_cloud, common_msgs::CloudData mesh_cloud, int instance, double radious = 0.004)
+common_msgs::CloudData SpaceHandlingLibrary::search_nearest_point(common_msgs::CloudData sensor_cloud, common_msgs::CloudData mesh_cloud, int instance, double radious = 0.004)
 {
     pcl::PointCloud<PclXyz> sensor_pcl, mesh_pcl;
     sensor_pcl = UtilMsgData::cloudmsg_to_pcl(sensor_cloud);
@@ -58,7 +51,7 @@ common_msgs::CloudData InstanceLabelDrawer::extract_nearest_point(common_msgs::C
 3: occludy_instance int
 4: radious double
 */
-std::vector<common_msgs::CloudData> InstanceLabelDrawer::extract_occuluder(std::vector<common_msgs::CloudData> cloud_multi, double radious)
+std::vector<common_msgs::CloudData> SpaceHandlingLibrary::extract_occuluder(std::vector<common_msgs::CloudData> cloud_multi, double radious)
 {
     std::vector<common_msgs::CloudData> out_data;
     std::vector<std::string> tf_names;
@@ -78,7 +71,7 @@ std::vector<common_msgs::CloudData> InstanceLabelDrawer::extract_occuluder(std::
     return out_data;
 }
 
-std::vector<common_msgs::ObjectInfo> InstanceLabelDrawer::extract_occuluder(std::vector<common_msgs::ObjectInfo> object_info, double radious)
+std::vector<common_msgs::ObjectInfo> SpaceHandlingLibrary::extract_occuluder(std::vector<common_msgs::ObjectInfo> object_info, double radious)
 {
     std::vector<common_msgs::ObjectInfo> out_data;
     std::vector<std::string> tf_names;
@@ -96,7 +89,7 @@ std::vector<common_msgs::ObjectInfo> InstanceLabelDrawer::extract_occuluder(std:
     return out_data;
 }
 
-std::vector<ObjectTfNameType> InstanceLabelDrawer::detect_occuluder(std::vector<std::string> tf_names, double radious)
+std::vector<ObjectTfNameType> SpaceHandlingLibrary::detect_occuluder(std::vector<std::string> tf_names, double radious)
 {
     std::vector<ObjectTfNameType> occluder_list;
     int collision = 0;
@@ -156,10 +149,3 @@ std::vector<ObjectTfNameType> InstanceLabelDrawer::detect_occuluder(std::vector<
     return occluder_list;
 }
 
-std::vector<common_msgs::BoxPosition> InstanceLabelDrawer::set_object_class_name(std::vector<common_msgs::BoxPosition> box_position_list, std::string class_name)
-{
-    for (int i = 0; i < box_position_list.size(); i++) {
-        box_position_list[i].object_name = class_name;
-    }
-    return box_position_list;
-}
