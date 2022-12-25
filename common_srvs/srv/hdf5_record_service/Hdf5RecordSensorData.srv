@@ -4,5 +4,7 @@ float32[] camera_info
 int32 is_overwrite
 int32 is_end
 string record_file_path
+int32 index
 ---
 bool ok
+string save_temp_file_path

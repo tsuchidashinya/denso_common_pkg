@@ -8,3 +8,4 @@ int32 index
 string record_file_path
 ---
 bool ok
+string save_temp_file_path

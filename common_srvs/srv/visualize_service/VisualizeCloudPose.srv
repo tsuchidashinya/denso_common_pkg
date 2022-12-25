@@ -1,4 +1,0 @@
-common_msgs/PoseData[] pose_data_list
-string[] topic_name_list
----
-bool ok

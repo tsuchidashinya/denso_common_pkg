@@ -4,3 +4,4 @@ float32[] z
 int32[] instance
 string object_name
 string tf_name
+string frame_id

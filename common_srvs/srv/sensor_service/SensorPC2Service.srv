@@ -1,3 +1,0 @@
-int32 counter
----
-sensor_msgs/PointCloud2 pc2_data

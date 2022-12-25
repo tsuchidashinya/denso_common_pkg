@@ -8,21 +8,18 @@ project(common_srvs)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-    message_generation
-    common_msgs
-    sensor_msgs
+  message_generation
+  common_msgs
+  sensor_msgs
 )
 
 
 add_service_files(
   FILES
   sensor_service/SensorService.srv
-  sensor_service/SensorPC2Service.srv
   visualize_service/VisualizeCloud.srv
-  visualize_service/VisualizeCloudPose.srv
   visualize_service/VisualizeImage.srv
-  visualize_service/VisualizeSensorPC2.srv
-  visualize_service/VisualizeCloudDelete.srv 
+  visualize_service/VisualizeDeleteService.srv 
   network_service/NetworkCloudService.srv 
   network_service/ObjectDetectionService.srv 
   hdf5_open_service/Hdf5OpenAccService.srv
@@ -37,7 +34,7 @@ add_service_files(
   hdf5_record_service/Hdf5RecordClustering.srv
   hdf5_record_service/Hdf5RecordPoseEstimation.srv
   hdf5_record_service/Hdf5RecordSegmentation.srv
-  hdf5_record_service/Hdf5RecordRealSensorData.srv
+  hdf5_record_service/Hdf5RecordSensorData.srv
   mesh_service/MeshCloudService.srv 
 )
 
