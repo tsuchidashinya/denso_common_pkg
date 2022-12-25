@@ -42,6 +42,12 @@ bool TfBroadcastServer::tf_delete_service_callback(common_srvs::TfDeleteService:
         response.is_delete_completed = 0;
     }
     else {
+        tf_stamp_list_[index].transform.translation.x = 100;
+        tf_stamp_list_[index].transform.translation.y = 100;
+        for (int i = 0; i < 10; i++) {
+            tf_function_.static_broadcast(tf_stamp_list_[index]);
+            ros::Duration(0.01).sleep();
+        }
         tf_name_list_.erase(tf_name_list_.begin() + index);
         tf_stamp_list_.erase(tf_stamp_list_.begin() + index);
         response.is_delete_completed = 1;
