@@ -11,7 +11,7 @@ common_parameter:
     - instance: 1
       color:
         - 255
-        - 0
+        - 255
         - 0
     - instance: 2
       color:
@@ -26,8 +26,8 @@ common_parameter:
     - instance: 4
       color:
         - 255
-        - 255
         - 0
+        - 255
     - instance: 5
       color:
         - 0
