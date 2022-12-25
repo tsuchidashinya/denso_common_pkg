@@ -18,34 +18,40 @@ void VisualizeClient::set_parameter()
     visualize_service_name_ = static_cast<std::string>(param_list["visualize_service_name"]);
     vis_img_service_name_ = static_cast<std::string>(param_list["visualize_image_service_name"]);
     hdf5_open_file_path_ = static_cast<std::string>(param_list["hdf5_open_file_path"]);
+    pnh_.getParam("common_parameter", param_list);
+    world_frame_ = static_cast<std::string>(param_list["world_frame"]);
+    sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
+    cloud_process_.set_crop_frame(sensor_frame_, world_frame_);
+    pnh_.getParam("crop", crop_);
 }
 
 void VisualizeClient::main()
 {
-    int data_size;
-    nh_.getParam("hdf5_data_size", data_size);
-    std::vector<common_msgs::CloudData> cloud_list;
-    std::vector<sensor_msgs::Image> image_list;
-    std::vector<std::string> topic_list;
-    std::vector<std::string> image_topic_list;
-    for (int i = 1; i <= data_size; i++) {
+    int index = 0;
+    while (1) {
         common_srvs::Hdf5OpenAccService hdf5_srv;
-        hdf5_srv.request.index = i;
+        hdf5_srv.request.index = index;
         hdf5_srv.request.hdf5_open_file_path = hdf5_open_file_path_;
+        Util::message_show("index", index);
         Util::client_request(hdf5_client_, hdf5_srv, hdf5_open_acc_service_name_);
-        cloud_list.push_back(hdf5_srv.response.cloud_data);
-        topic_list.push_back("index_" + std::to_string(i));
-        image_list.push_back(hdf5_srv.response.image);
-        image_topic_list.push_back("image_index_" + std::to_string(i));
+        common_srvs::VisualizeCloud visualize_srv;
+        common_srvs::VisualizeImage visualize_img_srv;
+        common_msgs::CloudData cloud_data = hdf5_srv.response.cloud_data;
+        if (crop_) {
+            pcl::PointCloud<pcl::PointXYZL> pcl_label_data = UtilMsgData::cloudmsg_to_pclLabel(cloud_data);
+            pcl_label_data = cloud_process_.cropbox_segmenter(pcl_label_data);
+            cloud_data = UtilMsgData::pclLabel_to_cloudmsg(pcl_label_data);
+        }
+        visualize_srv.request.cloud_data_list.push_back(cloud_data);
+        visualize_srv.request.topic_name_list.push_back("index_" + std::to_string(index));
+        Util::client_request(visualize_client_, visualize_srv, visualize_service_name_);
+        visualize_img_srv.request.image_list.push_back(hdf5_srv.response.image);
+        visualize_img_srv.request.topic_name_list.push_back("image_topic_" + std::to_string(index));
+        Util::client_request(vis_img_client_, visualize_img_srv, vis_img_service_name_);
+        if (index >= hdf5_srv.response.data_size - 1) {
+            break;
+        }
+        index++;
     }
-    common_srvs::VisualizeCloud visualize_srv;
-    visualize_srv.request.cloud_data_list = cloud_list;
-    visualize_srv.request.topic_name_list = topic_list;
-    Util::client_request(visualize_client_, visualize_srv, visualize_service_name_);
-    
-    common_srvs::VisualizeImage visualize_img_srv;
-    visualize_img_srv.request.image_list = image_list;
-    visualize_img_srv.request.topic_name_list = image_topic_list;
-    Util::client_request(vis_img_client_, visualize_img_srv, visualize_service_name_);
 }
 

@@ -21,5 +21,5 @@ private:
     ros::ServiceClient hdf5_client_, visualize_client_, vis_img_client_;
     CloudProcess cloud_process_;
     std::string world_frame_, sensor_frame_;
-    int crop_;
+    bool crop_;
 };

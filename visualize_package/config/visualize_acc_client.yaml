@@ -2,10 +2,14 @@ visualize_client:
   hdf5_open_acc_service_name: hdf5_open_acc_service
   visualize_service_name: visualize_cloud_service
   visualize_image_service_name: visualize_image_service
-  hdf5_open_file_path: /media/ericlab/DE59-9C00/test/acc_real.hdf5
+  hdf5_open_file_path: /media/ericlab/DE59-9C00/test/practice/acc_real.hdf5
 
-hdf5_open_server:
-  hdf5_open_acc_service_name: hdf5_open_acc_service
-  hdf5_open_sensor_data_service_name: hdf5_open_sensor_data_service
-  hdf5_open_segmentation_service_name: hdf5_open_segmentation_service
+cloud_process:
+  planar_threshold: 0.01
+  x_min: -0.4
+  y_min: -0.4
+  z_min: -0.01
+  x_max: 0.17
+  y_max: 0.3
+  z_max: 0.5
   

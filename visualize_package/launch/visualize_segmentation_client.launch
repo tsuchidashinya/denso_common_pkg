@@ -7,4 +7,8 @@
         <param name="crop" value="$(arg crop)"/>
     </node>
 
+    <node pkg="calibration_pkg" type="calibrate_tf_broadcaster" name="calibrate_tf_broadcaster">
+        <rosparam file="$(find calibration_pkg)/config/calibrate_tf_broadcaster.yaml" command="load" ns="" />
+        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+    </node>
 </launch>
