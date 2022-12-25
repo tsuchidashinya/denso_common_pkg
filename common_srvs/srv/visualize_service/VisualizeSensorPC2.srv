@@ -1,4 +1,0 @@
-sensor_msgs/PointCloud2[] pc2_list
-string[] new_topic_name_list
----
-int32 ok

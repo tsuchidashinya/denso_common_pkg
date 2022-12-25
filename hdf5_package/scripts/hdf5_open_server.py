@@ -21,17 +21,19 @@ class Hdf5OpenServer():
         self.real_phoxi_service_name = param_list["hdf5_open_sensor_data_service_name"]
         self.hdf5_open_segmentation_service_name = param_list["hdf5_open_segmentation_service_name"]
         self.hdf5_open_file_path = ""
+        self.hdf5_data_dict = {}
     
     def hdf5_open_segmentation_service_callback(self, request):
         # request = Hdf5OpenSegmentationServiceRequest()
-        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+        if request.hdf5_open_file_path != self.hdf5_open_file_path or request.is_reload:
             self.hdf5_open_file_path = request.hdf5_open_file_path
-            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
-            data_size = len(self.hdf5_object)
+            hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            self.hdf5_data_dict = hdf5_function.load_hdf5_data_on_dict(hdf5_object)
+            data_size = len(self.hdf5_data_dict)
             rospy.set_param("hdf5_data_size", data_size)
         index = request.index
-        np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
-        mask_data = self.hdf5_object["data_" + str(index)]['masks'][()]
+        np_cloud = self.hdf5_data_dict["data_" + str(index)]['Points']
+        mask_data = self.hdf5_data_dict["data_" + str(index)]['masks']
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(np_cloud, mask_data)
         response = Hdf5OpenSegmentationServiceResponse()
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_concat_cloud)
@@ -40,14 +42,15 @@ class Hdf5OpenServer():
     
     def real_phoxi_service_callback(self, request):
         index = request.index
-        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+        if request.hdf5_open_file_path != self.hdf5_open_file_path or request.is_reload:
             self.hdf5_open_file_path = request.hdf5_open_file_path
-            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
-            data_size = len(self.hdf5_object)
+            hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            self.hdf5_data_dict = hdf5_function.load_hdf5_data_on_dict(hdf5_object)
+            data_size = len(self.hdf5_data_dict)
             rospy.set_param("hdf5_data_size", data_size)
-        np_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
-        image = self.hdf5_object["data_" + str(index)]['image'][()]
-        camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
+        np_cloud = self.hdf5_data_dict["data_" + str(index)]['Points']
+        image = self.hdf5_data_dict["data_" + str(index)]['image']
+        camera_info_list = self.hdf5_data_dict["data_" + str(index)]['camera_info']
         response = Hdf5OpenSensorDataServiceResponse()
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
@@ -57,24 +60,26 @@ class Hdf5OpenServer():
     def service_callback(self, request):
         # request = Hdf5OpenAccServiceRequest()
         index = request.index
-        if request.hdf5_open_file_path != self.hdf5_open_file_path:
+        if request.hdf5_open_file_path != self.hdf5_open_file_path or request.is_reload:
             self.hdf5_open_file_path = request.hdf5_open_file_path
-            self.hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
-            data_size = len(self.hdf5_object)
+            hdf5_object = hdf5_function.open_readed_hdf5(request.hdf5_open_file_path)
+            self.hdf5_data_dict = hdf5_function.load_hdf5_data_on_dict(hdf5_object)
+            data_size = len(self.hdf5_data_dict)
             rospy.set_param("hdf5_data_size", data_size)
-        numpy_cloud = self.hdf5_object["data_" + str(index)]['Points'][()]
-        mask_data = self.hdf5_object["data_" + str(index)]['masks'][()]
+        numpy_cloud = self.hdf5_data_dict["data_" + str(index)]['Points']
+        mask_data = self.hdf5_data_dict["data_" + str(index)]['masks']
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(numpy_cloud, mask_data)
-        translation = self.hdf5_object["data_" + str(index)]['translation'][()]
-        rotation = self.hdf5_object["data_" + str(index)]['rotation'][()]
-        # instance = self.hdf5_object["data_" + str(index)]['instance'][()]
-        image = self.hdf5_object["data_" + str(index)]['image'][()]
-        camera_info_list = self.hdf5_object["data_" + str(index)]['camera_info'][()]
+        translation = self.hdf5_data_dict["data_" + str(index)]['translation']
+        rotation = self.hdf5_data_dict["data_" + str(index)]['rotation']
+        instance = self.hdf5_data_dict["data_" + str(index)]['instance']
+        image = self.hdf5_data_dict["data_" + str(index)]['image']
+        camera_info_list = self.hdf5_data_dict["data_" + str(index)]['camera_info']
         response = Hdf5OpenAccServiceResponse()
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
-        response.pose_data = util_msg_data.trans_rotate_to_msgposelist(translation, rotation)
+        response.pose_data = util_msg_data.trans_rotate_ins_to_msgposelist(translation, rotation, instance)
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_concat_cloud)
+        response.data_size = len(self.hdf5_data_dict)
         return response
 
 if __name__=='__main__':

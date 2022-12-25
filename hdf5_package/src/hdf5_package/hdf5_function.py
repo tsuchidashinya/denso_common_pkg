@@ -137,8 +137,9 @@ def write_insert_dict(hdf5_read_dict, data_dict):
     start_index_num = 0
     for _ in hdf5_read_dict.keys():
         start_index_num = start_index_num + 1
-    for key, value in data_dict.items():
-        hdf5_read_dict["data_" + str(start_index_num)][key] = value
+    update_dict = {"data_" + str(start_index_num): data_dict}
+    hdf5_read_dict.update(update_dict)
+    # hdf5_read_dict["data_" + str(start_index_num)][key] = value
     return hdf5_read_dict
 
 
@@ -165,8 +166,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/ericlab/Desktop/tsuchida_screen"
-    concatenate_hdf5(path, os.path.join(path, "acc_real.hdf5"))
+    path = "/media/ericlab/DE59-9C00/test/concate"
+    concatenate_hdf5(path, os.path.join(path, "real_HV8_data.hdf5"))
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)

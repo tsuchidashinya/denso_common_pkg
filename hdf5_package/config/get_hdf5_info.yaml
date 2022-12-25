@@ -1,2 +1,2 @@
 get_hdf5_info:
-  hdf5_open_file_path: /home/ericlab/Desktop/tsuchida_screen/acc_real.hdf5
+  hdf5_open_file_path: //media/ericlab/DE59-9C00/test/practice/pc/acc_real.hdf5
