@@ -26,7 +26,7 @@ void GazeboTfPublisher::modelstatesCallback(const gazebo_msgs::ModelStates::Cons
     for (int i = 0; i < model_names_.size(); i++) {
         geometry_msgs::TransformStamped tf_stamp;
         geometry_msgs::Transform trans;
-        tf2::Quaternion quat = TfFunction::make_tf2_quaternion(model_poses_[i].orientation);
+        tf2::Quaternion quat = TfFunction::geo_quat_to_tf2_quat(model_poses_[i].orientation);
         trans = TfFunction::make_geo_transform(model_poses_[i].position.x, model_poses_[i].position.y, model_poses_[i].position.z, quat);
         tf_stamp = TfFunction::make_geo_trans_stamped(model_names_[i], world_frame_, trans);
         tf_func_.static_broadcast(tf_stamp);
@@ -36,7 +36,7 @@ void GazeboTfPublisher::modelstatesCallback(const gazebo_msgs::ModelStates::Cons
         // Util::client_request(tf_client_, tf_br_srv, tf_br_service_name_);
         if (model_names_[i] == gazebo_tracked_frame_) {
             tf_stamp.child_frame_id = rviz_following_frame_;
-            tf_stamp.transform.rotation = TfFunction::make_geo_quaternion(TfFunction::rotate_xyz_make(0, M_PI/2, 0, TfFunction::make_tf2_quaternion(tf_stamp.transform.rotation)));
+            tf_stamp.transform.rotation = TfFunction::tf2_quat_to_geo_quat(TfFunction::rotate_xyz_make(0, M_PI/2, 0, TfFunction::geo_quat_to_tf2_quat(tf_stamp.transform.rotation)));
             tf_func_.static_broadcast(tf_stamp);
             // tf_br_srv.request.broadcast_tf = tf_stamp;
             // tf_br_srv.request.tf_name = tf_stamp.child_frame_id;

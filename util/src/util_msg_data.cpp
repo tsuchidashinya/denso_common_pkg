@@ -17,6 +17,42 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+/**
+ * @brief geometry_msgs::Transform型からtf::StampedTransformへ変換する関数
+ *
+ * @param trans
+ * @return tf::StampedTransform
+ */
+tf::StampedTransform UtilMsgData::make_stamped_trans(geometry_msgs::Transform trans)
+{
+  tf::StampedTransform stamp_trans;
+  tf::Vector3 vec3;
+  vec3.setX(trans.translation.x);
+  vec3.setY(trans.translation.y);
+  vec3.setZ(trans.translation.z);
+  stamp_trans.setOrigin(vec3);
+  tf::Quaternion tq(trans.rotation.x, trans.rotation.y, trans.rotation.z, trans.rotation.w);
+  stamp_trans.setRotation(tq);
+  return stamp_trans;
+}
+
+common_msgs::CloudData UtilMsgData::draw_all_ins_cloudmsg(common_msgs::CloudData cloud, int instance)
+{
+    cloud.instance.resize(cloud.x.size());
+    for (int i = 0; i < cloud.x.size(); i++) {
+        cloud.instance[i] = instance;
+    }
+    return cloud;
+}
+
+std::vector<common_msgs::BoxPosition> UtilMsgData::set_classname_on_boxposition(std::vector<common_msgs::BoxPosition> box_position_list, std::string class_name)
+{
+    for (int i = 0; i < box_position_list.size(); i++) {
+        box_position_list[i].object_name = class_name;
+    }
+    return box_position_list;
+}
+
 common_msgs::PoseData UtilMsgData::tranform_to_posedata(geometry_msgs::Transform trans)
 {
   common_msgs::PoseData pose;
@@ -167,13 +203,13 @@ pcl::PointCloud<PclRgb> UtilMsgData::pc2_color_to_pclrgb(sensor_msgs::PointCloud
 }
 
 
-void UtilMsgData::cloud_size_ok(common_msgs::CloudData &cloud)
+bool UtilMsgData::cloud_size_ok(common_msgs::CloudData cloud)
 {
-  if (cloud.x.size() == cloud.y.size() == cloud.z.size() == cloud.instance.size()) {
-    ;
+  if (cloud.x.size() == cloud.y.size() && cloud.x.size() == cloud.z.size() && cloud.x.size() == cloud.instance.size()) {
+    return true;
   }
   else {
-    cloud.instance.resize(cloud.x.size());
+    return false;
   }
 }
 

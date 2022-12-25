@@ -28,7 +28,7 @@ void CalibrationClient::set_parameter()
 void CalibrationClient::main()
 {
     geometry_msgs::TransformStamped move_tf;
-    move_tf.transform.rotation = TfFunction::make_geo_quaternion(TfFunction::rotate_xyz_make(0, 0, 0));
+    move_tf.transform.rotation = TfFunction::tf2_quat_to_geo_quat(TfFunction::rotate_xyz_make(0, 0, 0));
     move_tf.child_frame_id = move_tf_frame_;
     move_tf.header.frame_id = world_frame_;
     

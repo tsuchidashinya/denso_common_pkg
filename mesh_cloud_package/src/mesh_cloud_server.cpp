@@ -33,7 +33,7 @@ bool MeshCloudServer::service_callback(common_srvs::MeshCloudServiceRequest &req
         mesh_cloud.tf_name = request.multi_object_info[i].tf_name;
         response.mesh.push_back(mesh_cloud);
         tf::StampedTransform sensor_to_object;
-        sensor_to_object = Util::make_stamped_trans(tf_func_.tf_listen(request.multi_object_info[i].tf_name, sensor_frame_));
+        sensor_to_object = UtilMsgData::make_stamped_trans(tf_func_.tf_listen(request.multi_object_info[i].tf_name, sensor_frame_));
         response.pose.push_back(stamped_to_pose(sensor_to_object));
     }
     return true;
@@ -56,9 +56,9 @@ pcl::PointCloud<PclXyz> MeshCloudServer::create_mesh(std::string object_name)
 pcl::PointCloud<PclXyz> MeshCloudServer::transform_mesh(pcl::PointCloud<PclXyz> mesh_data, std::string tf_name)
 {
     tf::StampedTransform sensor_to_world, world_to_object;
-    world_to_object = Util::make_stamped_trans(tf_func_.tf_listen(tf_name, world_frame_));
+    world_to_object = UtilMsgData::make_stamped_trans(tf_func_.tf_listen(tf_name, world_frame_));
     pcl_ros::transformPointCloud(mesh_data, mesh_data, world_to_object);
-    sensor_to_world = Util::make_stamped_trans(tf_func_.tf_listen(world_frame_, sensor_frame_));
+    sensor_to_world = UtilMsgData::make_stamped_trans(tf_func_.tf_listen(world_frame_, sensor_frame_));
     pcl_ros::transformPointCloud(mesh_data, mesh_data, sensor_to_world);
     return mesh_data;
 }

@@ -80,28 +80,36 @@ bool VisualizeServiceClass::visualize_cloud_callback(common_srvs::VisualizeCloud
         return true;
     }
     for (int i = 0; i < request.topic_name_list.size(); i++) {
-        int index = Util::find_element_vector(topic_cloud_pc2_list_, request.topic_name_list[i]);
-        if (index == -1) {
-            vis_cloud_pub_list_.push_back(nh_.advertise<sensor_msgs::PointCloud2>(request.topic_name_list[i], 10));
-            topic_cloud_pc2_list_.push_back(request.topic_name_list[i]);
-            sensor_msgs::PointCloud2 pc2 = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
-            if (request.cloud_data_list[i].frame_id.size() == 0) {
-                pc2.header.frame_id = sensor_frame_;
-            }
-            else {
-                pc2.header.frame_id = request.cloud_data_list[i].frame_id;
-            }
-            vis_cloud_pc2_list_.push_back(pc2);
+        if (!UtilMsgData::cloud_size_ok(request.cloud_data_list[i])) {
+            ROS_WARN_STREAM(request.topic_name_list[i] << " is not same size on x, y, z, instance. Please Confirm!!");
+            continue;
         }
         else {
-            vis_cloud_pc2_list_[index] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
-            if (request.cloud_data_list[i].frame_id.size() == 0) {
-                vis_cloud_pc2_list_[index].header.frame_id = sensor_frame_;
+            int index = Util::find_element_vector(topic_cloud_pc2_list_, request.topic_name_list[i]);
+            if (index == -1) {
+                vis_cloud_pub_list_.push_back(nh_.advertise<sensor_msgs::PointCloud2>(request.topic_name_list[i], 10));
+                topic_cloud_pc2_list_.push_back(request.topic_name_list[i]);
+                sensor_msgs::PointCloud2 pc2 = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
+                if (request.cloud_data_list[i].frame_id.size() == 0) {
+                    pc2.header.frame_id = sensor_frame_;
+                }
+                else {
+                    pc2.header.frame_id = request.cloud_data_list[i].frame_id;
+                }
+                vis_cloud_pc2_list_.push_back(pc2);
             }
             else {
-                vis_cloud_pc2_list_[index].header.frame_id = request.cloud_data_list[i].frame_id;
+                vis_cloud_pc2_list_[index] = util_msg_data_.cloudmsg_to_pc2_color(request.cloud_data_list[i]);
+                if (request.cloud_data_list[i].frame_id.size() == 0) {
+                    vis_cloud_pc2_list_[index].header.frame_id = sensor_frame_;
+                }
+                else {
+                    vis_cloud_pc2_list_[index].header.frame_id = request.cloud_data_list[i].frame_id;
+                }
             }
+            
         }
+        
     }
     response.ok = true;
     return true;

@@ -141,24 +141,7 @@ double Util::distance(double x1, double y1, double x2, double y2)
 }
 
 
-/**
- * @brief geometry_msgs::Transform型からtf::StampedTransformへ変換する関数
- *
- * @param trans
- * @return tf::StampedTransform
- */
-tf::StampedTransform Util::make_stamped_trans(geometry_msgs::Transform trans)
-{
-  tf::StampedTransform stamp_trans;
-  tf::Vector3 vec3;
-  vec3.setX(trans.translation.x);
-  vec3.setY(trans.translation.y);
-  vec3.setZ(trans.translation.z);
-  stamp_trans.setOrigin(vec3);
-  tf::Quaternion tq(trans.rotation.x, trans.rotation.y, trans.rotation.z, trans.rotation.w);
-  stamp_trans.setRotation(tq);
-  return stamp_trans;
-}
+
 
 /**
  * @brief int型のランダムな数値を生成する

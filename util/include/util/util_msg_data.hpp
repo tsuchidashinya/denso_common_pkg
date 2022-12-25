@@ -31,8 +31,11 @@ class UtilMsgData
 {
 public:
   UtilMsgData();
+  static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
+  static std::vector<common_msgs::BoxPosition> set_classname_on_boxposition(std::vector<common_msgs::BoxPosition>, std::string);
   static std::map<int, int> get_instance_dict(common_msgs::CloudData);
-  static void cloud_size_ok(common_msgs::CloudData&);
+  static bool cloud_size_ok(common_msgs::CloudData);
+  static common_msgs::CloudData draw_all_ins_cloudmsg(common_msgs::CloudData, int);
   static common_msgs::CloudData change_ins_cloudmsg(common_msgs::CloudData, int, int);
   static common_msgs::CloudData remove_ins_cloudmsg(common_msgs::CloudData, int);
   static common_msgs::CloudData extract_ins_cloudmsg(common_msgs::CloudData, int);

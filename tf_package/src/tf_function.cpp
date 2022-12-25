@@ -330,14 +330,14 @@ void TfFunction::static_broadcast(geometry_msgs::TransformStamped transform)
     // }
 }
 
-geometry_msgs::Quaternion TfFunction::make_geo_quaternion(tf2::Quaternion tf2_quat)
+geometry_msgs::Quaternion TfFunction::tf2_quat_to_geo_quat(tf2::Quaternion tf2_quat)
 {
     geometry_msgs::Quaternion geo_quat;
     tf2::convert(tf2_quat, geo_quat);
     return geo_quat;
 }
 
-tf2::Quaternion TfFunction::make_tf2_quaternion(geometry_msgs::Quaternion geo_quat)
+tf2::Quaternion TfFunction::geo_quat_to_tf2_quat(geometry_msgs::Quaternion geo_quat)
 {
     tf2::Quaternion tf2_quat;
     tf2::convert(geo_quat, tf2_quat);

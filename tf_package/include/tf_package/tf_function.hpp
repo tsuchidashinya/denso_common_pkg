@@ -32,8 +32,8 @@ public:
     static tf2::Quaternion rotate_quaternion_by_axis(tf2::Quaternion, RotationOption, double);
     static tf2::Quaternion rotate_xyz_make(double, double, double, tf2::Quaternion);
     static tf2::Quaternion rotate_xyz_make(double, double, double);
-    static geometry_msgs::Quaternion make_geo_quaternion(tf2::Quaternion);
-    static tf2::Quaternion make_tf2_quaternion(geometry_msgs::Quaternion);
+    static geometry_msgs::Quaternion tf2_quat_to_geo_quat(tf2::Quaternion);
+    static tf2::Quaternion geo_quat_to_tf2_quat(geometry_msgs::Quaternion);
     void static_broadcast(geometry_msgs::TransformStamped);
     void broadcast(geometry_msgs::TransformStamped);
     geometry_msgs::Transform add_keyboard_tf(geometry_msgs::Transform, KeyBoardTf);

@@ -137,7 +137,7 @@ public:
     }
 
     static int find_tfname_from_cloudlist(std::vector<common_msgs::CloudData>, std::string);
-    static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
+    
     int random_int(int, int);
     float random_float(float, float);
     static ImageSize get_image_size(cv::Mat);
