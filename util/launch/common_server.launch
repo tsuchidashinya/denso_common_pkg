@@ -4,7 +4,7 @@
         <rosparam file="$(find mesh_cloud_package)/config/mesh_cloud_server.yaml" command="load" />
         <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
     </node>
-    <node pkg="visualize_package" type="visualize_server" name="visualize_server">
+    <node pkg="visualize_package" type="visualize_server" name="visualize_server" output="screen">
         <rosparam file="$(find visualize_package)/config/visualize_server.yaml" command="load" />
         <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
     </node>
