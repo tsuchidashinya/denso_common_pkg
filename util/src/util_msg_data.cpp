@@ -17,6 +17,19 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+common_msgs::PoseData UtilMsgData::stamped_to_pose(tf::StampedTransform tf_stamped)
+{
+    common_msgs::PoseData out_data;
+    out_data.trans.x = tf_stamped.getOrigin().x();
+    out_data.trans.y = tf_stamped.getOrigin().y();
+    out_data.trans.z = tf_stamped.getOrigin().z();
+    out_data.rot.x = tf_stamped.getRotation().x();
+    out_data.rot.y = tf_stamped.getRotation().y();
+    out_data.rot.z = tf_stamped.getRotation().z();
+    out_data.rot.w = tf_stamped.getRotation().w();
+    return out_data;
+}
+
 /**
  * @brief geometry_msgs::Transform型からtf::StampedTransformへ変換する関数
  *

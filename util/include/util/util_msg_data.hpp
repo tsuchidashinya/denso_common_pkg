@@ -31,6 +31,7 @@ class UtilMsgData
 {
 public:
   UtilMsgData();
+  static common_msgs::PoseData stamped_to_pose(tf::StampedTransform);
   static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
   static std::vector<common_msgs::BoxPosition> set_classname_on_boxposition(std::vector<common_msgs::BoxPosition>, std::string);
   static std::map<int, int> get_instance_dict(common_msgs::CloudData);
