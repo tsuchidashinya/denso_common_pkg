@@ -34,7 +34,7 @@ bool MeshCloudServer::service_callback(common_srvs::MeshCloudServiceRequest &req
         response.mesh.push_back(mesh_cloud);
         tf::StampedTransform sensor_to_object;
         sensor_to_object = UtilMsgData::make_stamped_trans(tf_func_.tf_listen(request.multi_object_info[i].tf_name, sensor_frame_));
-        response.pose.push_back(stamped_to_pose(sensor_to_object));
+        response.pose.push_back(UtilMsgData::stamped_to_pose(sensor_to_object));
     }
     return true;
 }
@@ -63,18 +63,7 @@ pcl::PointCloud<PclXyz> MeshCloudServer::transform_mesh(pcl::PointCloud<PclXyz> 
     return mesh_data;
 }
 
-common_msgs::PoseData MeshCloudServer::stamped_to_pose(tf::StampedTransform tf_stamped)
-{
-    common_msgs::PoseData out_data;
-    out_data.trans.x = tf_stamped.getOrigin().x();
-    out_data.trans.y = tf_stamped.getOrigin().y();
-    out_data.trans.z = tf_stamped.getOrigin().z();
-    out_data.rot.x = tf_stamped.getRotation().x();
-    out_data.rot.y = tf_stamped.getRotation().y();
-    out_data.rot.z = tf_stamped.getRotation().z();
-    out_data.rot.w = tf_stamped.getRotation().w();
-    return out_data;
-}
+
 
 
 void MeshCloudServer::set_parameter()

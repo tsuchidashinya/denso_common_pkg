@@ -72,6 +72,20 @@ public:
     static double distance(double[], double[]);
     static double distance(double x1, double y1, double x2, double y2);
     
+    template <typename T>
+    static std::vector<T> get_swap_list(T a, T b)
+    {
+        std::vector<T> final_value;
+        if (a < b) {
+            final_value.push_back(a);
+            final_value.push_back(b);
+        }
+        else {
+            final_value.push_back(b);
+            final_value.push_back(a);
+        }
+        return final_value;
+    }
 
     /**
      * @brief 標準出力に変数の内容を表示します。主に手動のデバックで用います。
@@ -137,7 +151,7 @@ public:
     }
 
     static int find_tfname_from_cloudlist(std::vector<common_msgs::CloudData>, std::string);
-    
+    float probability();
     int random_int(int, int);
     float random_float(float, float);
     static ImageSize get_image_size(cv::Mat);

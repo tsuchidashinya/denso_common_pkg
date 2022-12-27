@@ -27,7 +27,6 @@ public:
     pcl::PointCloud<PclXyz> create_mesh(std::string);
     pcl::PointCloud<PclXyz> transform_mesh(pcl::PointCloud<PclXyz>, std::string);
     bool service_callback(common_srvs::MeshCloudServiceRequest &, common_srvs::MeshCloudServiceResponse &);
-    common_msgs::PoseData stamped_to_pose(tf::StampedTransform);
     XmlRpc::XmlRpcValue param_list;
 private:
     ros::NodeHandle nh_;

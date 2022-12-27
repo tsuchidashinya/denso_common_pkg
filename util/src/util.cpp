@@ -18,6 +18,11 @@ Util::Util()
 {
 }
 
+float Util::probability()
+{
+  return random_float(0, 1);
+}
+
 void Util::write_b_box_label(std::vector<common_msgs::BoxPosition> boxes, std::string save_file_path)
 {
     std::ofstream file(save_file_path);
