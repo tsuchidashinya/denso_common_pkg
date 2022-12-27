@@ -11,10 +11,26 @@
 
 #include <gazebo_model_package/decide_object_position.hpp>
 
-DecidePosition::DecidePosition()
-    : pnh_("~")
+DecidePosition::DecidePosition() : 
+pnh_("~"),
+decide_pose_option_(DecidePoseOption::Head),
+sensor_small_deviation_(0)
 {
     set_parameter();
+}
+
+void DecidePosition::set_decice_pose_option(DecidePoseOption option)
+{
+    if (option == DecidePoseOption::FullRandom) {
+        decide_pose_option_ = DecidePoseOption::FullRandom;
+    }
+    else if (option == DecidePoseOption::Head) {
+        decide_pose_option_ = DecidePoseOption::Head;
+    }
+    else if (option == DecidePoseOption::HeadAndTail) {
+        decide_pose_option_ = DecidePoseOption::HeadAndTail;
+    }
+    std::cout << "dicide_pose_optio1n: " << decide_pose_option_; 
 }
 
 void DecidePosition::set_parameter()
@@ -30,6 +46,14 @@ void DecidePosition::set_parameter()
     sensor_distance_min_ = param_list["sensor_distance_min"];
     sensor_distance_max_ = param_list["sensor_distance_max"];
     object_height_ = param_list["object_height"];
+    sensor_small_deviation_ = param_list["sensor_small_deviation"];
+    // std::string para_decide = static_cast<std::string>("decide_pose_opition");
+    // if (para_decide == "FullRandom") {
+    //     decide_pose_option_ = DecidePoseOption::FullRandom;
+    // }
+    // else if (para_decide == "HeadAndTail") {
+    //     decide_pose_option_ = DecidePoseOption::HeadAndTail;
+    // }
 }
 
 
@@ -103,10 +127,28 @@ std::vector<common_msgs::ObjectInfo> DecidePosition::get_randam_place_position(s
             }
 
             double z = z_position_ + box_height_ + map_index * 0.05;
-            double roll = util.random_float(-M_PI, M_PI);
-            double pitch = util.random_float(-M_PI, M_PI);
-            double yaw = util.random_float(-M_PI, M_PI);
+            double roll, pitch, yaw;
+            float scale_para = 20;
+            if (decide_pose_option_ == DecidePoseOption::FullRandom) {
+                roll = util.random_float(-M_PI, M_PI);
+                pitch = util.random_float(-M_PI, M_PI);
+            }
+            else if (decide_pose_option_ == DecidePoseOption::Head) {
+                roll = util.random_float(-M_PI / scale_para, M_PI / scale_para);
+                pitch = util.random_float(-M_PI / scale_para, M_PI / scale_para);
+            }
+            else if (decide_pose_option_ == DecidePoseOption::HeadAndTail) {
+                if (util.probability() < 0.7) {
+                    roll = util.random_float(-M_PI / scale_para, M_PI / scale_para);
+                    pitch = util.random_float(-M_PI / scale_para, M_PI / scale_para);
+                }
+                else {
+                    roll = util.random_float(-M_PI / scale_para + M_PI, M_PI / scale_para + M_PI);
+                    pitch = util.random_float(-M_PI / scale_para, M_PI / scale_para);
+                }
+            }
             object_info[i].position = TfFunction::make_geo_transform(x, y, z, TfFunction::rotate_xyz_make(roll, pitch, yaw));
+            
         }
     }
     return object_info;
@@ -148,9 +190,17 @@ common_msgs::ObjectInfo DecidePosition::get_sensor_position()
     double sensor_distance = util.random_float(sensor_distance_min_, sensor_distance_max_);
     double x, y, z;
     tf2::Quaternion quaternion;
-    
-    x = sensor_distance * sin(angle);
-    y = 0;
+    auto sensor_scale = sensor_distance / sensor_distance_max_;
+    sensor_scale = sensor_scale * sensor_scale;
+    auto sensor_small_deviation_result = sensor_small_deviation_ * sensor_scale;
+    auto small_deviation_x = util.random_float(-sensor_small_deviation_result, sensor_small_deviation_result);
+    auto small_deviation_y = util.random_float(-sensor_small_deviation_result, sensor_small_deviation_result);
+    // auto small_deviation_x = sensor_small_deviation_ * sensor_scale;
+    // auto small_deviation_y = sensor_small_deviation_ * sensor_scale;
+    // Util::message_show("small_deviation_x", small_deviation_x);
+    // Util::message_show("small_deviation_y", small_deviation_y);
+    x = sensor_distance * sin(angle) + small_deviation_x;
+    y = small_deviation_y;
     z = sensor_distance * cos(angle);
     quaternion = TfFunction::rotate_xyz_make(0, angle, 0);
     

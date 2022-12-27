@@ -16,7 +16,13 @@
 #include <gazebo_msgs/ModelState.h>
 #include <common_msgs/ObjectInfo.h>
 
+enum DecidePoseOption
+{
+    FullRandom,
+    Head,
+    HeadAndTail
 
+};
 class DecidePosition
 {
 public:
@@ -28,13 +34,16 @@ public:
     common_msgs::ObjectInfo get_box_position();
     common_msgs::ObjectInfo get_sensor_position();
     void set_parameter();
+    void set_decice_pose_option(DecidePoseOption);
     XmlRpc::XmlRpcValue param_list;
 
 private:
     ros::NodeHandle pnh_;
     std::string box_name_, sensor_name_;
+    DecidePoseOption decide_pose_option_;
     double z_position_;
     double box_height_;
     double object_radious_, object_height_;
     double sensor_angle_min_, sensor_angle_max_, sensor_distance_min_, sensor_distance_max_;
+    double sensor_small_deviation_;
 };

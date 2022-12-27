@@ -37,7 +37,10 @@ void GazeboTfPublisher::modelstatesCallback(const gazebo_msgs::ModelStates::Cons
         if (model_names_[i] == gazebo_tracked_frame_) {
             tf_stamp.child_frame_id = rviz_following_frame_;
             tf_stamp.transform.rotation = TfFunction::tf2_quat_to_geo_quat(TfFunction::rotate_xyz_make(0, M_PI/2, 0, TfFunction::geo_quat_to_tf2_quat(tf_stamp.transform.rotation)));
-            tf_func_.static_broadcast(tf_stamp);
+            for (int i = 0; i < 3; i++) {
+                tf_func_.static_broadcast(tf_stamp);
+                ros::Duration(0.01).sleep();
+            }
             // tf_br_srv.request.broadcast_tf = tf_stamp;
             // tf_br_srv.request.tf_name = tf_stamp.child_frame_id;
             // Util::client_request(tf_client_, tf_br_srv, tf_br_service_name_);
