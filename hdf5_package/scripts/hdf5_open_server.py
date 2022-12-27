@@ -37,7 +37,7 @@ class Hdf5OpenServer():
         np_concat_cloud = util_msg_data.concatenate_npcloud_and_npmask(np_cloud, mask_data)
         response = Hdf5OpenSegmentationServiceResponse()
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_concat_cloud)
-        response.data_size = len(self.hdf5_object)
+        response.data_size = len(self.hdf5_data_dict)
         return response
     
     def real_phoxi_service_callback(self, request):

@@ -168,6 +168,6 @@ def get_len_hdf5(hdf5_object):
 if __name__=='__main__':
     path = "/media/ericlab/DE59-9C00/test/concate"
     concatenate_hdf5(path, os.path.join(path, "real_HV8_data.hdf5"))
-    # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai.hdf5"
-    # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object_kai/kai3228/kai_1.hdf5"
+    # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai.hdf5"
+    # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)
