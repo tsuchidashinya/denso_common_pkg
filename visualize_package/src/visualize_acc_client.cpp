@@ -32,6 +32,7 @@ void VisualizeClient::main()
         common_srvs::Hdf5OpenAccService hdf5_srv;
         hdf5_srv.request.index = index;
         hdf5_srv.request.hdf5_open_file_path = hdf5_open_file_path_;
+        hdf5_srv.request.is_reload = true;
         Util::message_show("index", index);
         Util::client_request(hdf5_client_, hdf5_srv, hdf5_open_acc_service_name_);
         common_srvs::VisualizeCloud visualize_srv;
