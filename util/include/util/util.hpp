@@ -69,7 +69,14 @@ public:
     }
 
     static std::string get_time_str();
-    static double distance(double[], double[]);
+    template <typename T>
+    static double distance(std::vector<T> vec1, std::vector<T> vec2) {
+        T sum = 0;
+        for (int i = 0; i < vec1.size(); i++) {
+            sum += (vec1[i] - vec2[i]) * (vec1[i] - vec2[i]);
+        }
+        return sqrt(sum);
+    }
     static double distance(double x1, double y1, double x2, double y2);
     
     template <typename T>

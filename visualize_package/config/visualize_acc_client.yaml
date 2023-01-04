@@ -2,7 +2,7 @@ visualize_client:
   hdf5_open_acc_service_name: hdf5_open_acc_service
   visualize_service_name: visualize_cloud_service
   visualize_image_service_name: visualize_image_service
-  hdf5_open_file_path: /media/ericlab/DE59-9C00/test/practice/acc_real.hdf5
+  hdf5_open_file_path: /media/ericlab/DE59-9C00/test_annotation/acc_real.hdf5
 
 cloud_process:
   planar_threshold: 0.01

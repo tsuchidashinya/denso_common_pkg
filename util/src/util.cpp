@@ -117,23 +117,7 @@ std::string Util::get_time_str()
   return output;
 }
 
-/**
- * @brief ２つのベクトルの距離を返す
- *
- * @param vec1 ベクトル(配列の参照で渡してください 例: double vec1[3] = {0, 1, 0})
- * @param vec2  vec1と同様
- * @return double vec1とvec2のユークリッド距離
- */
-double Util::distance(double *vec1, double *vec2)
-{
-  int vec_size = sizeof(vec1) / sizeof(vec1[0]);
-  double sum = 0;
-  for (int i = 0; i < vec_size; i++)
-  {
-    sum += (vec1[i] - vec2[i]) * (vec1[i] - vec2[i]);
-  }
-  return sqrt(sum);
-}
+
 /*
 1: x1
 2: y1

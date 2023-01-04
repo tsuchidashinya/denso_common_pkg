@@ -31,6 +31,8 @@ class UtilMsgData
 {
 public:
   UtilMsgData();
+  static common_msgs::CloudData substitute_cloudmsg_para(common_msgs::CloudData, common_msgs::CloudData);
+  static common_msgs::CloudData vector3_to_cloudmsg(geometry_msgs::Vector3);
   static common_msgs::PoseData stamped_to_pose(tf::StampedTransform);
   static tf::StampedTransform make_stamped_trans(geometry_msgs::Transform);
   static std::vector<common_msgs::BoxPosition> set_classname_on_boxposition(std::vector<common_msgs::BoxPosition>, std::string);

@@ -17,6 +17,14 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+common_msgs::CloudData UtilMsgData::substitute_cloudmsg_para(common_msgs::CloudData sub_after, common_msgs::CloudData sub_before)
+{
+  sub_after.frame_id = sub_before.frame_id;
+  sub_after.object_name = sub_before.object_name;
+  sub_after.tf_name = sub_before.tf_name;
+  return sub_after;
+}
+
 common_msgs::PoseData UtilMsgData::stamped_to_pose(tf::StampedTransform tf_stamped)
 {
     common_msgs::PoseData out_data;
