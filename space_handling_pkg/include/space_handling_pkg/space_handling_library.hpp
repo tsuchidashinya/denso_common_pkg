@@ -17,6 +17,7 @@ class SpaceHandlingLibrary
 public:
     SpaceHandlingLibrary();
     static common_msgs::CloudData search_nearest_point(common_msgs::CloudData, common_msgs::CloudData, int, double);
+    static common_msgs::CloudData search_nearest_point_on_unit(common_msgs::CloudData, common_msgs::CloudData, int, double);
     std::vector<common_msgs::CloudData> extract_occuluder(std::vector<common_msgs::CloudData>, double);
     std::vector<common_msgs::ObjectInfo> extract_occuluder(std::vector<common_msgs::ObjectInfo>, double);
 private:

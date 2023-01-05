@@ -43,6 +43,39 @@ common_msgs::CloudData SpaceHandlingLibrary::search_nearest_point(common_msgs::C
     return sensor_cloud;
 }
 
+common_msgs::CloudData SpaceHandlingLibrary::search_nearest_point_on_unit(common_msgs::CloudData sensor_cloud, common_msgs::CloudData search_cloud, int index, double radious = 0.004)
+{
+    pcl::PointCloud<PclXyz> sensor_pcl;
+    sensor_pcl = UtilMsgData::cloudmsg_to_pcl(sensor_cloud);
+    PclXyz search_point;
+    search_point.x = search_cloud.x[index];
+    search_point.y = search_cloud.y[index];
+    search_point.z = search_cloud.z[index];
+    pcl::search::KdTree<PclXyz> kdtree;
+    kdtree.setInputCloud(sensor_pcl.makeShared());
+    std::vector<int> pointIndices;
+    std::vector<float> squaredDistance;
+    ros::WallTime start = ros::WallTime::now();
+    common_msgs::CloudData out_cloud;
+    if (kdtree.radiusSearch(search_point, radious, pointIndices, squaredDistance)) {
+        for (int j = 0; j < pointIndices.size(); j++) {
+            ros::WallTime end = ros::WallTime::now();
+            ros::WallDuration calc_time = end - start;
+            if (calc_time.toSec() >= 2) {
+                ROS_WARN_STREAM("nearest point search failed");
+                return out_cloud;
+            }
+            else {
+                out_cloud.x.push_back(sensor_cloud.x[pointIndices[j]]);
+                out_cloud.y.push_back(sensor_cloud.y[pointIndices[j]]);
+                out_cloud.z.push_back(sensor_cloud.z[pointIndices[j]]);
+                out_cloud.instance.push_back(sensor_cloud.instance[pointIndices[j]]);
+            }
+        }
+    }
+    return out_cloud;
+}
+
 
 
 /*
