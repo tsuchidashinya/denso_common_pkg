@@ -159,6 +159,8 @@ public:
 
     static int find_tfname_from_cloudlist(std::vector<common_msgs::CloudData>, std::string);
     float probability();
+    static int random_int_static(int, int);
+    static float random_float_static(float, float);
     int random_int(int, int);
     float random_float(float, float);
     static ImageSize get_image_size(cv::Mat);

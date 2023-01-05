@@ -23,6 +23,22 @@ float Util::probability()
   return random_float(0, 1);
 }
 
+int Util::random_int_static(int min, int max)
+{
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_int_distribution<> distr(min, max);
+  return distr(eng);
+}
+
+float Util::random_float_static(float min, float max)
+{
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_real_distribution<> distr(min, max);
+  return distr(eng);
+}
+
 void Util::write_b_box_label(std::vector<common_msgs::BoxPosition> boxes, std::string save_file_path)
 {
     std::ofstream file(save_file_path);
