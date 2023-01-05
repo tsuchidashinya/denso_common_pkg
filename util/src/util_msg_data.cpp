@@ -17,12 +17,44 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+geometry_msgs::Vector3 UtilMsgData::cloudmsg_to_vector3(common_msgs::CloudData cloud) {
+  geometry_msgs::Vector3 vector3;
+  int index = Util::random_int_static(0, cloud.x.size() - 1);
+  vector3.x = cloud.x[index];
+  vector3.y = cloud.y[index];
+  vector3.z = cloud.z[index];
+  return vector3;
+}
+
+common_msgs::CloudData UtilMsgData::pushback_cloud_point(common_msgs::CloudData cloud, int index, common_msgs::CloudData out_cloud)
+{
+  out_cloud.x.push_back(cloud.x[index]);
+  out_cloud.y.push_back(cloud.y[index]);
+  out_cloud.z.push_back(cloud.z[index]);
+  out_cloud.instance.push_back(cloud.instance[index]);
+  return out_cloud;
+}
+
+/*
+1: sub_after
+2: sub_before
+*/
 common_msgs::CloudData UtilMsgData::substitute_cloudmsg_para(common_msgs::CloudData sub_after, common_msgs::CloudData sub_before)
 {
   sub_after.frame_id = sub_before.frame_id;
   sub_after.object_name = sub_before.object_name;
   sub_after.tf_name = sub_before.tf_name;
   return sub_after;
+}
+
+common_msgs::CloudData UtilMsgData::vector3_to_cloudmsg(geometry_msgs::Vector3 vector3)
+{
+  common_msgs::CloudData cloud;
+  cloud.x.push_back(vector3.x);
+  cloud.y.push_back(vector3.y);
+  cloud.z.push_back(vector3.z);
+  cloud.instance.push_back(0);
+  return cloud;
 }
 
 common_msgs::PoseData UtilMsgData::stamped_to_pose(tf::StampedTransform tf_stamped)
@@ -145,8 +177,7 @@ common_msgs::CloudData UtilMsgData::change_ins_cloudmsg(common_msgs::CloudData c
       outdata.instance.push_back(cloud.instance[i]);
     }
   }
-  outdata.tf_name = cloud.tf_name;
-  outdata.object_name = cloud.object_name;
+  outdata = substitute_cloudmsg_para(outdata, cloud);
   return outdata;
 }
 
@@ -161,8 +192,7 @@ common_msgs::CloudData UtilMsgData::extract_ins_cloudmsg(common_msgs::CloudData 
       outdata.instance.push_back(cloud.instance[i]);
     }
   }
-  outdata.tf_name = cloud.tf_name;
-  outdata.object_name = cloud.object_name;
+  outdata = substitute_cloudmsg_para(outdata, cloud);
   return outdata;
 }
 
