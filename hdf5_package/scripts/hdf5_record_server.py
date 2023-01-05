@@ -118,11 +118,6 @@ class RecordServiceClass():
         self.hdf5_read_dict2 = hdf5_function.write_insert_dict(self.hdf5_read_dict2, data_dict)
         self.bar2.update(1)
         if self.counter2 == request.the_number_of_dataset:
-            temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            record_temp_all_path = util.decide_allpath(self.record_temp_dir2, temp_filename)
-            hdf5_object = hdf5_function.open_writed_hdf5(record_temp_all_path)
-            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict2)
-            hdf5_function.close_hdf5(hdf5_object)
             final_path = request.record_file_path
             while True:
                 if not os.path.exists(final_path):
@@ -131,11 +126,18 @@ class RecordServiceClass():
                     final_dir, final_file_name = os.path.split(final_path)
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
-            hdf5_function.concatenate_hdf5(self.record_temp_dir2, final_path)
+            hdf5_object = hdf5_function.open_writed_hdf5(final_path)
+            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict2)
+            hdf5_function.close_hdf5(hdf5_object)
+            self.bar2.close()
             print("save on ", final_path)
+            files = os.listdir(self.record_temp_dir2)
+            for file in files:
+                os.remove(os.path.join(self.record_temp_dir2, file))
             os.rmdir(os.path.join(self.record_temp_dir2))
+            self.hdf5_record_file_path2 = ""
         elif index == 0:
-            temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
+            temp_filename = util.insert_str(record_file_name, util.get_timestr_mdhms_under())
             record_temp_all_path = util.decide_allpath(self.record_temp_dir2, temp_filename)
             hdf5_object = hdf5_function.open_writed_hdf5(record_temp_all_path)
             hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict2)
@@ -149,7 +151,7 @@ class RecordServiceClass():
         record_dir, record_file_name = os.path.split(request.record_file_path)
         rospy.set_param("record_counter", self.counter3)
         index = self.counter3 % self.hdf5_save_interval
-        if self.hdf5_record_file_path3 != request.record_file_path:
+        if self.hdf5_record_file_path3 != request.record_file_path or request.is_reload:
             self.hdf5_record_file_path3 = request.record_file_path
             self.bar3 = tqdm(total=request.the_number_of_dataset)
             self.bar3.set_description("Progress rate")
@@ -166,11 +168,10 @@ class RecordServiceClass():
         translation, rotation = util_msg_data.msgposelist_to_trans_rotate(request.pose_datas)
         pose_mask = util_msg_data.make_pose_mask(translation, rotation)
         data_dict = {"pcl": np_cloud, "pose": pose_mask}
-        hdf5_function.write_hdf5(self.hdf5_object3, data_dict, index)
+        self.hdf5_read_dict3 = hdf5_function.write_insert_dict(self.hdf5_read_dict3, data_dict)
         self.bar3.update(1)
         index = self.counter3 % self.hdf5_save_interval
         if request.the_number_of_dataset == self.counter3:
-            hdf5_function.close_hdf5(self.hdf5_object3)
             final_path = request.record_file_path
             while True:
                 if not os.path.exists(final_path):
@@ -179,13 +180,22 @@ class RecordServiceClass():
                     final_dir, final_file_name = os.path.split(final_path)
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
-            hdf5_function.concatenate_hdf5(self.record_temp_dir3, final_path)
+            hdf5_object = hdf5_function.open_writed_hdf5(final_path)
+            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict3)
+            hdf5_function.close_hdf5(hdf5_object)
+            self.bar3.close()
             print("save on ", final_path)
+            files = os.listdir(self.record_temp_dir3)
+            for file in files:
+                os.remove(os.path.join(self.record_temp_dir3, file))
             os.rmdir(os.path.join(self.record_temp_dir3))
+            self.hdf5_record_file_path3 = ""
         elif index == 0:
-            hdf5_function.close_hdf5(self.hdf5_object3)
-            temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object3 = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir3, temp_filename))
+            temp_filename = util.insert_str(record_file_name, util.get_timestr_mdhms_under())
+            record_temp_all_path = util.decide_allpath(self.record_temp_dir3, temp_filename)
+            hdf5_object = hdf5_function.open_writed_hdf5(record_temp_all_path)
+            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict3)
+            hdf5_function.close_hdf5(hdf5_object)
         response.ok = True
         return response
 
@@ -209,11 +219,10 @@ class RecordServiceClass():
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
         np_cloud,  = util_msg_data.extract_mask_from_npcloud(np_cloud)
         data_dict = {"pcl": np_cloud, "class": request.class_id}
-        hdf5_function.write_hdf5(self.hdf5_object4, data_dict, index)
+        self.hdf5_read_dict4 = hdf5_function.write_insert_dict(self.hdf5_read_dict4, data_dict)
         self.bar4.update(1)
         index = self.counter4 % self.hdf5_save_interval
         if request.the_number_of_dataset == self.counter4:
-            hdf5_function.close_hdf5(self.hdf5_object4)
             final_path = request.record_file_path
             while True:
                 if not os.path.exists(final_path):
@@ -222,13 +231,22 @@ class RecordServiceClass():
                     final_dir, final_file_name = os.path.split(final_path)
                     final_file_name = util.insert_str(final_file_name, "copy")
                     final_path = os.path.join(final_dir, final_file_name)
-            hdf5_function.concatenate_hdf5(self.record_temp_dir4, final_path)
+            hdf5_object = hdf5_function.open_writed_hdf5(final_path)
+            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict4)
+            hdf5_function.close_hdf5(hdf5_object)
+            self.bar4.close()
             print("save on ", final_path)
+            files = os.listdir(self.record_temp_dir4)
+            for file in files:
+                os.remove(os.path.join(self.record_temp_dir4, file))
             os.rmdir(os.path.join(self.record_temp_dir4))
+            self.hdf5_record_file_path4 = ""
         elif index == 0:
-            hdf5_function.close_hdf5(self.hdf5_object4)
-            temp_filename = util.insert_str(record_file_name, util.get_timestr_hms())
-            self.hdf5_object4 = hdf5_function.open_writed_hdf5(util.decide_allpath(self.record_temp_dir4, temp_filename))
+            temp_filename = util.insert_str(record_file_name, util.get_timestr_mdhms_under())
+            record_temp_all_path = util.decide_allpath(self.record_temp_dir4, temp_filename)
+            hdf5_object = hdf5_function.open_writed_hdf5(record_temp_all_path)
+            hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict4)
+            hdf5_function.close_hdf5(hdf5_object)
         response.ok = True
         return response
     
