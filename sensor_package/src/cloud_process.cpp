@@ -89,19 +89,3 @@ void CloudProcess::set_parameter()
     crop_z_max_ = param_list["z_max"];
 }
 
-/**
- * @brief ランダムダウンサンプリングを行う関数
- *
- * @param pcl_data 入力点群
- * @param resolution 抽出したい点群数
- * @return pcl::PointCloud<PclXyz> 出力点群
- */
-pcl::PointCloud<PclXyz> CloudProcess::downsample_random(pcl::PointCloud<PclXyz> pcl_data, int resolution)
-{
-    pcl::PointCloud<PclXyz> output;
-    pcl::RandomSample<PclXyz> randamSampling;
-    randamSampling.setInputCloud(pcl_data.makeShared());
-    randamSampling.setSample(resolution);
-    randamSampling.filter(output);
-    return output;
-}

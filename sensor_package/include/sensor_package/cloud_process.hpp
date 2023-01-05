@@ -85,7 +85,15 @@ public:
         voxelGrid.filter(output);
         return output;
     }
-    static pcl::PointCloud<PclXyz> downsample_random(pcl::PointCloud<PclXyz>, int);
+    template <typename T>
+    static pcl::PointCloud<T> downsample_random(pcl::PointCloud<T> pcl_cloud, int num) {
+        pcl::PointCloud<T> output;
+        pcl::RandomSample<T> randamSampling;
+        randamSampling.setInputCloud(pcl_cloud.makeShared());
+        randamSampling.setSample(num);
+        randamSampling.filter(output);
+        return output;
+    }
 
 private:
     void set_parameter();
