@@ -5,3 +5,4 @@ int32 is_reload
 common_msgs/CloudData cloud_data
 float32[] camera_info
 sensor_msgs/Image image
+int32 data_size

@@ -1,3 +1,4 @@
+string checkpoints_path
 sensor_msgs/Image input_image
 ---
 common_msgs/BoxPosition[] b_boxs

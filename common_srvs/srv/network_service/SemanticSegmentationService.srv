@@ -1,3 +1,4 @@
+string checkpoints_path
 common_msgs/CloudData[] input_data_multi
 ---
 common_msgs/CloudData[] output_data_multi
