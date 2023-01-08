@@ -33,6 +33,7 @@ public:
   UtilMsgData();
   static common_msgs::CloudData pushback_cloud_point(common_msgs::CloudData, int, common_msgs::CloudData);
   static common_msgs::CloudData substitute_cloudmsg_para(common_msgs::CloudData, common_msgs::CloudData);
+  static geometry_msgs::Vector3 vector3(float, float, float);
   static geometry_msgs::Vector3 cloudmsg_to_vector3(common_msgs::CloudData);
   static common_msgs::CloudData vector3_to_cloudmsg(geometry_msgs::Vector3);
   static common_msgs::PoseData stamped_to_pose(tf::StampedTransform);

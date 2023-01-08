@@ -30,7 +30,6 @@ void DecidePosition::set_decice_pose_option(DecidePoseOption option)
     else if (option == DecidePoseOption::HeadAndTail) {
         decide_pose_option_ = DecidePoseOption::HeadAndTail;
     }
-    std::cout << "dicide_pose_optio1n: " << decide_pose_option_; 
 }
 
 void DecidePosition::set_parameter()

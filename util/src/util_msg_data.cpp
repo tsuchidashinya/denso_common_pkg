@@ -17,6 +17,15 @@ UtilMsgData::UtilMsgData()
   set_parameter();
 }
 
+geometry_msgs::Vector3 UtilMsgData::vector3(float x, float y, float z)
+{
+  geometry_msgs::Vector3 vector3;
+  vector3.x = x;
+  vector3.y = y;
+  vector3.z = z;
+  return vector3;
+}
+
 geometry_msgs::Vector3 UtilMsgData::cloudmsg_to_vector3(common_msgs::CloudData cloud) {
   geometry_msgs::Vector3 vector3;
   int index = Util::random_int_static(0, cloud.x.size() - 1);
