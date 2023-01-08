@@ -55,6 +55,7 @@ class Hdf5OpenServer():
         response.camera_info = util_msg_data.npcam_to_msgcam(camera_info_list)
         response.image = util_msg_data.npimg_to_rosimg(image)
         response.cloud_data = util_msg_data.npcloud_to_msgcloud(np_cloud)
+        response.data_size = len(self.hdf5_data_dict)
         return response
 
     def service_callback(self, request):
