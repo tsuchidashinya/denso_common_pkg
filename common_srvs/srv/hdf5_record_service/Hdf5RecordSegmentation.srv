@@ -2,5 +2,5 @@ common_msgs/CloudData cloud_data
 int32 the_number_of_dataset
 string record_file_path
 ---
-bool ok
+int32 finish
 string save_temp_file_path

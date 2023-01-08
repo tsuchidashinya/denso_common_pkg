@@ -109,7 +109,7 @@ class RecordServiceClass():
             self.hdf5_read_dict2 = {}
         self.counter2 = self.counter2 + 1
         if self.counter2 > request.the_number_of_dataset:
-            response.ok = False
+            response.finish = False
             return response
         index = self.counter2 % self.hdf5_save_interval
         np_cloud = util_msg_data.msgcloud_to_npcloud(request.cloud_data)
@@ -117,6 +117,7 @@ class RecordServiceClass():
         data_dict = {"Points": np_cloud, "masks": np_mask}
         self.hdf5_read_dict2 = hdf5_function.write_insert_dict(self.hdf5_read_dict2, data_dict)
         self.bar2.update(1)
+        response.finish = 0
         if self.counter2 == request.the_number_of_dataset:
             final_path = request.record_file_path
             while True:
@@ -136,13 +137,14 @@ class RecordServiceClass():
                 os.remove(os.path.join(self.record_temp_dir2, file))
             os.rmdir(os.path.join(self.record_temp_dir2))
             self.hdf5_record_file_path2 = ""
+            response.finish = 1
         elif index == 0:
             temp_filename = util.insert_str(record_file_name, util.get_timestr_mdhms_under())
             record_temp_all_path = util.decide_allpath(self.record_temp_dir2, temp_filename)
             hdf5_object = hdf5_function.open_writed_hdf5(record_temp_all_path)
             hdf5_function.write_hdf5_from_dict(hdf5_object, self.hdf5_read_dict2)
             hdf5_function.close_hdf5(hdf5_object)
-        response.ok = True
+            response.finish = 0
         return response
     
     def record_pose_estimation_service_callback(self, request):
