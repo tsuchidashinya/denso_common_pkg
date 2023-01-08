@@ -188,23 +188,23 @@ geometry_msgs::Transform TfFunction::add_keyboard_tf(geometry_msgs::Transform pr
  */
 geometry_msgs::Transform TfFunction::tf_listen(std::string target, std::string source)
 {
-  geometry_msgs::TransformStamped final_tf;
-  while (true)
-  {
-    try
+    geometry_msgs::TransformStamped final_tf;
+    while (true)
     {
-      final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
-      break;
+        try
+        {
+            final_tf = buffer_.lookupTransform(source, target, ros::Time(0));
+            break;
+        }
+        catch (const std::exception &e)
+        {
+            ROS_ERROR_STREAM("target: " << target << "   source: " << source);
+            ROS_WARN_STREAM(e.what());
+            ros::Duration(0.1).sleep();
+            continue;
+        }
     }
-    catch (const std::exception &e)
-    {
-        ROS_ERROR_STREAM("target: " << target << "   source: " << source);
-      ROS_WARN_STREAM(e.what());
-      ros::Duration(0.1).sleep();
-      continue;
-    }
-  }
-  return final_tf.transform;
+    return final_tf.transform;
 }
 
 /**
