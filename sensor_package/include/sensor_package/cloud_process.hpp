@@ -26,6 +26,35 @@ public:
     pcl::PointCloud<PclXyz> planar_segmentar(pcl::PointCloud<PclXyz>);
     void set_crop_frame(std::string, std::string);
 
+    template <typename T>
+    static pcl::PointCloud<T> cropbox_segmenter_origin_world(pcl::PointCloud<T> pcl_data, float x_max, float y_max, float z_max)
+    {
+        Eigen::Vector4f minPoint, maxPoint;
+        minPoint[0] = -x_max;
+        minPoint[1] = -y_max;
+        minPoint[2] = -z_max;
+        maxPoint[0] = x_max;
+        maxPoint[1] = y_max;
+        maxPoint[2] = z_max;
+        Eigen::Vector3f boxTranslation, boxRotation;
+        boxTranslation[0] = 0;
+        boxTranslation[1] = 0;
+        boxTranslation[2] = 0;
+        boxRotation[0] = 0;
+        boxRotation[1] = 0;
+        boxRotation[2] = 0;
+
+        pcl::CropBox<T> cropBox;
+        cropBox.setInputCloud(pcl_data.makeShared());
+        cropBox.setMin(minPoint);
+        cropBox.setMax(maxPoint);
+        cropBox.setTranslation(boxTranslation);
+        cropBox.setRotation(boxRotation);
+        pcl::PointCloud<T> output;
+        cropBox.filter(output);
+        return output;
+    }
+    static common_msgs::CloudData cropbox_segmenter_origin_world(common_msgs::CloudData, float, float, float);
     /**
      * @brief 範囲限定して点群を抽出する関数
      * ※　先にset_crop_frame関数を実行して抽出する基準のTFをセッティングしてください
@@ -85,6 +114,7 @@ public:
         voxelGrid.filter(output);
         return output;
     }
+    static common_msgs::CloudData downsample_by_voxelgrid(common_msgs::CloudData, double);
     template <typename T>
     static pcl::PointCloud<T> downsample_random(pcl::PointCloud<T> pcl_cloud, int num) {
         pcl::PointCloud<T> output;
@@ -94,6 +124,7 @@ public:
         randamSampling.filter(output);
         return output;
     }
+    static common_msgs::CloudData downsample_random(common_msgs::CloudData, int);
 
 private:
     void set_parameter();

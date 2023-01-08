@@ -17,6 +17,40 @@ CloudProcess::CloudProcess()
     set_parameter();
 }
 
+/*
+1: cloud
+2: x_max
+3: y_max
+4: z_max
+*/
+common_msgs::CloudData CloudProcess::cropbox_segmenter_origin_world(common_msgs::CloudData cloud, float x_max, float y_max, float z_max)
+{
+    auto pcl_data = UtilMsgData::cloudmsg_to_pclLabel(cloud);
+    pcl_data = cropbox_segmenter_origin_world(pcl_data, x_max, y_max, z_max);
+    auto after_cloud = UtilMsgData::pclLabel_to_cloudmsg(pcl_data);
+    return UtilMsgData::substitute_cloudmsg_para(after_cloud, cloud);
+}
+
+/*
+1: cloud
+2: leaf_size
+*/
+common_msgs::CloudData CloudProcess::downsample_by_voxelgrid(common_msgs::CloudData cloud, double leaf_size)
+{
+    auto pcl_data = UtilMsgData::cloudmsg_to_pclLabel(cloud);
+    pcl_data = downsample_by_voxelgrid(pcl_data, leaf_size);
+    auto after_cloud = UtilMsgData::pclLabel_to_cloudmsg(pcl_data);
+    return UtilMsgData::substitute_cloudmsg_para(after_cloud, cloud);
+}
+
+common_msgs::CloudData CloudProcess::downsample_random(common_msgs::CloudData cloud, int sample_num)
+{
+    auto pcl_data = UtilMsgData::cloudmsg_to_pclLabel(cloud);
+    pcl_data = downsample_random(pcl_data, sample_num);
+    auto after_cloud = UtilMsgData::pclLabel_to_cloudmsg(pcl_data);
+    return UtilMsgData::substitute_cloudmsg_para(after_cloud, cloud);
+}
+
 /**
  * @brief 切り分けるべき点群を探索し、第一引数のinlinerに情報を格納
  *
