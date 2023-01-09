@@ -37,6 +37,21 @@ bool AccuracyUtil::equal_gt_esti_position(common_msgs::CloudData gt_cloud, int i
     return equal;
 }
 
+int max_count(common_msgs::CloudData cloud)
+{
+    auto instance_dict = UtilMsgData::get_instance_dict(cloud);
+    // Util::print_map(instance_dict);
+    auto max_ins_num = 0, max_ins = 0;
+    for (auto iter = instance_dict.begin(); iter != instance_dict.end(); ++iter) {
+        if (iter->second > max_ins_num) {
+            max_ins = iter->first;
+            max_ins_num = iter->second;
+        }
+    }
+    // Util::message_show("max_instance", max_ins);
+    return max_ins;
+}
+
 /*
 1: gt_parts
 2: gt_ins_quantity
@@ -45,18 +60,20 @@ bool AccuracyUtil::equal_gt_esti_position(common_msgs::CloudData gt_cloud, int i
 float AccuracyUtil::calcurate_iou(common_msgs::CloudData gt_parts, common_msgs::CloudData esti_cloud, int instance)
 {
     float tp = 0, fp = 0, fn = 0;
-    float gt_ins_quantity = get_gt_the_instance_quantity(gt_parts, instance);
+    
     esti_cloud = UtilMsgData::extract_ins_cloudmsg(esti_cloud, instance);
     common_msgs::CloudData gt_ins_parts;
     gt_ins_parts = extract_gt_parts(gt_parts, esti_cloud);
+    auto gt_ins = max_count(gt_ins_parts);
+    float gt_ins_quantity = get_gt_the_instance_quantity(gt_parts, gt_ins);
     Util::message_show("gt_parts", gt_parts.x.size());
     Util::message_show("esti_cloud", esti_cloud.x.size());
     float iou;
     for (int i = 0; i < gt_ins_parts.x.size(); i++) {
-        if (gt_ins_parts.instance[i] == instance) {
+        if (gt_ins_parts.instance[i] == gt_ins) {
             tp++;
         }
-        else if (gt_ins_parts.instance[i] != instance){
+        else if (gt_ins_parts.instance[i] != gt_ins){
             fp++;
         } 
     }

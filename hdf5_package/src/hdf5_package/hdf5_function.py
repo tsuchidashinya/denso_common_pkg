@@ -61,7 +61,7 @@ def concatenate_hdf5(dir_path, out_file_path):
     for ff in files:
         os.remove(os.path.join(dir_path, ff))
     with h5py.File(out_file_path, mode="w") as f:
-        for i in range(len(all_data)):
+        for i in range(3000):
             f.create_group('data_' + str(i))
             for j in range(len(keys_2)):
                 f['data_' + str(i)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
@@ -166,8 +166,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/concate"
-    concatenate_hdf5(path, os.path.join(path, "sensor_b_box_7000_improve.hdf5"))
+    path = "/home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/data_3000"
+    concatenate_hdf5(path, os.path.join(path, "sensor_b_box_3000_improve.hdf5"))
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)
