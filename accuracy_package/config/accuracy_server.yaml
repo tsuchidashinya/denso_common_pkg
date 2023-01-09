@@ -1,0 +1,2 @@
+accuracy_server:
+  accuracy_service_name: accuracy_iou_service

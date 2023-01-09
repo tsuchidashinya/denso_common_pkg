@@ -203,7 +203,6 @@ common_msgs::ObjectInfo DecidePosition::get_sensor_position()
     z = sensor_distance * cos(angle);
     quaternion = TfFunction::rotate_xyz_make(0, angle, 0);
     
-    
     outdata.position = TfFunction::make_geo_transform(x, y, z, quaternion);
     outdata.object_name = sensor_name_;
     outdata.tf_name = sensor_name_;
