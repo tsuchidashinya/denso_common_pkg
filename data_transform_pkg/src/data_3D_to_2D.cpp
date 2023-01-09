@@ -44,7 +44,7 @@ std::vector<common_msgs::BoxPosition> Data3Dto2D::convert_3Dto2D(std::vector<Poi
             // Util::message_show("tf_id", i);
         }
         else {
-           std::cout << "Not Detect" << object_info_list[i].tf_name << ": " << uv_left.x << " " << uv_left.y << " " << uv_right.x << " " << uv_right.y << std::endl;
+           ROS_ERROR_STREAM("Not Detect" << object_info_list[i].tf_name << ": " << uv_left.x << " " << uv_left.y << " " << uv_right.x << " " << uv_right.y);
         }
     }
     return outdata;
