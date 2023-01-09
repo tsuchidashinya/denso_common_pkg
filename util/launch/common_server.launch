@@ -1,5 +1,26 @@
 <?xml version="1.0"?>
 <launch> 
+    <arg name="sim_or_real" default="sim"/>
+    <arg name="accuracy_iou_service_name" default="accuracy_iou_service"/>
+
+    <group if="$(eval sim_or_real=='real')">
+        <node pkg="sensor_package" type="SensorServer" name="sensor_server" output="screen">
+            <rosparam file="$(find sensor_package)/config/sensor_server_real_photoneo.yaml" command="load"/>
+            <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        </node>
+    </group>
+    <group if="$(eval sim_or_real=='sim')">
+        <node pkg="sensor_package" type="SensorServer" name="sensor_server" output="screen">
+            <rosparam file="$(find sensor_package)/config/sensor_server.yaml" command="load"/>
+            <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        </node>
+    </group>
+    
+    
+    <node pkg="accuracy_package" type="accuracy_server" name="accuracy_server">
+        <param name="accuracy_iou_service_name" value="$(arg accuracy_iou_service_name)"/>
+    </node>
+
     <node pkg="mesh_cloud_package" type="mesh_cloud_server" name="mesh_cloud">
         <rosparam file="$(find mesh_cloud_package)/config/mesh_cloud_server.yaml" command="load" />
         <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
@@ -17,4 +38,8 @@
     <node pkg="tf_package" type="tf_broadcast_server" name="tf_broadcast_server">
         <rosparam file="$(find tf_package)/config/tf_broadcast_server.yaml" command="load" ns="" />
     </node>
+    <node pkg="network_server_pkg" type="network_server.py" name="network_server" output="screen">
+        <rosparam file="$(find network_server_pkg)/config/network_server.yaml" command="load" ns="" />
+    </node>
+    
 </launch>

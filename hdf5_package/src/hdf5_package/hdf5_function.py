@@ -61,7 +61,42 @@ def concatenate_hdf5(dir_path, out_file_path):
     for ff in files:
         os.remove(os.path.join(dir_path, ff))
     with h5py.File(out_file_path, mode="w") as f:
-        for i in range(3000):
+        for i in range(len(all_data)):
+            f.create_group('data_' + str(i))
+            for j in range(len(keys_2)):
+                f['data_' + str(i)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
+
+def concatenate_hdf5_data_num_decide(dir_path, out_file_path, data_num):
+    files = os.listdir(dir_path)
+    keys_1_all = []
+    keys_2 = []
+    all_data = []
+    for i in range(len(files)):
+        with h5py.File(os.path.join(dir_path, files[i]), mode="r") as f:
+            if i == 0:
+                keys_1 = []
+                for k1 in f.keys():
+                    keys_1.append(k1)
+                for k2 in f[keys_1[0]].keys():
+                    keys_2.append(k2)
+                keys_1_all.append(keys_1)
+            else:
+                keys_1 = []
+                for k1 in f.keys():
+                    keys_1.append(k1)
+                keys_1_all.append(keys_1)
+    for i in range(len(files)):
+        keys_1 = []
+        with h5py.File(os.path.join(dir_path, files[i]), mode="r") as f:
+            for j in range(len(f.keys())):
+                part_data = []
+                for k in range(len(keys_2)):
+                    part_data.append(f[keys_1_all[i][j]][keys_2[k]][()])
+                all_data.append(part_data)
+    for ff in files:
+        os.remove(os.path.join(dir_path, ff))
+    with h5py.File(out_file_path, mode="w") as f:
+        for i in range(data_num):
             f.create_group('data_' + str(i))
             for j in range(len(keys_2)):
                 f['data_' + str(i)].create_dataset(keys_2[j], data=all_data[i][j], compression="lzf")
@@ -166,8 +201,8 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/data_3000"
-    concatenate_hdf5(path, os.path.join(path, "sensor_b_box_3000_improve.hdf5"))
+    path = "/home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/data_4000"
+    concatenate_hdf5_data_num_decide(path, os.path.join(path, "4000_not_noize.hdf5"), 4000)
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)
