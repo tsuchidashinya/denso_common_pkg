@@ -201,8 +201,9 @@ def get_len_hdf5(hdf5_object):
     return file_count
 
 if __name__=='__main__':
-    path = "/home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/data_4000"
-    concatenate_hdf5_data_num_decide(path, os.path.join(path, "4000_not_noize.hdf5"), 4000)
+    path = "/home/ericlab/tsuchida/test_data/concate"
+    # concatenate_hdf5_data_num_decide(path, os.path.join(path, "1000_not_noize.hdf5"), 1000)
+    concatenate_hdf5(path, os.path.join(path, "HV8_sensor_real.hdf5"))
     # input_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai.hdf5"
     # out_path = "/home/ericlab/tsuchida/2022_12/annotation/Semseg/multi_object/kai3228/kai_1.hdf5"
     # change_data(input_path, out_path)

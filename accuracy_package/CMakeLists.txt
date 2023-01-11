@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-#  INCLUDE_DIRS include
+ INCLUDE_DIRS include
  LIBRARIES accuracy_util
 #  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib

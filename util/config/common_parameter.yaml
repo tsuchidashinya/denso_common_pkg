@@ -10,13 +10,13 @@ common_parameter:
         - 255
     - instance: 1
       color:
-        - 255
-        - 255
         - 0
+        - 0
+        - 255
     - instance: 2
       color:
         - 0
-        - 0
+        - 255
         - 255
     - instance: 3
       color:
