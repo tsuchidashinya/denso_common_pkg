@@ -2,7 +2,7 @@
 <launch>
 
     <node pkg="calibration_pkg" type="calibration_client" name="calibration_client" output="screen">
-        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
         <rosparam file="$(find calibration_pkg)/config/calibration_client.yaml" command="load" ns="" />
     </node>
 

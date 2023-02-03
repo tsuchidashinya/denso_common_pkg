@@ -5,13 +5,13 @@
     </node>
     <node pkg="visualize_package" type="visualize_server" name="visualize_server" output="screen">
         <rosparam file="$(find visualize_package)/config/visualize_server.yaml" command="load" />
-        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
     </node>
     <!-- <node pkg="tf_package" type="tf_broadcast_server" name="tf_broadcast_server" output="screen">
         <rosparam file="$(find tf_package)/config/tf_broadcast_server.yaml" command="load" ns="" />
     </node> -->
     <node pkg="sensor_package" type="SensorServer" name="sensor_server" output="screen">
         <rosparam file="$(find sensor_package)/config/sensor_server_real_photoneo.yaml" command="load"/>
-        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
     </node>
 </launch>

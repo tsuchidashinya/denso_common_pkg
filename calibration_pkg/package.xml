@@ -51,13 +51,13 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>tf_package</build_depend>
-  <build_depend>util</build_depend>
+  <build_depend>util_package</build_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>tf_package</build_export_depend>
-  <build_export_depend>util</build_export_depend>
+  <build_export_depend>util_package</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>tf_package</exec_depend>
-  <exec_depend>util</exec_depend>
+  <exec_depend>util_package</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

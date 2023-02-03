@@ -10,7 +10,7 @@ project(tf_package)
 find_package(catkin REQUIRED COMPONENTS
   common_srvs
   roscpp
-  util
+  util_package
   tf2_ros
 )
 
@@ -20,7 +20,7 @@ catkin_python_setup()
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES tf_function
- CATKIN_DEPENDS common_srvs roscpp util tf2_ros
+ CATKIN_DEPENDS common_srvs roscpp util_package tf2_ros
 )
 
 include_directories(

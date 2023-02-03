@@ -10,14 +10,14 @@ project(calibration_pkg)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf_package
-  util
+  util_package
 )
 
 
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES calibration_pkg
-#  CATKIN_DEPENDS roscpp tf_package util
+#  CATKIN_DEPENDS roscpp tf_package util_package
 #  DEPENDS system_lib
 )
 

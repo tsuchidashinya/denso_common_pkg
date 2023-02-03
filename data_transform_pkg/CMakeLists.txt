@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   roscpp
   tf_package
-  util
+  util_package
 )
 
 ## System dependencies are found with CMake's conventions
@@ -108,7 +108,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES func_data_convertion data_2D_to_3D data_3D_to_2D
-#  CATKIN_DEPENDS common_msgs cv_bridge pcl_ros roscpp tf_package util
+#  CATKIN_DEPENDS common_msgs cv_bridge pcl_ros roscpp tf_package util_package
 #  DEPENDS system_lib
 )
 

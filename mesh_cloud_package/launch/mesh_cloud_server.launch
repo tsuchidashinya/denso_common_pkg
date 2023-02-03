@@ -2,6 +2,6 @@
 <launch>
     <node pkg="mesh_cloud_package" type="mesh_cloud_server" name="mesh_cloud_server" output="screen">
         <rosparam file="$(find mesh_cloud_package)/config/mesh_cloud_server.yaml" command="load" />
-        <rosparam file="$(find util)/config/common_parameter.yaml" command="load" />
+        <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
     </node>
 </launch>

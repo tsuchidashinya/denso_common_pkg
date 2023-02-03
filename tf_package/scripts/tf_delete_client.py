@@ -2,7 +2,7 @@
 from common_srvs.srv import TfDeleteService, TfDeleteServiceRequest
 import rospy
 import rosparam
-from util import util
+from util_package import util
 
 if __name__=='__main__':
     rospy.init_node("tf_delete_client")

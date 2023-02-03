@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   common_msgs 
   common_srvs 
-  util
+  util_package
   tf_package
 )
 

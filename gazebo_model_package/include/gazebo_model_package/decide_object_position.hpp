@@ -10,7 +10,7 @@
  */
 
 #pragma once
-#include <util/util.hpp>
+#include <util_package/util.hpp>
 #include <tf_package/tf_function.hpp>
 #include <gazebo_msgs/SetModelState.h>
 #include <gazebo_msgs/ModelState.h>

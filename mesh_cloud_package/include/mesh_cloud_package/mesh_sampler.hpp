@@ -7,7 +7,7 @@
 #include <vtkTriangle.h>
 #include <vtkTriangleFilter.h>
 #include <iostream>
-#include <util/util_msg_data.hpp>
+#include <util_package/util_msg_data.hpp>
 
 
 double uniform_deviate(int);

@@ -10,9 +10,9 @@
  */
 
 #pragma once
-#include <util/util.hpp>
+#include <util_package/util.hpp>
 #include "decide_object_position.hpp"
-#include <util/util_msg_data.hpp>
+#include <util_package/util_msg_data.hpp>
 
 class GazeboMoveServer
 {

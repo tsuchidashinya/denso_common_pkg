@@ -5,7 +5,7 @@ from common_srvs.srv import Hdf5OpenAccService, Hdf5OpenAccServiceResponse, Hdf5
 from common_srvs.srv import Hdf5OpenSensorDataService, Hdf5OpenSensorDataServiceResponse, Hdf5OpenSensorDataServiceRequest
 from common_srvs.srv import Hdf5OpenSegmentationService, Hdf5OpenSegmentationServiceResponse, Hdf5OpenSegmentationServiceRequest
 from hdf5_package import hdf5_function
-from util import util_msg_data
+from util_package import util_msg_data
 
 class Hdf5OpenServer():
     def __init__(self):

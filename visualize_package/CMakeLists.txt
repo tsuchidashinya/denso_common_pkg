@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   roscpp
   tf_package
-  util
+  util_package
   sensor_package
 )
 
@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES visualize_package
-#  CATKIN_DEPENDS common_msgs common_srvs cv_bridge pcl_ros roscpp tf_package util
+#  CATKIN_DEPENDS common_msgs common_srvs cv_bridge pcl_ros roscpp tf_package util_package
 #  DEPENDS system_lib
 )
 

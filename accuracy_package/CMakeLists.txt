@@ -9,7 +9,7 @@ project(accuracy_package)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  util 
+  util_package 
   common_srvs
 )
 

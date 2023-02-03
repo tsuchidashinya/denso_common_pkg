@@ -6,7 +6,7 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf_package/tf_function.hpp>
 #include <common_srvs/TfBroadcastService.h>
-#include <util/util.hpp>
+#include <util_package/util.hpp>
 
 class GazeboTfPublisher
 {
