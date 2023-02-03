@@ -26,12 +26,12 @@ class RecordServiceClass():
 
     def set_parameter(self):
         param_list = rosparam.get_param(rospy.get_name() + "/hdf5_record_server/")
-        self.record_acc_name = param_list["record_acc_service_name"]
-        self.record_segmentation_name = param_list["record_segmentation_service_name"]
-        self.record_pose_estimation_name = param_list["record_pose_estimation_service_name"]
-        self.record_clustering_name = param_list["record_clustering_service_name"]
+        self.record_acc_name = "record_acc_service"
+        self.record_segmentation_name = "record_segmentation_service"
+        self.record_pose_estimation_name = "record_pose_estimation_service"
+        self.record_clustering_name = "record_clustering_service"
         self.hdf5_save_interval = param_list["hdf5_save_interval"]
-        self.record_real_sensor_service_name = param_list["record_real_sensor_data_service_name"]
+        self.record_real_sensor_service_name = "record_real_sensor_data_service"
         self.counter1 = 0
         self.counter2 = 0
         self.counter3 = 0

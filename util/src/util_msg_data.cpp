@@ -143,10 +143,8 @@ geometry_msgs::Transform UtilMsgData::posedata_to_transform(common_msgs::PoseDat
 
 std::map<int, int> UtilMsgData::get_instance_dict(common_msgs::CloudData cloud)
 {
-  Util::message_show("map", "ok");
   std::map<int, int> info;
   std::vector<int> instance_list;
-  Util::message_show(std::to_string(cloud.x.size()), cloud.instance.size());
   for (int i = 0; i < cloud.x.size(); i++) {
     int same_exist = Util::find_element_vector(instance_list, cloud.instance[i]);
     if (same_exist == -1) {

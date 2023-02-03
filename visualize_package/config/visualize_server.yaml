@@ -1,5 +1,2 @@
 visualize_service:
   timer_duration: 0.01
-  visualize_cloud_service_name: visualize_cloud_service
-  visualize_image_service_name: visualize_image_service
-  vis_cloud_delete_service_name: visualize_delete_service

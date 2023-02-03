@@ -14,8 +14,8 @@ void TfBroadcastServer::set_parameter()
 {
     pnh_.getParam("tf_broadcast_server", param_list);
     timer_duration_ = param_list["timer_duration"];
-    tf_broadcast_service_name_ = static_cast<std::string>(param_list["tf_broadcast_service_name"]);
-    tf_delete_service_name_ = static_cast<std::string>(param_list["tf_delete_service_name"]);
+    tf_broadcast_service_name_ = "tf_broadcast_service";
+    tf_delete_service_name_ = "tf_delete_service";
 }
 
 bool TfBroadcastServer::tf_broadcast_service_callback(common_srvs::TfBroadcastService::Request &request, 

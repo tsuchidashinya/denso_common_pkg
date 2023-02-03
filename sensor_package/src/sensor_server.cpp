@@ -43,7 +43,7 @@ void SensorServer::set_parameter() {
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     pnh_.getParam("sensor_server", param_list);
-    sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    sensor_service_name_ = "sensor_service";
     pc_pub_topic_ = static_cast<std::string>(param_list["pc_pub_topic"]);
     pc_sub_topic_ = static_cast<std::string>(param_list["pc_sub_topic"]);
     img_sub_topic_ = static_cast<std::string>(param_list["img_sub_topic"]);

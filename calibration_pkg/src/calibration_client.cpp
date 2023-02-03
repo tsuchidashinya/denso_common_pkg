@@ -17,8 +17,8 @@ void CalibrationClient::set_parameter()
     pnh_.getParam("calibration_client", param_list);
     qxyz_step_ = param_list["qxyz_step"];
     xyz_step_ = param_list["xyz_step"];
-    calibration_service_name_ = static_cast<std::string>(param_list["calibration_service_name"]);
-    tf_broad_service_name_ = static_cast<std::string>(param_list["tf_broadcast_service_name"]);
+    calibration_service_name_ = "calibration_service";
+    tf_broad_service_name_ = "tf_broadcast_service";
     move_tf_frame_ = static_cast<std::string>(param_list["move_tf_frame"]);
     new_tf_frame_name_ = static_cast<std::string>(param_list["new_tf_frame_name"]);
     write_yaml_file_path_ = static_cast<std::string>(param_list["write_yaml_file_path"]);

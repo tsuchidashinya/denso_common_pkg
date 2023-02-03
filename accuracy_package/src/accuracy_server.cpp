@@ -10,8 +10,7 @@ AccuracyServer::AccuracyServer(ros::NodeHandle &nh) :
 
 void AccuracyServer::set_parameter()
 {
-    pnh_.getParam("accuracy_server", param_list);
-    acc_service_name_ = static_cast<std::string>(param_list["accuracy_service_name"]);
+    acc_service_name_ = "accuracy_iou_service";
 }
 
 bool AccuracyServer::accuracy_service_callback(common_srvs::AccuracyIouService::Request &request, common_srvs::AccuracyIouService::Response &response)

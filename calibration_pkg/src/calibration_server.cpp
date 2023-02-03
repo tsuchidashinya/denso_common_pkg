@@ -14,10 +14,10 @@ pnh_("~")
 void CalibrationServer::set_paramenter()
 {
     pnh_.getParam("calibration_server", param_list);
-    calibration_service_name_ = static_cast<std::string>(param_list["calibration_service_name"]);
-    tf_broad_service_name_ = static_cast<std::string>(param_list["tf_broadcast_service_name"]);
-    vis_cloud_service_name_ = static_cast<std::string>(param_list["vis_cloud_service_name"]);
-    sensor_service_name_ = static_cast<std::string>(param_list["sensor_service_name"]);
+    calibration_service_name_ = "calibration_service";
+    tf_broad_service_name_ = "tf_broadcast_service";
+    vis_cloud_service_name_ = "visualize_cloud_service";
+    sensor_service_name_ = "sensor_service";
     new_pc_topic_name_ = static_cast<std::string>(param_list["new_pc_topic_name"]);
 }
 

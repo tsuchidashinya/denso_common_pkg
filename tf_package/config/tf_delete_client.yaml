@@ -1,3 +1,2 @@
 tf_delete_client:
   delete_tf_frame: tf_0
-  tf_delete_service_name: tf_delete_service

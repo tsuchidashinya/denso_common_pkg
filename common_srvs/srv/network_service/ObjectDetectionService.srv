@@ -1,4 +1,6 @@
 string checkpoints_path
+string model_mode
 sensor_msgs/Image input_image
+int32 reload
 ---
 common_msgs/BoxPosition[] b_boxs

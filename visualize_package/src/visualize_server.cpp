@@ -16,9 +16,9 @@ void VisualizeServiceClass::set_parameter()
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
     pnh_.getParam("visualize_service", param_list);
     timer_duration_ = param_list["timer_duration"];
-    visualize_cloud_service_name_ = static_cast<std::string>(param_list["visualize_cloud_service_name"]);
-    vis_image_service_name_ = static_cast<std::string>(param_list["visualize_image_service_name"]);
-    vis_cloud_delete_service_name_ = static_cast<std::string>(param_list["vis_cloud_delete_service_name"]);
+    visualize_cloud_service_name_ = "visualize_cloud_service";
+    vis_image_service_name_ = "visualize_image_service";
+    vis_cloud_delete_service_name_ = "visualize_delete_service";
 }
 
 void VisualizeServiceClass::timer_callback(const ros::TimerEvent &event)

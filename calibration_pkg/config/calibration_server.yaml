@@ -1,7 +1,3 @@
 calibration_server:
-  calibration_service_name: calibration_service
-  tf_broadcast_service_name: tf_broadcast_service
-  vis_cloud_service_name: visualize_cloud_service
-  sensor_service_name: sensor_service
   new_pc_topic_name: new_pc_topic
   

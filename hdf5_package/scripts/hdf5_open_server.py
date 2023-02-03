@@ -16,10 +16,9 @@ class Hdf5OpenServer():
 
     
     def set_parameter(self):
-        param_list = rosparam.get_param(rospy.get_name() + "/hdf5_open_server")
-        self.service_name = param_list["hdf5_open_acc_service_name"]
-        self.real_phoxi_service_name = param_list["hdf5_open_sensor_data_service_name"]
-        self.hdf5_open_segmentation_service_name = param_list["hdf5_open_segmentation_service_name"]
+        self.service_name = "hdf5_open_acc_service"
+        self.real_phoxi_service_name = "hdf5_open_sensor_data_service"
+        self.hdf5_open_segmentation_service_name = "hdf5_open_segmentation_service"
         self.hdf5_open_file_path = ""
         self.hdf5_data_dict = {}
     

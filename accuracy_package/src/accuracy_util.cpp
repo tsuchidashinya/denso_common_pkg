@@ -37,7 +37,7 @@ bool AccuracyUtil::equal_gt_esti_position(common_msgs::CloudData gt_cloud, int i
     return equal;
 }
 
-int max_count(common_msgs::CloudData cloud)
+int  AccuracyUtil::max_count(common_msgs::CloudData cloud)
 {
     auto instance_dict = UtilMsgData::get_instance_dict(cloud);
     // Util::print_map(instance_dict);

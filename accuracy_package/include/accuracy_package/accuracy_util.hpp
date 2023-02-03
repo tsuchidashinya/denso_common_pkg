@@ -9,4 +9,5 @@ public:
     static int get_gt_the_instance_quantity(common_msgs::CloudData, int);
     static float calcurate_iou(common_msgs::CloudData, common_msgs::CloudData, int);
     static bool equal_gt_esti_position(common_msgs::CloudData, int, common_msgs::CloudData, int);
+    static int max_count(common_msgs::CloudData);
 };
