@@ -16,8 +16,8 @@
     </group>
     
     <node pkg="accuracy_package" type="accuracy_server" name="accuracy_server" />
-    <node pkg="mesh_cloud_package" type="mesh_cloud_server" name="mesh_cloud">
-        <rosparam file="$(find mesh_cloud_package)/config/mesh_cloud_server.yaml" command="load" />
+    <node pkg="mesh_package" type="mesh_cloud_server" name="mesh_cloud">
+        <rosparam file="$(find mesh_package)/config/mesh_cloud_server.yaml" command="load" />
         <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
     </node>
     <node pkg="visualize_package" type="visualize_server" name="visualize_server" output="screen">

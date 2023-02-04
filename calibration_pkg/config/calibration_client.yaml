@@ -1,6 +1,0 @@
-calibration_client:
-  xyz_step: 0.001
-  qxyz_step: 0.01
-  move_tf_frame: move_tf
-  write_yaml_file_path: /home/dl-box/tsuchida/ros_package/study_ws/src/denso_common_pkg/calibration_pkg/config/calibrate_tf_broadcaster.yaml
-  new_tf_frame_name: new_tf_frame

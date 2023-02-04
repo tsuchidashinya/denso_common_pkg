@@ -516,6 +516,7 @@ gazebo_msgs::ModelState UtilMsgData::make_gazebo_model_state(std::string object_
 gazebo_msgs::ModelState UtilMsgData::make_gazebo_model_state(common_msgs::ObjectInfo object_info)
 {
     gazebo_msgs::ModelState model;
+    // ROS_INFO_STREAM(object_info.tf_name << "  x: " << object_info.position.translation.x << "  y: " << object_info.position.translation.y << "   z: " << object_info.position.translation.z);
     model.model_name = object_info.tf_name;
     model.pose.position.x = object_info.position.translation.x;
     model.pose.position.y = object_info.position.translation.y;

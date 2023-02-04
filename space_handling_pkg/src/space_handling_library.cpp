@@ -77,74 +77,30 @@ common_msgs::CloudData SpaceHandlingLibrary::search_nearest_point_on_unit(common
 }
 
 
-
-/*
-1: cloud_multi std::vector<common_msgs::CloudData>
-2: occuluder_instance int
-3: occludy_instance int
-4: radious double
-*/
-std::vector<common_msgs::CloudData> SpaceHandlingLibrary::extract_occuluder(std::vector<common_msgs::CloudData> cloud_multi, double radious)
-{
-    std::vector<common_msgs::CloudData> out_data;
-    std::vector<std::string> tf_names;
-    for (int i = 0; i < cloud_multi.size(); i++) {
-        if (cloud_multi[i].tf_name.size() != 0) {
-            tf_names.push_back(cloud_multi[i].tf_name);
-        }
-    }
-    std::vector<ObjectTfNameType> occluder_list = detect_occuluder(tf_names, radious);
-    for (int i = 0; i < cloud_multi.size(); i++) {
-        for (int j = 0; j < occluder_list.size(); j++) {
-            if (i == occluder_list[j].index) {
-                out_data.push_back(cloud_multi[i]);
-            }
-        }
-    }
-    return out_data;
-}
-
-std::vector<common_msgs::ObjectInfo> SpaceHandlingLibrary::extract_occuluder(std::vector<common_msgs::ObjectInfo> object_info, double radious)
+std::vector<common_msgs::ObjectInfo> SpaceHandlingLibrary::extract_occuluder(std::vector<common_msgs::ObjectInfo> object_info)
 {
     std::vector<common_msgs::ObjectInfo> out_data;
-    std::vector<std::string> tf_names;
-    for (int i = 0; i < object_info.size(); i++) {
-        tf_names.push_back(object_info[i].tf_name);
-    }
-    std::vector<ObjectTfNameType> occluder_list = detect_occuluder(tf_names, radious);
-    for (int i = 0; i < object_info.size(); i++) {
-        for (int j = 0; j < occluder_list.size(); j++) {
-            if (i == occluder_list[j].index) {
-                out_data.push_back(object_info[i]);
-            }
-        }
-    }
+    out_data = detect_occuluder(object_info);
     return out_data;
 }
 
-std::vector<ObjectTfNameType> SpaceHandlingLibrary::detect_occuluder(std::vector<std::string> tf_names, double radious)
+std::vector<common_msgs::ObjectInfo> SpaceHandlingLibrary::detect_occuluder(std::vector<common_msgs::ObjectInfo> object_info_list)
 {
-    std::vector<ObjectTfNameType> occluder_list;
+    std::vector<common_msgs::ObjectInfo> occluder_list;
     int collision = 0;
-    for (int i = 0; i < tf_names.size(); i++) {
+    for (int i = 0; i < object_info_list.size(); i++) {
        geometry_msgs::Transform trans_get;
-       
-       trans_get = tf_func_.tf_listen(tf_names[i], world_frame_);
-    //    TfFunction::tf_data_show(trans_get, "tf_name_" + std::to_string(i));
+       object_info_list[i].position = tf_func_.tf_listen(object_info_list[i].tf_name, world_frame_);
        if (i == 0) {
-        ObjectTfNameType object;
-        object.trans = trans_get;
-        object.index = i;
-        occluder_list.push_back(object);
+        occluder_list.push_back(object_info_list[i]);
        }
        else {
         collision = 0;
         std::vector<int> delete_list;
         for (int k = 0; k < occluder_list.size(); k++) {
-            double dis = Util::distance(trans_get.translation.x, trans_get.translation.y, occluder_list[k].trans.translation.x, occluder_list[k].trans.translation.y);
-            if (dis < 2 * radious) {
-                if (trans_get.translation.z > occluder_list[k].trans.translation.z) {
-                    // occluder_list.erase(occluder_list.begin() + k);
+            double dis = Util::distance(object_info_list[i].position.translation.x, object_info_list[i].position.translation.y, occluder_list[k].position.translation.x, occluder_list[k].position.translation.y);
+            if (dis < object_info_list[i].occulusion_radious + occluder_list[k].occulusion_radious) {
+                if (object_info_list[i].position.translation.z > occluder_list[k].position.translation.z) {
                     delete_list.push_back(occluder_list[k].index);
                 }
                 else {
@@ -153,29 +109,16 @@ std::vector<ObjectTfNameType> SpaceHandlingLibrary::detect_occuluder(std::vector
                 }
             }
         }
-        // std::cout << "occuluder_list: ";
-        // for (int i = 0; i < occluder_list.size(); i++) {
-        //        std::cout << occluder_list[i].index << " "; 
-        // }
-        // std::cout << std::endl;
-        // std::cout << "delete_list: ";
         for (int i = 0; i < delete_list.size(); i++) {
-            // std::cout << delete_list[i] << " ";
             for (int j = 0; j < occluder_list.size(); j++) {
-                int index = 0;
                 if (occluder_list[j].index == delete_list[i]) {
                     occluder_list.erase(occluder_list.begin() + j);
                     break;
                 }
             }
         }
-        // std::cout << std::endl;
-        
         if (collision == 0) {
-            ObjectTfNameType object;
-            object.trans = trans_get;
-            object.index = i;
-            occluder_list.push_back(object);
+            occluder_list.push_back(object_info_list[i]);
         }
        } 
     }
