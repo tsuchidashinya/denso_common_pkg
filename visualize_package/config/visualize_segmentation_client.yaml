@@ -1,5 +1,5 @@
 visualize_client:
-  hdf5_open_file_path: /home/ericlab/tsuchida/2023_01/annotation/Semseg/HV8/data_4000/4000_propose.hdf5
+  hdf5_open_file_path: /home/ericlab/tsuchida/2022_12/annotation/Semseg/t_pipe/sensor_b_box_3000_noize.hdf5
 
 cloud_process:
   planar_threshold: 0.01
