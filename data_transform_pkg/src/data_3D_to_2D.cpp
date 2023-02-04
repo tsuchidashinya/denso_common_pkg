@@ -5,9 +5,6 @@ Data3Dto2D::Data3Dto2D(std::vector<float> cinfo_list, ImageSize img_size): pnh_(
     pnh_.getParam("common_parameter", param_list);
     world_frame_ = static_cast<std::string>(param_list["world_frame"]);
     sensor_frame_ = static_cast<std::string>(param_list["sensor_frame"]);
-    pnh_.getParam("data_3D_to_2D", param_list);
-    object_radious_x_ = param_list["radious_x"];
-    object_radious_y_ = param_list["radious_y"];
     cinfo_list_ = cinfo_list;
     img_size_ = img_size;
 }
@@ -27,8 +24,8 @@ std::vector<common_msgs::BoxPosition> Data3Dto2D::convert_3Dto2D(std::vector<Poi
         double y = point3D_objects[i].y;
         double z = point3D_objects[i].z;
         Point3D pt_cv(y, x, z);
-        Point3D pt_cv_left(y - object_radious_y_, x - object_radious_x_, z);
-        Point3D pt_cv_right(y + object_radious_y_, x + object_radious_x_, z);
+        Point3D pt_cv_left(y - object_info_list[i].radious, x - object_info_list[i].radious, z);
+        Point3D pt_cv_right(y + object_info_list[i].radious, x + object_info_list[i].radious, z);
         Point2D uv_left, uv_right;
         FuncDataConvertion data_convert;
         uv_left = data_convert.func_3d_to_2d_coodinate(pt_cv_left, cinfo_list_);

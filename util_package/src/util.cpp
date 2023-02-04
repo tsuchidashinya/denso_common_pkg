@@ -18,6 +18,18 @@ Util::Util()
 {
 }
 
+int Util::find_objectinfo_by_tfname(std::vector<common_msgs::ObjectInfo> object_info_list, std::string tf_name)
+{
+  int index;
+  for (int i = 0; i < object_info_list.size(); i++) {
+    if (object_info_list[i].tf_name == tf_name) {
+      index = i;
+      break;
+    }
+  }
+  return index;
+}
+
 float Util::probability()
 {
   return random_float(0, 1);

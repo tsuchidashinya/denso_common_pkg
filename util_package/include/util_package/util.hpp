@@ -34,6 +34,15 @@ struct YoloFormat
   std::string object_name;
 };
 
+struct ObjectListType
+{
+    std::string object_name;
+    int num_of_object;
+    int instance_num;
+    double occlusion_radious;
+    double radious;
+};
+
 class Util
 {
 public:
@@ -156,6 +165,8 @@ public:
         }
         return std::distance(list.begin(), iter);
     }
+
+    static int find_objectinfo_by_tfname(std::vector<common_msgs::ObjectInfo>, std::string tf_name);
 
     static int find_tfname_from_cloudlist(std::vector<common_msgs::CloudData>, std::string);
     float probability();

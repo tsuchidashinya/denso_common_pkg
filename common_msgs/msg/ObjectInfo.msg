@@ -1,3 +1,7 @@
 string object_name
 string tf_name
+float32 radious
+float32 occulusion_radious
+int32 index
+int32 instance_num
 geometry_msgs/Transform position

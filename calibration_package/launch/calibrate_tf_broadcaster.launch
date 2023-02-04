@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="calibration_package" type="calibrate_tf_broadcaster" name="calibrate_tf_broadcaster">
+        <rosparam file="$(find calibration_package)/config/calibrate_tf_broadcaster.yaml" command="load" ns="" />
+        <rosparam file="$(find util_package)/config/common_parameter.yaml" command="load" />
+    </node>
+
+</launch>
