@@ -63,6 +63,47 @@ common_msgs::ObjectInfo DecidePosition::make_object_info(int object_id, std::str
     return outdata;
 }
 
+gazebo::msgs::Visual DecidePosition::get_link_visual(std::string link_name)
+{
+    gazebo::msgs::Visual visual_msg;
+    
+}
+
+gazebo_msgs::SetLightPropertiesRequest DecidePosition::get_light_properties()
+{
+    gazebo_msgs::SetLightPropertiesRequest request;
+    request.light_name = "sun";
+    request.cast_shadows = true;
+    // request.attenuation_constant = 0.9;
+    // request.attenuation_linear = 0.01;
+    // request.attenuation_quadratic = 0;
+    request.attenuation_constant = Util::random_float_static(0, 1);
+    request.attenuation_linear = Util::random_float_static(0, 1);
+    request.attenuation_quadratic = Util::random_float_static(0, 1);
+    request.direction.x = Util::random_float_static(-0.99, 0.99);
+    request.direction.y = Util::random_float_static(-0.99, 0.99);
+    request.direction.z = -0.99;
+    request.pose.orientation.x = 0;
+    request.pose.orientation.y = 0;
+    request.pose.orientation.z = 0;
+    request.pose.orientation.w = 1;
+    request.pose.position.x = Util::random_float_static(-10, 10);
+    request.pose.position.y = Util::random_float_static(-10, 10);
+    request.pose.position.z = 10;
+    float color_max, color_min;
+    color_min = 0.01;
+    color_max = 0.99;
+    request.diffuse.r = Util::random_float_static(color_min, color_max);
+    request.diffuse.g = Util::random_float_static(color_min, color_max);
+    request.diffuse.b = Util::random_float_static(color_min, color_max);
+    request.diffuse.a = Util::random_float_static(0, 1);
+    request.specular.r = Util::random_float_static(color_min, color_max);
+    request.specular.g = Util::random_float_static(color_min, color_max);
+    request.specular.b = Util::random_float_static(color_min, color_max);
+    request.specular.a = Util::random_float_static(0, 1);
+    return request;
+}
+
 /*
 1: index
 2: object_id

@@ -14,6 +14,11 @@
 #include <tf_package/tf_function.hpp>
 #include <gazebo_msgs/SetModelState.h>
 #include <gazebo_msgs/ModelState.h>
+#include <gazebo_msgs/SetLightProperties.h>
+#include <gazebo_msgs/SetLinkState.h>
+#include <gazebo/transport/TransportTypes.hh>
+#include <gazebo/transport/TransportIface.hh>
+#include <gazebo/msgs/msgs.hh>
 #include <common_msgs/ObjectInfo.h>
 
 enum DecidePoseOption
@@ -34,6 +39,8 @@ public:
     std::vector<common_msgs::ObjectInfo> get_remove_position(std::vector<common_msgs::ObjectInfo>);
     common_msgs::ObjectInfo get_box_position();
     common_msgs::ObjectInfo get_sensor_position();
+    gazebo_msgs::SetLightPropertiesRequest get_light_properties();
+    gazebo::msgs::Visual get_link_visual(std::string);
     void set_parameter();
     void set_decice_pose_option(DecidePoseOption);
     XmlRpc::XmlRpcValue param_list;
