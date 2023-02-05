@@ -1,5 +1,6 @@
 string link_parent_name
 string link_visual_name
+string link_name
 std_msgs/ColorRGBA ambient
 std_msgs/ColorRGBA diffuse
 std_msgs/ColorRGBA specular

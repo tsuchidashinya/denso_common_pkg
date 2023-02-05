@@ -15,6 +15,7 @@
 #include <util_package/util_msg_data.hpp>
 
 
+
 class GazeboMoveServer
 {
 public:
@@ -23,16 +24,15 @@ public:
     void set_multi_gazebo_model(std::vector<common_msgs::ObjectInfo>);
     void set_gazebo_model(common_msgs::ObjectInfo);
     void set_light(gazebo_msgs::SetLightPropertiesRequest);
-    void set_link_visual(gazebo::msgs::Visual);
+    void set_link_visual(common_srvs::SetLinkVisualPropertiesRequest);
+    common_srvs::GetVisualNamesResponse get_visual_name(std::string);
     void set_parameter();
 private:
     ros::NodeHandle nh_, pnh_;
-    gazebo::transport::Node gzNode_;
-    ros::ServiceClient gazebo_light_client_;
     ros::Publisher gazebo_pub_;
-    gazebo::transport::PublisherPtr gazebo_transport_pub_;
+    ros::ServiceClient gazebo_light_client_, gazebo_link_visual_client_, gazebo_visual_client_, gazebo_model_proporties_client_;
     std::string world_frame_;
-    std::string light_service_name_;
+    std::string light_service_name_, link_visual_service_name_, visualname_service_name_, model_proporties_service_name_;
     XmlRpc::XmlRpcValue param_list;
     TfFunction tf_func_;
 };

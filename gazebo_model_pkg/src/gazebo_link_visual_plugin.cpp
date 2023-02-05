@@ -2,7 +2,7 @@
 
 namespace gazebo
 {
-    // GZ_REGISTER_WORLD_PLUGIN(GazeboLinkVisualPlugin)
+    GZ_REGISTER_WORLD_PLUGIN(GazeboLinkVisualPlugin)
     GazeboLinkVisualPlugin::GazeboLinkVisualPlugin()
     {
 
@@ -29,8 +29,14 @@ namespace gazebo
         "set_link_visual", boost::bind(&GazeboLinkVisualPlugin::SetLinkVisualCallback,
         this, _1, _2), ros::VoidPtr(), &this->queue_);
         this->set_link_visual_ = this->rosnode_->advertiseService(set_col_aso);
-         this->callback_queue_thread_ =
-            boost::thread(boost::bind(&GazeboLinkVisualPlugin::QueueThread, this));
+
+        ros::AdvertiseServiceOptions get_vis_names_aso = ros::AdvertiseServiceOptions::create<common_srvs::GetVisualNames>(
+            "get_visual_names", boost::bind(&GazeboLinkVisualPlugin::GetVisualNameCallback,
+            this,_1,_2), ros::VoidPtr(), &queue_);
+        this->get_visual_name_ = this->rosnode_->advertiseService(get_vis_names_aso);
+
+        this->callback_queue_thread_ =
+        boost::thread(boost::bind(&GazeboLinkVisualPlugin::QueueThread, this));
     }
 
     void GazeboLinkVisualPlugin::QueueThread()
@@ -104,7 +110,37 @@ namespace gazebo
 
         //publish message
         this->visualPub->Publish(visualMsg);
+        res.success = true;
+        return true;
+    }
 
+    bool GazeboLinkVisualPlugin::GetVisualNameCallback(common_srvs::GetVisualNames::Request &req,
+                                                common_srvs::GetVisualNames::Response &res)
+    {
+        boost::lock_guard<boost::mutex> lock(this->lock_);
+        std::vector<std::string> vis_names;
+        std::vector<std::string> parent_names;
+        for (std::vector<std::string>::const_iterator itr = req.link_names.begin(); itr != req.link_names.end(); ++itr)
+        {
+            #if GAZEBO_MAJOR_VERSION >= 8
+                physics::LinkPtr link = boost::dynamic_pointer_cast<physics::Link>(world_->EntityByName(*itr));
+            #else
+                physics::LinkPtr link = boost::dynamic_pointer_cast<physics::Link>(world_->GetEntity(*itr));
+            #endif
+            if (!link)
+            {
+                res.success = false;
+                res.status_message = "GetCollisionNamesCallback: Could not access the link!";
+                return true;
+            }
+            for (physics::Link::Visuals_M::const_iterator jtr = link->visuals.begin(); jtr != link->visuals.end(); ++jtr)
+            {
+                vis_names.push_back(jtr->second.name());
+                parent_names.push_back(*itr);
+            }
+        }
+        res.link_visual_names = vis_names;
+        res.link_parent_names = parent_names;
         res.success = true;
         return true;
     }

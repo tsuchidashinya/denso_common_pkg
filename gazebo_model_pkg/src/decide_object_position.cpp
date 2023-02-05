@@ -19,6 +19,31 @@ sensor_small_deviation_(0)
     set_parameter();
 }
 
+common_srvs::SetLinkVisualPropertiesRequest DecidePosition::get_link_visual_parameter(std::string link_name)
+{
+    common_srvs::SetLinkVisualPropertiesRequest request;
+    request.link_name = link_name;
+    auto color_min = 0.1, color_max = 0.9;
+    auto red = Util::random_float_static(color_min, color_max);
+    auto blue = Util::random_float_static(color_min, color_max);
+    auto green = Util::random_float_static(color_min, color_max);
+    // auto a = Util::random_float_static(0, 1);
+    auto a = 1;
+    request.ambient.r = red;
+    request.ambient.b = blue;
+    request.ambient.g = green;
+    request.ambient.a = a;
+    request.diffuse.r = red;
+    request.diffuse.b = blue;
+    request.diffuse.g = green;
+    request.diffuse.a = a;
+    request.emissive.r = 0;
+    request.emissive.g = 0;
+    request.emissive.b = 0;
+    request.emissive.a = 1;
+    return request;
+}
+
 void DecidePosition::set_decice_pose_option(DecidePoseOption option)
 {
     if (option == DecidePoseOption::FullRandom) {
@@ -61,12 +86,6 @@ common_msgs::ObjectInfo DecidePosition::make_object_info(int object_id, std::str
     outdata.tf_name = object_name + "_" + std::to_string(object_id);
     outdata.object_name = object_name;
     return outdata;
-}
-
-gazebo::msgs::Visual DecidePosition::get_link_visual(std::string link_name)
-{
-    gazebo::msgs::Visual visual_msg;
-    
 }
 
 gazebo_msgs::SetLightPropertiesRequest DecidePosition::get_light_properties()

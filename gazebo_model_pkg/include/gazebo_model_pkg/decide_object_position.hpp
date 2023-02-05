@@ -15,10 +15,9 @@
 #include <gazebo_msgs/SetModelState.h>
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetLightProperties.h>
-#include <gazebo_msgs/SetLinkState.h>
-#include <gazebo/transport/TransportTypes.hh>
-#include <gazebo/transport/TransportIface.hh>
-#include <gazebo/msgs/msgs.hh>
+#include <gazebo_msgs/GetModelProperties.h>
+#include <common_srvs/GetVisualNames.h>
+#include <common_srvs/SetLinkVisualProperties.h>
 #include <common_msgs/ObjectInfo.h>
 
 enum DecidePoseOption
@@ -40,7 +39,7 @@ public:
     common_msgs::ObjectInfo get_box_position();
     common_msgs::ObjectInfo get_sensor_position();
     gazebo_msgs::SetLightPropertiesRequest get_light_properties();
-    gazebo::msgs::Visual get_link_visual(std::string);
+    common_srvs::SetLinkVisualPropertiesRequest get_link_visual_parameter(std::string);
     void set_parameter();
     void set_decice_pose_option(DecidePoseOption);
     XmlRpc::XmlRpcValue param_list;
