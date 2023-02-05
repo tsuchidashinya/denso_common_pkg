@@ -36,6 +36,7 @@ add_service_files(
   hdf5_record_service/Hdf5RecordSegmentation.srv
   hdf5_record_service/Hdf5RecordSensorData.srv
   mesh_service/MeshCloudService.srv 
+  gazebo_plugin_service/SetLinkVisualProperties.srv
 )
 
 generate_messages(
