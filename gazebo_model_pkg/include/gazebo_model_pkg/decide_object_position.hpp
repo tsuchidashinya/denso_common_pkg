@@ -38,6 +38,7 @@ public:
     std::vector<common_msgs::ObjectInfo> get_remove_position(std::vector<common_msgs::ObjectInfo>);
     common_msgs::ObjectInfo get_box_position();
     common_msgs::ObjectInfo get_sensor_position();
+    common_msgs::ObjectInfo get_sensor_return_position();
     gazebo_msgs::SetLightPropertiesRequest get_light_properties();
     common_srvs::SetLinkVisualPropertiesRequest get_link_visual_parameter(std::string);
     void set_parameter();

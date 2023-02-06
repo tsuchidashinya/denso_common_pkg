@@ -286,3 +286,31 @@ common_msgs::ObjectInfo DecidePosition::get_sensor_position()
     return outdata;
 }
 
+
+common_msgs::ObjectInfo DecidePosition::get_sensor_return_position()
+{
+    Util util;
+    common_msgs::ObjectInfo outdata;
+    double angle = (sensor_angle_max_ + sensor_angle_min_) / 2;
+    double sensor_distance = (sensor_distance_min_ + sensor_distance_max_) / 2;
+    double x, y, z;
+    tf2::Quaternion quaternion;
+    auto sensor_scale = sensor_distance / sensor_distance_max_;
+    sensor_scale = sensor_scale * sensor_scale;
+    auto sensor_small_deviation_result = sensor_small_deviation_ * sensor_scale;
+    auto small_deviation_x = util.random_float(-sensor_small_deviation_result, sensor_small_deviation_result);
+    auto small_deviation_y = util.random_float(-sensor_small_deviation_result, sensor_small_deviation_result);
+    // auto small_deviation_x = sensor_small_deviation_ * sensor_scale;
+    // auto small_deviation_y = sensor_small_deviation_ * sensor_scale;
+    // Util::message_show("small_deviation_x", small_deviation_x);
+    // Util::message_show("small_deviation_y", small_deviation_y);
+    x = sensor_distance * sin(angle);
+    y = 0;
+    z = sensor_distance * cos(angle);
+    quaternion = TfFunction::rotate_xyz_make(0, angle, 0);
+    
+    outdata.position = TfFunction::make_geo_transform(x, y, z, quaternion);
+    outdata.object_name = sensor_name_;
+    outdata.tf_name = sensor_name_;
+    return outdata;
+}
