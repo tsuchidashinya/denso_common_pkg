@@ -55,6 +55,7 @@ public:
         return output;
     }
     static common_msgs::CloudData cropbox_segmenter_origin_world(common_msgs::CloudData, float, float, float);
+    common_msgs::CloudData cropbox_segmenter(common_msgs::CloudData);
     /**
      * @brief 範囲限定して点群を抽出する関数
      * ※　先にset_crop_frame関数を実行して抽出する基準のTFをセッティングしてください

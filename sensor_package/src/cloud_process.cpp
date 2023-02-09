@@ -17,6 +17,14 @@ CloudProcess::CloudProcess()
     set_parameter();
 }
 
+common_msgs::CloudData CloudProcess::cropbox_segmenter(common_msgs::CloudData cloud)
+{
+    auto pcl_data = UtilMsgData::cloudmsg_to_pclLabel(cloud);
+    pcl_data = cropbox_segmenter(pcl_data);
+    auto after_cloud = UtilMsgData::pclLabel_to_cloudmsg(pcl_data);
+    return UtilMsgData::substitute_cloudmsg_para(after_cloud, cloud);
+}
+
 /*
 1: cloud
 2: x_max
